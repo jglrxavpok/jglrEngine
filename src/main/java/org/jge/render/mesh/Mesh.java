@@ -187,6 +187,9 @@ public class Mesh implements Disposable
         IntBuffer indicesBuffer = Buffers.createFlippedIntBuffer(data.getIndices());
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_DYNAMIC_DRAW);
         openGLInit = true;
+        
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
 	public void dispose()

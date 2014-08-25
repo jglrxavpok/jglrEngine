@@ -22,17 +22,9 @@ import org.jge.util.LWJGLHandler;
 import org.jge.util.Log;
 import org.jge.util.OpenGLUtils;
 import org.jge.util.Strings;
-import org.lwjgl.LWJGLException;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.opencl.CL;
-import org.lwjgl.opencl.CL10;
-import org.lwjgl.opencl.CL10GL;
-import org.lwjgl.opencl.CL11;
-import org.lwjgl.opencl.CL12;
-import org.lwjgl.opencl.CLCapabilities;
-import org.lwjgl.opencl.CLDevice;
-import org.lwjgl.opencl.CLDeviceCapabilities;
 import org.lwjgl.opengl.GLContext;
 
 public final class CoreEngine

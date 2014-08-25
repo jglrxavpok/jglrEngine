@@ -404,13 +404,14 @@ public class RenderEngine extends MappedValues
 			}
 		}
 		
-		//printIfGLError();
+		applyFilter(renderToTextShader, renderToTextTarget, renderToTextTargetTemp);
+		applyFilter(nullFilterShader, renderToTextTargetTemp, renderToTextTarget);
+//		printIfGLError();
 		return this;
 	}
 	
 	public RenderEngine render(SceneObject object, double delta)
 	{
-		
 		while(!beforeRenders.isEmpty())
 			beforeRenders.pop().run();
 		renderScene(object, renderToTextTarget, renderToTextTargetTemp, delta);
@@ -424,8 +425,8 @@ public class RenderEngine extends MappedValues
 	    Camera.setCurrent(cam);
 	    glClearColor(0.0f, 0.0f, 1f, 1.0f);
 	    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	    renderToTextShader.bind();
-	    renderToTextShader.updateUniforms(altTransform, altCamera, planeMaterial, this);
+	    defaultShader.bind();
+	    defaultShader.updateUniforms(altTransform, altCamera, planeMaterial, this);
 		planeMesh.draw();
 		
 		if(hudObject != null && object != hudObject)

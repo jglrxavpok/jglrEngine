@@ -231,7 +231,7 @@ public class TestGame extends Game
 			getRenderEngine().setCamera(camera);
 			
 			Music dapperCadaver = Music.get(getClasspathResourceLoader().getResource(new ResourceLocation("test/music", "DapperCadaver-TF2.wav")));
-			dapperCadaver.play();
+//			dapperCadaver.play();
 			dapperCadaver.setGain(0.01f);
 			dapperCadaver.setPitch(2f);
 			dapperCadaver.setLooping(true);
@@ -269,7 +269,7 @@ public class TestGame extends Game
 		cube.getTransform().scale(2, 2, 2);
 		PhysicsShape cubeShape = new BoxPhysShape(new Vector3(2, 2, 2));
 		cube.addComponentAs("physics", new PhysicsComponent(1, cubeShape));
-		cube.addComponent(new SoundSource(new Sound(getClasspathResourceLoader().getResource(new ResourceLocation("test/sounds", "Jump1.wav"))), 1000));
+//		cube.addComponent(new SoundSource(new Sound(getClasspathResourceLoader().getResource(new ResourceLocation("test/sounds", "Jump1.wav"))), 1000));
 	}
 
 	public void updateGame(double delta)
@@ -369,7 +369,7 @@ public class TestGame extends Game
 		PhysicsShape monkeyShape = new MeshPhysShape(lowMonkeyMesh);
 		monkey.addComponentAs("physics", new PhysicsComponent(1, monkeyShape));
 		
-		Camera viewCamera = new Camera(Maths.toRadians(90), (double)Window.getCurrent().getRealWidth()/(double)Window.getCurrent().getRealHeight(), 0.01, 1000);
+		Camera viewCamera = new Camera(Maths.toRadians(90), (double)Window.getCurrent().getRealWidth()/(double)Window.getCurrent().getRealHeight(), 0.0001, 1000);
 		monkey.addComponent(viewCamera);
 		
 		menu.setViewRoot(getSceneRoot());

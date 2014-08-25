@@ -53,4 +53,22 @@ public class TextureRegion
 		this.texture = text;
 		return this;
 	}
+	
+	public TextureRegion flip(boolean horizontaly, boolean verticaly)
+	{
+		if(horizontaly)
+		{
+			double oldMaxU = maxU;
+			maxU = minU;
+			minU = oldMaxU;
+		}
+		
+		if(verticaly)
+		{
+			double oldMaxV = maxV;
+			maxV = minV;
+			minV = oldMaxV;
+		}
+		return this;
+	}
 }

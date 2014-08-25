@@ -6,5 +6,7 @@ uniform int R_lightNumber;
 
 void main()
 {
-	gl_FragColor = texture2D(diffuse, texCoord0) / R_lightNumber;
+	vec4 color = texture2D(diffuse, texCoord0);
+	vec3 rgbPart = color.rgb / R_lightNumber; 
+	gl_FragColor = vec4(rgbPart, color.w);
 }

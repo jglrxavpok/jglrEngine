@@ -13,6 +13,5 @@
 	<classpathentry kind="lib" path="libs/jbullet.jar"/>
 	<classpathentry kind="lib" path="libs/asm-all-5.0.3.jar"/>
 	<classpathentry kind="lib" path="libs/asm-debug-all-5.0.3.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/JLSL"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
 	<name>jglrEngine</name>
-	<comment/>
-	<projects/>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>fr.trevidos.GLShaderTools.cgTools.cgBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
 	<natures>
 		<nature>org.springsource.ide.eclipse.gradle.core.nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>fr.trevidos.GLShaderTools.cgTools.cgCompiler</nature>
 	</natures>
-	<buildSpec>
-		<buildCommand>
-			<name>org.eclipse.jdt.core.javabuilder</name>
-			<arguments/>
-		</buildCommand>
-		<buildCommand>
-			<name>fr.trevidos.GLShaderTools.cgTools.cgBuilder</name>
-			<arguments/>
-		</buildCommand>
-	</buildSpec>
-	<linkedResources/>
+	<linkedResources>
+		<link>
+			<name>JLSL_submodule</name>
+			<type>2</type>
+			<location>D:/Code/Java/JavaWorkbench/JLSL/src</location>
+		</link>
+	</linkedResources>
 </projectDescription>

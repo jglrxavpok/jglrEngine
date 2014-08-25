@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
+	<classpathentry exported="true" kind="lib" path="D:/Code/Java/JavaWorkbench/jglrEngine/libs/jinput.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Code/Java/JavaWorkbench/jglrEngine/libs/lwjgl.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Code/Java/JavaWorkbench/jglrEngine/libs/lwjgl_util.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Code/Java/JavaWorkbench/jglrEngine/libs/lwjgl_natives.zip"/>
+	<classpathentry kind="lib" path="libs/vecmath.jar"/>
+	<classpathentry kind="lib" path="libs/jbullet.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JLSL"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -3,6 +3,7 @@ package org.jge.maths;
 import java.nio.FloatBuffer;
 
 import org.jge.util.BufferWritable;
+import org.jglrxavpok.jlsl.glsl.GLSL.Substitute;
 
 public class Vector3 implements BufferWritable
 {
@@ -56,61 +57,73 @@ public class Vector3 implements BufferWritable
         return new Vector3(x,y,z);
     }
     
+    @Substitute(value ="+", ownerBefore=true, usesParenthesis=false)
     public Vector3 add(double factor)
     {
         return new Vector3(this.x+factor, this.y+factor, this.z+factor);
     }
     
+    @Substitute(value ="+", ownerBefore=true, usesParenthesis=false)
     public Vector3 add(double x, double y, double z)
     {
         return new Vector3(this.x+x, this.y+y, this.z+z);
     }
     
+    @Substitute(value ="+", ownerBefore=true, usesParenthesis=false)
     public Vector3 add(Vector3 v)
     {
         return new Vector3(this.x+v.x, this.y+v.y, this.z+v.z);
     }
     
+    @Substitute(value ="-", ownerBefore=true, usesParenthesis=false)
     public Vector3 sub(double factor)
     {
         return new Vector3(this.x-factor, this.y-factor, this.z-factor);
     }
     
+    @Substitute(value ="-", ownerBefore=true, usesParenthesis=false)
     public Vector3 sub(double x, double y, double z)
     {
         return new Vector3(this.x-x, this.y-y, this.z-z);
     }
     
+    @Substitute(value ="-", ownerBefore=true, usesParenthesis=false)
     public Vector3 sub(Vector3 v)
     {
         return new Vector3(this.x-v.x, this.y-v.y, this.z-v.z);
     }
     
+    @Substitute(value ="/", ownerBefore=true, usesParenthesis=false)
     public Vector3 div(double factor)
     {
         return new Vector3(this.x/factor, this.y/factor, this.z/factor);
     }
     
+    @Substitute(value ="/", ownerBefore=true, usesParenthesis=false)
     public Vector3 div(double x, double y, double z)
     {
         return new Vector3(this.x/x, this.y/y, this.z/z);
     }
     
+    @Substitute(value ="/", ownerBefore=true, usesParenthesis=false)
     public Vector3 div(Vector3 v)
     {
         return new Vector3(this.x/v.x, this.y/v.y, this.z/v.z);
     }
     
+    @Substitute(value ="*", ownerBefore=true, usesParenthesis=false)
     public Vector3 mul(double factor)
     {
         return new Vector3(this.x*factor, this.y*factor, this.z*factor);
     }
     
+    @Substitute(value ="*", ownerBefore=true, usesParenthesis=false)
     public Vector3 mul(Vector3 v)
     {
         return new Vector3(this.x*v.x,this.y*v.y, this.z*v.z);
     }
     
+    @Substitute(value ="*", ownerBefore=true, usesParenthesis=false)
     public Vector3 mul(double x, double y, double z)
     {
         return new Vector3(this.x*x,this.y*y, this.z*z);
@@ -129,16 +142,19 @@ public class Vector3 implements BufferWritable
         return this;
     }
 
+    @Substitute(value ="x", actsAsField=true)
     public double getX()
     {
         return x;
     }
     
+    @Substitute(value ="x", actsAsField=true)
     public double getY()
     {
         return y;
     }
     
+    @Substitute(value ="x", actsAsField=true)
     public double getZ()
     {
         return z;
@@ -185,31 +201,37 @@ public class Vector3 implements BufferWritable
         return new Vector3(-x, -y, -z);
     }
 
+    @Substitute(value ="$", actsAsField=true)
     public Vector2 xy()
     {
         return new Vector2(x, y);
     }
     
+    @Substitute(value ="$", actsAsField=true)
     public Vector2 xz()
     {
         return new Vector2(x, z);
     }
     
+    @Substitute(value ="$", actsAsField=true)
     public Vector2 zx()
     {
         return new Vector2(z, x);
     }
     
+    @Substitute(value ="$", actsAsField=true)
     public Vector2 yx()
     {
         return new Vector2(y, x);
     }
     
+    @Substitute(value ="$", actsAsField=true)
     public Vector2 zy()
     {
         return new Vector2(z, y);
     }
     
+    @Substitute(value ="$", actsAsField=true)
     public Vector2 yz()
     {
         return new Vector2(y, z);
@@ -245,18 +267,21 @@ public class Vector3 implements BufferWritable
         return this;
     }
     
+    @Substitute(value ="x", actsAsField=true)
     public Vector3 setX(double x)
 	{
 		this.x = x;
 		return this;
 	}
     
+    @Substitute(value ="y", actsAsField=true)
 	public Vector3 setY(double y)
 	{
 		this.y = y;
 		return this;
 	}
 	
+    @Substitute(value ="z", actsAsField=true)
 	public Vector3 setZ(double z)
 	{
 		this.z = z;

@@ -101,6 +101,11 @@ public class HUDWidget extends SceneObject
 	
 	public void drawBox(Shader shader, Camera camera, RenderEngine engine, double startX, double startY)
 	{
+		drawBox(shader, camera, engine, startX, startY, getWidth(), getHeight());
+	}
+	
+	public void drawBox(Shader shader, Camera camera, RenderEngine engine, double startX, double startY, double width, double height)
+	{
 		Sprite topLeft = new Sprite(this.widgetTexture, startX+0,startY+0,16,16);
 		Sprite topRight = new Sprite(this.widgetTexture, startX+16,startY+0,16,16);
 		Sprite bottomLeft = new Sprite(this.widgetTexture, startX+0,startY+16,16,16);
@@ -115,31 +120,31 @@ public class HUDWidget extends SceneObject
 		ArrayList<Integer> indices = new ArrayList<Integer>();
 		int currentIndex = 0;
 		
-		for(int y = 16;y<getHeight()-16;y+=16)
+		for(int y = 16;y<height-16;y+=16)
 		{
-			for(int x = 16;x<getWidth()-16;x+=16)
+			for(int x = 16;x<width-16;x+=16)
 			{
 				currentIndex += in.prepareGroupedRendering(vertices, indices, currentIndex, x, y);
 			}
 		}
 
-		for(int x = 16;x<getWidth()-16;x+=16)
+		for(int x = 16;x<width-16;x+=16)
 		{
 			currentIndex += bottom.prepareGroupedRendering(vertices, indices, currentIndex, x, 0);
-			currentIndex += top.prepareGroupedRendering(vertices, indices, currentIndex, x, getHeight()-16);
+			currentIndex += top.prepareGroupedRendering(vertices, indices, currentIndex, x, height-16);
 		}
 		
-		for(int y = 16;y<getHeight()-16;y+=16)
+		for(int y = 16;y<height-16;y+=16)
 		{
 			currentIndex += left.prepareGroupedRendering(vertices, indices, currentIndex, 0, y);
-			currentIndex += right.prepareGroupedRendering(vertices, indices, currentIndex, getWidth()-16, y);
+			currentIndex += right.prepareGroupedRendering(vertices, indices, currentIndex, width-16, y);
 		}
 		
 		
 		currentIndex += bottomLeft.prepareGroupedRendering(vertices, indices, currentIndex, 0, 0);
-		currentIndex += topLeft.prepareGroupedRendering(vertices, indices, currentIndex, 0, getHeight()-16);
-		currentIndex += bottomRight.prepareGroupedRendering(vertices, indices, currentIndex, getWidth()-16, 0);
-		currentIndex += topRight.prepareGroupedRendering(vertices, indices, currentIndex, getWidth()-16, getHeight()-16);
+		currentIndex += topLeft.prepareGroupedRendering(vertices, indices, currentIndex, 0, height-16);
+		currentIndex += bottomRight.prepareGroupedRendering(vertices, indices, currentIndex, width-16, 0);
+		currentIndex += topRight.prepareGroupedRendering(vertices, indices, currentIndex, width-16, height-16);
 		
 		shader.bind();
 		Integer[] indicesArray = indices.toArray(new Integer[0]);

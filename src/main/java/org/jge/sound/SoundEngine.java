@@ -3,7 +3,7 @@ package org.jge.sound;
 import org.jge.AbstractResource;
 import org.jge.EngineException;
 import org.jge.RuntimeEngineException;
-import org.jge.components.Camera;
+import org.jge.maths.Transform;
 import org.jge.maths.Vector3;
 import org.jge.util.Buffers;
 import org.lwjgl.LWJGLException;
@@ -14,6 +14,7 @@ public class SoundEngine
 {
 
 	private int maxSourcesPerSound;
+	private Transform playerTrans;
 
 	public SoundEngine()
 	{
@@ -35,15 +36,27 @@ public class SoundEngine
 
 	public void update(double delta)
 	{
-		if(Camera.getCurrent() != null)
-    		if(Camera.getCurrent().getParent().getTransform().hasChanged())
+		if(getPlayerTransform() != null)
+    		if(getPlayerTransform().hasChanged())
     		{
-        		AL10.alListener(AL10.AL_POSITION, Buffers.createFlippedBuffer(Camera.getCurrent().getParent().getTransform().getTransformedPos()));
-        		AL10.alListener(AL10.AL_VELOCITY, Buffers.createFlippedBuffer(Vector3.NULL));
-        		AL10.alListener(AL10.AL_ORIENTATION, Buffers.createFlippedBuffer(Camera.getCurrent().getParent().getTransform().getTransformedRotation().getForward().negative().normalize(), Camera.getCurrent().getParent().getTransform().getTransformedRotation().getUp().normalize()));
+    			AL10.alListener(AL10.AL_POSITION, Buffers.createFlippedBuffer(getPlayerTransform().getTransformedPos()));
+    			AL10.alListener(AL10.AL_VELOCITY, Buffers.createFlippedBuffer(Vector3.NULL));
+    			AL10.alListener(AL10.AL_ORIENTATION, Buffers.createFlippedBuffer(getPlayerTransform().getTransformedRotation().getForward().negative().normalize(), 
+    					getPlayerTransform().getTransformedRotation().getUp().normalize()));
     		}
 	}
 	
+	public Transform getPlayerTransform()
+	{
+		return playerTrans;
+	}
+	
+	public SoundEngine setPlayerTransform(Transform trans)
+	{
+		playerTrans = trans;
+		return this;
+	}
+
 	public SoundResource loadSound(AbstractResource res)
 	{
 		String ext = res.getResourceLocation().getExtension().toUpperCase();

@@ -226,42 +226,49 @@ public class Quaternion implements BufferWritable
         return new Quaternion(x_, y_, z_, w_);
     }
     
-
+    @Substitute(value="x", actsAsField=true)
     public double getX()
     {
         return x;
     }
 
+    @Substitute(value="x", actsAsField=true)
     public void setX(double x)
     {
         this.x = x;
     }
 
+    @Substitute(value="y", actsAsField=true)
     public double getY()
     {
         return y;
     }
 
+    @Substitute(value="y", actsAsField=true)
     public void setY(double y)
     {
         this.y = y;
     }
 
+    @Substitute(value="z", actsAsField=true)
     public double getZ()
     {
         return z;
     }
-
+    
+    @Substitute(value="z", actsAsField=true)
     public void setZ(double z)
     {
         this.z = z;
     }
 
+    @Substitute(value="w", actsAsField=true)
     public double getW()
     {
         return w;
     }
 
+    @Substitute(value="w", actsAsField=true)
     public void setW(double w)
     {
         this.w = w;
@@ -312,6 +319,7 @@ public class Quaternion implements BufferWritable
 		this.w = w;
 	}
 
+	@Substitute(value="xyz", ownerPosition=-1, usesParenthesis=false, actsAsField = true)
 	public Vector3 xyz()
 	{
 		return new Vector3(x, y, z);

@@ -19,7 +19,6 @@ import org.jge.components.FreeMove;
 import org.jge.components.MeshRenderer;
 import org.jge.components.SceneObject;
 import org.jge.components.ShadowMapSize;
-import org.jge.components.SoundSource;
 import org.jge.components.SpotLight;
 import org.jge.components.hud.HUDSpriteObject;
 import org.jge.components.hud.TextLabelObject;
@@ -40,8 +39,10 @@ import org.jge.render.Texture;
 import org.jge.render.fonts.Font;
 import org.jge.render.fonts.SimpleFont;
 import org.jge.render.mesh.Mesh;
+import org.jge.render.shaders.JGESimpleVertexShader;
+import org.jge.render.shaders.JavaShader;
+import org.jge.render.shaders.filters.FilterInvertFragmentShader;
 import org.jge.sound.Music;
-import org.jge.sound.Sound;
 import org.jge.util.BinaryUtils;
 import org.jge.util.Buffers;
 import org.jge.util.Log;
@@ -77,7 +78,7 @@ public class TestGame extends Game
 			Log.error(BinaryUtils.toString(loader.getResource(new ResourceLocation("test/test.txt")).getData()));
 			font = SimpleFont.instance;
 //			getRenderEngine().addPostProcessingFilter(new Shader(new ResourceLocation("shaders", "filter-texwaves")));
-//			getRenderEngine().addPostProcessingFilter(new JavaShader(130, JGESimpleVertexShader.class, FilterInvertFragmentShader.class));
+			getRenderEngine().addPostProcessingFilter(new JavaShader(130, JGESimpleVertexShader.class, FilterInvertFragmentShader.class));
 //			getRenderEngine().addPostProcessingFilter(new Shader(new ResourceLocation("shaders", "filter-oldtv")));
 			menu = new TestMenu();
 			Sprite sprite = new Sprite(new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "heart.png")), Texture.FILTER_NEAREST))
@@ -130,7 +131,7 @@ public class TestGame extends Game
 
 			SceneObject test1 = new SceneObject().addComponent(new MeshRenderer(mesh1, material));
 			SceneObject test2 = new SceneObject().addComponent(new MeshRenderer(mesh2, material));
-			Camera camera = new Camera(Maths.toRadians(70), (double)Window.getCurrent().getWidth() / (double)Window.getCurrent().getHeight(), 0.1, 400);
+			Camera camera = new Camera(Maths.toRadians(90), (double)Window.getCurrent().getWidth() / (double)Window.getCurrent().getHeight(), 0.1, 400);
 			cameraObject = new SceneObject()
 					.addComponent(camera)
 					.addComponent(new FreeLook(0.5, true)).addComponent(new FreeMove(0.5));
@@ -228,13 +229,16 @@ public class TestGame extends Game
 			PhysicsShape planeShape = new BoxPhysShape(new Vector3(31.5f, 0.12f, 31.5f));
 			plane.addComponentAs("physics", new PhysicsComponent(0, planeShape));
 			
-			getRenderEngine().setCamera(camera);
+			camera.setName("world");
 			
 			Music dapperCadaver = Music.get(getClasspathResourceLoader().getResource(new ResourceLocation("test/music", "DapperCadaver-TF2.wav")));
 //			dapperCadaver.play();
 			dapperCadaver.setGain(0.01f);
 			dapperCadaver.setPitch(2f);
 			dapperCadaver.setLooping(true);
+			
+			getRenderEngine().setCamera(camera);
+			getSoundEngine().setPlayerTransform(cameraObject.getTransform());
 		}
 		catch(Exception e1)
 		{
@@ -306,8 +310,8 @@ public class TestGame extends Game
 		}
 		if(Input.isKeyDown(Input.KEY_F))
 		{
-			spotLightObject.getTransform().setPosition(Camera.getCurrent().getParent().getTransform().getTransformedPos());
-			spotLightObject.getTransform().setRotation(Camera.getCurrent().getParent().getTransform().getTransformedRotation());
+			spotLightObject.getTransform().setPosition(cameraObject.getTransform().getTransformedPos());
+			spotLightObject.getTransform().setRotation(cameraObject.getTransform().getTransformedRotation());
 		}
 
 		if(Input.isKeyJustPressed(Input.KEY_C))
@@ -361,7 +365,6 @@ public class TestGame extends Game
 		material2.setFloat("specularPower", 4);
 		monkey.addComponent(new MeshRenderer(monkeyMesh, material2));
 
-		addToWorld(monkey);
 
 		monkey.getTransform().setPosition(cameraObject.getTransform().getTransformedPos());
 		monkey.getTransform().setRotation(cameraObject.getTransform().getTransformedRotation());
@@ -369,11 +372,13 @@ public class TestGame extends Game
 		PhysicsShape monkeyShape = new MeshPhysShape(lowMonkeyMesh);
 		monkey.addComponentAs("physics", new PhysicsComponent(1, monkeyShape));
 		
-		Camera viewCamera = new Camera(Maths.toRadians(90), (double)Window.getCurrent().getRealWidth()/(double)Window.getCurrent().getRealHeight(), 0.0001, 1000);
+		Camera viewCamera = new Camera(Maths.toRadians(150), (double)Window.getCurrent().getRealWidth()/(double)Window.getCurrent().getRealHeight(), 0.0001, 1000);
 		monkey.addComponent(viewCamera);
+		viewCamera.setName("monkey");
 		
-		menu.setViewRoot(getSceneRoot());
+		menu.setViewRoot(getSceneRoot().getChild("world"));
 		menu.setViewCam(viewCamera);
+		addToWorld(monkey);
 	}
 
 	@Override

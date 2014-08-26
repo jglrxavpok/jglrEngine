@@ -108,4 +108,11 @@ public class Texture implements Disposable
 	{
 		return data.getHeight();
 	}
+	
+	public boolean equals(Object other)
+	{
+		if(other instanceof Texture)
+			return ((Texture)other).data.getID() == data.getID();
+		return false;
+	}
 }

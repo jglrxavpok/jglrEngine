@@ -1,6 +1,5 @@
 package org.jge.components;
 
-import org.jge.JGEngine;
 import org.jge.maths.Matrix4;
 import org.jge.maths.Vector3;
 
@@ -9,7 +8,7 @@ public class Camera extends SceneComponent
 
     private Matrix4 projection;
 
-    private static Camera current;
+	private String name = "unknown cam";
 
     public Camera(Matrix4 projection)
     {
@@ -19,7 +18,6 @@ public class Camera extends SceneComponent
     public Camera(double fov, double aspect, double zNear, double zFar)
     {
         super();
-        current = this;
         this.projection = new Matrix4().initPerspective(fov, aspect, zNear, zFar);
     }
     
@@ -40,7 +38,6 @@ public class Camera extends SceneComponent
     public void init(SceneObject object)
     {
         super.init(object);
-        JGEngine.getGame().getRenderEngine().addCamera(this);
     }
     
     public Vector3 getLeft()
@@ -83,14 +80,15 @@ public class Camera extends SceneComponent
         getParent().getTransform().getRotation().getUp().set(up.getX(), up.getY(), up.getZ());
     }
     
-    public static void setCurrent(Camera cam)
+    public String getName()
+	{
+		return name;
+	}
+    
+    public Camera setName(String name)
     {
-        current = cam;
+    	this.name  = name;
+    	return this;
     }
 
-    public static Camera getCurrent()
-    {
-        return current;
-    }
-    
 }

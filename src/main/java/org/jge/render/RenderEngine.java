@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import org.jge.AbstractResource;
+import org.jge.CoreEngine;
 import org.jge.EngineException;
 import org.jge.JGEngine;
 import org.jge.Profiler.ProfileTimer;
@@ -18,6 +19,7 @@ import org.jge.components.Camera;
 import org.jge.components.SceneObject;
 import org.jge.components.ShadowMapSize;
 import org.jge.components.ShadowingInfo;
+import org.jge.game.DummySceneObject;
 import org.jge.game.HUDObject;
 import org.jge.gpuresources.MappedValues;
 import org.jge.gpuresources.TextureResource;
@@ -49,7 +51,7 @@ public class RenderEngine extends MappedValues
 	private Camera altCamera;
 	private SceneObject renderToTextCameraObject;
 	
-	private Camera							  cam;
+	private Camera							  renderCamera;
 	private Shader							  ambientShader;
 
 	private ArrayList<Shader>				postFilters;
@@ -225,7 +227,8 @@ public class RenderEngine extends MappedValues
 			planeMaterial.setTexture("diffuse", renderToTextTarget);
 			altTransform = new Transform();
 			altCamera = new Camera(initMatrix = new Matrix4().initIdentity());
-			renderToTextCameraObject = new SceneObject().addComponent(altCamera);
+			altCamera.setName("alternative camera");
+			renderToTextCameraObject = new DummySceneObject(altCamera);
 			renderToTextCameraObject.getTransform().rotate(new Vector3(0,1,0), Maths.toRadians(180));
 			
 			altTransform.rotate(new Vector3(1, 0, 0), Maths.toRadians(90));
@@ -254,7 +257,7 @@ public class RenderEngine extends MappedValues
 	
 	public Camera getCamera()
 	{
-		return cam;
+		return renderCamera;
 	}
 
 	public RenderEngine clearBuffers()
@@ -285,36 +288,27 @@ public class RenderEngine extends MappedValues
 		else
 			dest.bindAsRenderTarget();
 		
-		Camera temp = cam;
 		
 		setTexture("filterTexture", source);
-	    cam = altCamera;
 	    altCamera.getParent().getTransform().setPosition(new Vector3(0, 0, 0));
 	    altCamera.getParent().getTransform().setRotation(new Quaternion());
 	    altCamera.setProjection(initMatrix);
-	    Camera.setCurrent(cam);
 	    glClear(GL_DEPTH_BUFFER_BIT);
 	    
 	    filter.bind();
 	    filter.updateUniforms(altTransform, altCamera, planeMaterial, this);
 		planeMesh.draw();
 		
-		cam = temp;
 		
 		setTexture("filterTexture", null);
-		Camera.setCurrent(cam);
 	}
 	
-	public RenderEngine renderScene(SceneObject object, Texture renderToTextTarget, Texture renderToTextTargetTemp, double delta)
+	public RenderEngine renderScene(SceneObject object, Camera renderCamera, Texture renderToTextureText, Texture renderToTextureTextTemp, double delta)
 	{
-		renderProfileTimer.startInvocation();
 		setInt("lightNumber", Maths.max(1, lights.size()+1));
 		
-		renderToTextTarget.bindAsRenderTarget();
-		glClearColor(0, 0, 0, 0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		object.renderAll(ambientShader, getCamera(), delta, this);
+		renderToTextureText.bindAsRenderTarget();
+		object.renderAll(ambientShader, renderCamera, delta, this);
 
 		for(BaseLight light : lights)
 		{
@@ -340,21 +334,15 @@ public class RenderEngine extends MappedValues
 				setFloat("shadowVarianceMin", shadowingInfo.getVarianceMin());
 				setVector3("shadowTexelSize", new Vector3(1.0f/(double)ShadowMapSize.values()[shadowMapIndex].getSize(),1.0f/(double)ShadowMapSize.values()[shadowMapIndex].getSize(),0));
 				altCamera.setProjection(shadowingInfo.getProjection());
-				LightCamTrans tr = activeLight.getLightCamTrans(cam);
+				LightCamTrans tr = activeLight.getLightCamTrans(renderCamera);
 				altCamera.getParent().getTransform().setPosition(tr.pos);
 				altCamera.getParent().getTransform().setRotation(tr.rot);
 				
 				setLightMatrix(bias.mul(altCamera.getViewProjection()));
 				
-				Camera temp = cam;
-			    cam = altCamera;
-			    Camera.setCurrent(cam);
-			    
 			    if(shadowingInfo.flipFaces()) glCullFace(GL_FRONT);
-				object.renderAll(shadowMapShader, getCamera(), delta, this);
+				object.renderAll(shadowMapShader, altCamera, delta, this);
 				if(shadowingInfo.flipFaces()) glCullFace(GL_BACK);
-				cam = temp;
-				Camera.setCurrent(cam);
 				
 				if(shadowingInfo.getShadowSoftness() != 0.0)
 					blurShadowMap(shadowMapIndex, shadowingInfo.getShadowSoftness());
@@ -368,44 +356,44 @@ public class RenderEngine extends MappedValues
 			}
 			
 			renderingShadowMap = false;
-			renderToTextTarget.bindAsRenderTarget();
+			renderToTextureText.bindAsRenderTarget();
 			
 			enableGLCap(GL_BLEND);
 			setBlendFunc(GL_ONE, GL_ONE);
 			glDepthMask(false);
 			glDepthFunc(GL_EQUAL);
 			if(light.getShader() != null)
-				object.renderAll(light.getShader(), getCamera(), delta, this);
+				object.renderAll(light.getShader(), renderCamera, delta, this);
 			glDepthFunc(GL_LESS);
 			glDepthMask(true);
 			disableGLCap(GL_BLEND);
 			
 			activeLight = null;
 		}
-		if(!postFilters.isEmpty())
+		
+		if(!postFilters.isEmpty() && renderToTextureText.equals(this.renderToTextTarget))
 		{
 			int i=0;
 			for(Shader filter : postFilters)
 			{
 				if(i % 2 == 0)
 				{
-					applyFilter(filter, renderToTextTarget, renderToTextTargetTemp);
+					applyFilter(filter, renderToTextureText, renderToTextureTextTemp);
 				}
 				else
 				{
-					applyFilter(filter, renderToTextTargetTemp, renderToTextTarget);
+					applyFilter(filter, renderToTextureTextTemp, renderToTextureText);
 				}
 				i++;
 			}
 			
 			if(i % 2 != 0)
 			{
-				applyFilter(nullFilterShader, renderToTextTargetTemp, renderToTextTarget);
+				applyFilter(nullFilterShader, renderToTextureTextTemp, renderToTextureText);
 			}
 		}
-		
-		applyFilter(renderToTextShader, renderToTextTarget, renderToTextTargetTemp);
-		applyFilter(nullFilterShader, renderToTextTargetTemp, renderToTextTarget);
+		applyFilter(renderToTextShader, renderToTextureText, renderToTextureTextTemp);
+		applyFilter(nullFilterShader, renderToTextureTextTemp, renderToTextureText);
 //		printIfGLError();
 		return this;
 	}
@@ -414,15 +402,17 @@ public class RenderEngine extends MappedValues
 	{
 		while(!beforeRenders.isEmpty())
 			beforeRenders.pop().run();
-		renderScene(object, renderToTextTarget, renderToTextTargetTemp, delta);
-		Window.getCurrent().bindAsRenderTarget();
-		Camera temp = cam;
 		
-	    cam = altCamera;
+		renderProfileTimer.startInvocation();
+		renderToTextTarget.bindAsRenderTarget();
+		glClearColor(0, 0, 0, 0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		renderScene(object, this.renderCamera, renderToTextTarget, renderToTextTargetTemp, delta);
+		Window.getCurrent().bindAsRenderTarget();
+		
 	    altCamera.getParent().getTransform().setPosition(new Vector3(0, 0, 0));
 	    altCamera.getParent().getTransform().setRotation(new Quaternion());
 	    altCamera.setProjection(initMatrix);
-	    Camera.setCurrent(cam);
 	    glClearColor(0.0f, 0.0f, 1f, 1.0f);
 	    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	    defaultShader.bind();
@@ -450,9 +440,6 @@ public class RenderEngine extends MappedValues
     		planeMaterial.setTexture("diffuse", renderToTextTarget);
     		enableGLCap(GL_DEPTH_TEST);
 		}
-		
-		cam = temp;
-		Camera.setCurrent(cam);
 		
 		object.onPostRenderAll(delta, this);
 		if(hudObject != null)
@@ -511,12 +498,6 @@ public class RenderEngine extends MappedValues
 		return this;
 	}
 
-	public RenderEngine addCamera(Camera camera)
-	{
-//		this.cam = camera;
-		return this;
-	}
-
 	public int getSamplerSlot(String name)
 	{
 		return samplers.get(name);
@@ -552,8 +533,7 @@ public class RenderEngine extends MappedValues
 
 	public RenderEngine setCamera(Camera cam)
 	{
-		this.cam = cam;
-		Camera.setCurrent(cam);
+		this.renderCamera = cam;
 		return this;
 	}
 	

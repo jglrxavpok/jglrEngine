@@ -22,6 +22,7 @@ public class HUDObject extends SceneObject
 	public HUDObject()
 	{
 		this.hudCam = new Camera(new Matrix4().initOrthographic(0, Window.getCurrent().getRealWidth(), 0, Window.getCurrent().getRealHeight(), -1, 1));
+		hudCam.setName("hud");
 		addComponentAs("hudCam", hudCam);
 	}
 	

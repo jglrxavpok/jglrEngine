@@ -13,7 +13,9 @@ import org.jge.ResourceLoader;
 import org.jge.Window;
 import org.jge.components.SceneObject;
 import org.jge.crash.CrashReport;
+import org.jge.phys.PhysicsEngine;
 import org.jge.render.RenderEngine;
+import org.jge.sound.SoundEngine;
 import org.jge.util.Cursor;
 import org.jge.util.Strings;
 
@@ -131,6 +133,16 @@ public abstract class Game
 	public RenderEngine getRenderEngine()
 	{
 		return engine.getRenderEngine();
+	}
+	
+	public PhysicsEngine getPhysicsEngine()
+	{
+		return engine.getPhysicsEngine();
+	}
+	
+	public SoundEngine getSoundEngine()
+	{
+		return engine.getSoundEngine();
 	}
 
 	public Game addToHUD(SceneObject object)

@@ -19,28 +19,54 @@ import org.jge.sound.SoundEngine;
 import org.jge.util.Cursor;
 import org.jge.util.Strings;
 
+/**
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2014 jglrxavpok
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * @author jglrxavpok
+ * 
+ */
 public abstract class Game
 {
 
-	private File		folder;
-	private boolean running = true;
-	private CoreEngine  engine;
-	private SceneRoot root;
-	private ProfileTimer updateTimer = new ProfileTimer();
-	private Cursor cursor;
+	private File		  folder;
+	private boolean	   running	 = true;
+	private CoreEngine	engine;
+	private SceneRoot	 root;
+	private ProfileTimer  updateTimer = new ProfileTimer();
+	private Cursor		cursor;
 	private LoadingScreen loadingScreen;
-	private Properties properties;
-	
+	private Properties	properties;
+
 	public void crash(CrashReport report)
 	{
 		JGEngine.crash(report);
 	}
-	
+
 	public LoadingScreen getLoadingScreen()
 	{
 		return loadingScreen;
 	}
-	
+
 	public Game setLoadingScreen(LoadingScreen screen)
 	{
 		this.loadingScreen = screen;
@@ -61,13 +87,13 @@ public abstract class Game
 		this.engine = core;
 		return this;
 	}
-	
+
 	public Game setCursor(Cursor cursor)
 	{
 		this.cursor = cursor;
 		return this;
 	}
-	
+
 	public Cursor getCursor()
 	{
 		return cursor;
@@ -84,12 +110,12 @@ public abstract class Game
 		updateGame(delta);
 		updateTimer.endInvocation();
 	}
-	
+
 	public double displayWindowSyncTime()
 	{
 		return displayUpdateTime(0);
 	}
-	
+
 	public double displayUpdateTime(double divisor)
 	{
 		return updateTimer.displayAndReset("Game update", divisor);
@@ -110,8 +136,7 @@ public abstract class Game
 		if(folder == null)
 		{
 			folder = new File(JGEngine.getGamesFolder(), Strings.createCorrectedFileName(getGameName()));
-			if(!folder.exists())
-				folder.mkdirs();
+			if(!folder.exists()) folder.mkdirs();
 		}
 		return folder;
 	}
@@ -121,8 +146,7 @@ public abstract class Game
 	public void drawLoadingScreen(String message)
 	{
 		engine.getRenderEngine().clearBuffers();
-		if(loadingScreen != null)
-			this.loadingScreen.refreshScreen();
+		if(loadingScreen != null) this.loadingScreen.refreshScreen();
 	}
 
 	public void init()
@@ -134,12 +158,12 @@ public abstract class Game
 	{
 		return engine.getRenderEngine();
 	}
-	
+
 	public PhysicsEngine getPhysicsEngine()
 	{
 		return engine.getPhysicsEngine();
 	}
-	
+
 	public SoundEngine getSoundEngine()
 	{
 		return engine.getSoundEngine();
@@ -151,14 +175,14 @@ public abstract class Game
 		object.onAddToSceneAll(getSceneRoot().getChild("hud"));
 		return this;
 	}
-	
+
 	public Game addToScene(SceneObject object)
 	{
 		getSceneRoot().addChild(object);
 		object.onAddToSceneAll(getSceneRoot());
 		return this;
 	}
-	
+
 	public Game addToWorld(SceneObject object)
 	{
 		getSceneRoot().getChild("world").addChild(object);
@@ -180,27 +204,27 @@ public abstract class Game
 		renderEngine.setHUDObject((HUDObject)root.getChild("hud"));
 		renderEngine.render(root.getChild("world"), delta);
 	}
-	
+
 	public boolean isRunning()
 	{
 		return running;
 	}
-	
+
 	public void stop()
 	{
 		this.running = false;
 	}
-	
+
 	public void onPropertiesLoad(Properties loaded)
 	{
-		
+
 	}
-	
+
 	public Properties getProperties()
 	{
 		return properties;
 	}
-	
+
 	public Game saveProperties() throws EngineException
 	{
 		File propsFile = new File(getGameFolder(), "properties.txt");

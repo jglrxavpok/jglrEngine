@@ -176,7 +176,6 @@ public class Vector3 implements BufferWritable
     {
     	double sinAngle = Math.sin(-angle);
         double cosAngle = Math.cos(-angle);
-
         return this.cross(axis.mul(sinAngle)).add(           //Rotation on local X
                 (this.mul(cosAngle)).add(                     //Rotation on local Z
                         axis.mul(this.dot(axis.mul(1 - cosAngle))))); //Rotation on local Y

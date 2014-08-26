@@ -47,6 +47,32 @@ import org.jge.util.BinaryUtils;
 import org.jge.util.Buffers;
 import org.jge.util.Log;
 
+/**
+ * 
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2014 jglrxavpok
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * @author jglrxavpok
+ */
 public class TestGame extends Game
 {
 
@@ -68,7 +94,7 @@ public class TestGame extends Game
 	private SceneObject cameraObject;
 	private Mesh		lowMonkeyMesh;
 	private Font		font;
-	private TestMenu menu;
+	private TestMenu	menu;
 
 	public void init()
 	{
@@ -77,12 +103,13 @@ public class TestGame extends Game
 			ZipSimpleResourceLoader loader = new ZipSimpleResourceLoader(getDiskResourceLoader().getResource(new ResourceLocation("./test.zip")));
 			Log.error(BinaryUtils.toString(loader.getResource(new ResourceLocation("test/test.txt")).getData()));
 			font = SimpleFont.instance;
-//			getRenderEngine().addPostProcessingFilter(new Shader(new ResourceLocation("shaders", "filter-texwaves")));
+			// getRenderEngine().addPostProcessingFilter(new Shader(new
+			// ResourceLocation("shaders", "filter-texwaves")));
 			getRenderEngine().addPostProcessingFilter(new JavaShader(130, JGESimpleVertexShader.class, FilterInvertFragmentShader.class));
-//			getRenderEngine().addPostProcessingFilter(new Shader(new ResourceLocation("shaders", "filter-oldtv")));
+			// getRenderEngine().addPostProcessingFilter(new Shader(new
+			// ResourceLocation("shaders", "filter-oldtv")));
 			menu = new TestMenu();
-			Sprite sprite = new Sprite(new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "heart.png")), Texture.FILTER_NEAREST))
-				.setWidth(32).setHeight(32);
+			Sprite sprite = new Sprite(new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "heart.png")), Texture.FILTER_NEAREST)).setWidth(32).setHeight(32);
 			SceneObject spriteObject = new HUDSpriteObject(sprite);
 			spriteObject.getTransform().setPosition(new Vector3(50, 50, 0));
 			addToHUD(new TextLabelObject(font, "Hello t§uhere! How are you doing §cFFFF0000today, §r§bhm?", 0xFFFFFFFF));
@@ -95,8 +122,7 @@ public class TestGame extends Game
 			material.setTexture("dispMap", new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "bricks2_disp.png"))));
 			material.setFloat("specularIntensity", 0.5f);
 			material.setFloat("specularPower", 4);
-			getWindow().setIcons(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "icon16.png")),
-					getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "icon32.png")));
+			getWindow().setIcons(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "icon16.png")), getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "icon32.png")));
 			Mesh mesh = new Mesh(getClasspathResourceLoader().getResource(new ResourceLocation("test/models/plane.obj")));
 
 			Material materialBricks = new Material();
@@ -105,10 +131,8 @@ public class TestGame extends Game
 				materialBricks.setTexture("diffuse", new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "bricks.png"))));
 				materialBricks.setFloat("specularIntensity", 0.5f);
 				materialBricks.setFloat("specularPower", 4);
-				materialBricks.setTexture("normalMap",
-						new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "bricks_normal.png"))));
-				materialBricks.setTexture("dispMap",
-						new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "bricks_disp.png"))));
+				materialBricks.setTexture("normalMap", new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "bricks_normal.png"))));
+				materialBricks.setTexture("dispMap", new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "bricks_disp.png"))));
 			}
 			catch(Exception e1)
 			{
@@ -132,9 +156,7 @@ public class TestGame extends Game
 			SceneObject test1 = new SceneObject().addComponent(new MeshRenderer(mesh1, material));
 			SceneObject test2 = new SceneObject().addComponent(new MeshRenderer(mesh2, material));
 			Camera camera = new Camera(Maths.toRadians(90), (double)Window.getCurrent().getWidth() / (double)Window.getCurrent().getHeight(), 0.1, 400);
-			cameraObject = new SceneObject()
-					.addComponent(camera)
-					.addComponent(new FreeLook(0.5, true)).addComponent(new FreeMove(0.5));
+			cameraObject = new SceneObject().addComponent(camera).addComponent(new FreeLook(0.5, true)).addComponent(new FreeMove(0.5));
 
 			addToWorld(cameraObject);
 
@@ -147,7 +169,6 @@ public class TestGame extends Game
 			test2.addComponentAs("physics", new PhysicsComponent(0, new BoxPhysShape(new Vector3(8, 0.12, 8))));
 
 			addToWorld(test1);
-
 
 			SceneObject directionalLight = new SceneObject().addComponent(new DirectionalLight(new Vector3(1, 1, 1), 1f));
 			directionalLight.getTransform().rotate(new Vector3(1, 0, 0), Maths.toRadians(-45)).rotate(new Vector3(0, 1, 0), Maths.toRadians(45));
@@ -228,15 +249,15 @@ public class TestGame extends Game
 
 			PhysicsShape planeShape = new BoxPhysShape(new Vector3(31.5f, 0.12f, 31.5f));
 			plane.addComponentAs("physics", new PhysicsComponent(0, planeShape));
-			
+
 			camera.setName("world");
-			
+
 			Music dapperCadaver = Music.get(getClasspathResourceLoader().getResource(new ResourceLocation("test/music", "DapperCadaver-TF2.wav")));
-//			dapperCadaver.play();
+			// dapperCadaver.play();
 			dapperCadaver.setGain(0.01f);
 			dapperCadaver.setPitch(2f);
 			dapperCadaver.setLooping(true);
-			
+
 			getRenderEngine().setCamera(camera);
 			getSoundEngine().setPlayerTransform(cameraObject.getTransform());
 		}
@@ -258,7 +279,7 @@ public class TestGame extends Game
 		addToWorld(cube);
 		PhysicsShape cubeShape = new MeshPhysShape(mesh);
 		cube.addComponentAs("physics", new PhysicsComponent(1, cubeShape));
-		
+
 	}
 
 	private void createCube() throws Exception
@@ -273,7 +294,9 @@ public class TestGame extends Game
 		cube.getTransform().scale(2, 2, 2);
 		PhysicsShape cubeShape = new BoxPhysShape(new Vector3(2, 2, 2));
 		cube.addComponentAs("physics", new PhysicsComponent(1, cubeShape));
-//		cube.addComponent(new SoundSource(new Sound(getClasspathResourceLoader().getResource(new ResourceLocation("test/sounds", "Jump1.wav"))), 1000));
+		// cube.addComponent(new SoundSource(new
+		// Sound(getClasspathResourceLoader().getResource(new
+		// ResourceLocation("test/sounds", "Jump1.wav"))), 1000));
 	}
 
 	public void updateGame(double delta)
@@ -282,7 +305,7 @@ public class TestGame extends Game
 		{
 			crash(new CrashReport("Unknown"));
 		}
-		
+
 		if(Input.isKeyJustPressed(Input.KEY_G))
 		{
 			MonoThreadedLoadingScreen loadingScreen = new MonoThreadedLoadingScreen(this);
@@ -365,17 +388,16 @@ public class TestGame extends Game
 		material2.setFloat("specularPower", 4);
 		monkey.addComponent(new MeshRenderer(monkeyMesh, material2));
 
-
 		monkey.getTransform().setPosition(cameraObject.getTransform().getTransformedPos());
 		monkey.getTransform().setRotation(cameraObject.getTransform().getTransformedRotation());
 
 		PhysicsShape monkeyShape = new MeshPhysShape(lowMonkeyMesh);
 		monkey.addComponentAs("physics", new PhysicsComponent(1, monkeyShape));
-		
-		Camera viewCamera = new Camera(Maths.toRadians(150), (double)Window.getCurrent().getRealWidth()/(double)Window.getCurrent().getRealHeight(), 0.0001, 1000);
+
+		Camera viewCamera = new Camera(Maths.toRadians(150), (double)Window.getCurrent().getRealWidth() / (double)Window.getCurrent().getRealHeight(), 0.0001, 1000);
 		monkey.addComponent(viewCamera);
 		viewCamera.setName("monkey");
-		
+
 		menu.setViewRoot(getSceneRoot().getChild("world"));
 		menu.setViewCam(viewCamera);
 		addToWorld(monkey);
@@ -386,9 +408,9 @@ public class TestGame extends Game
 	{
 		return "Test Game";
 	}
-	
+
 	public void onPropertiesLoad(Properties loaded)
 	{
-		Log.error("test is "+loaded.getProperty("test"));
+		Log.error("test is " + loaded.getProperty("test"));
 	}
 }

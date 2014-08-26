@@ -11,54 +11,53 @@ import org.jge.render.RenderState;
 import org.jge.render.Sprite;
 import org.jge.render.Texture;
 import org.jge.render.shaders.Shader;
+
 import org.lwjgl.opengl.GL30;
 
 public class HUD3DView extends HUDWidget
 {
 
-	private Texture renderTexture;
-	private Texture renderTextureTempTarget;
-	private Camera viewCamera;
-	private Sprite sprite;
+	private Texture	 renderTexture;
+	private Texture	 renderTextureTempTarget;
+	private Camera	  viewCamera;
+	private Sprite	  sprite;
 	private SceneObject viewRoot;
-	private int invocations;
 
 	public HUD3DView(double w, double h)
 	{
 		super(w, h);
 	}
-	
+
 	public void init()
 	{
 		super.init();
-		renderTexture = new Texture((int)getWidth(), (int)getHeight(),null,GL_TEXTURE_2D,GL_NEAREST,GL30.GL_COLOR_ATTACHMENT0, GL30.GL_RGBA32F, GL_RGBA, false);
-		renderTextureTempTarget = new Texture((int)getWidth(), (int)getHeight(),null,GL_TEXTURE_2D,GL_NEAREST,GL30.GL_COLOR_ATTACHMENT0, GL30.GL_RGBA32F, GL_RGBA, false);
-		renderMaterial.setTexture("diffuse", renderTexture);
+		renderTexture = new Texture((int)getWidth(), (int)getHeight(), null, GL_TEXTURE_2D, GL_NEAREST, GL30.GL_COLOR_ATTACHMENT0, GL30.GL_RGBA32F, GL_RGBA, false);
+		renderTextureTempTarget = new Texture((int)getWidth(), (int)getHeight(), null, GL_TEXTURE_2D, GL_NEAREST, GL30.GL_COLOR_ATTACHMENT0, GL30.GL_RGBA32F, GL_RGBA, false);
 		sprite = new Sprite(renderTexture);
 		sprite.flip(false, true);
 	}
-	
+
 	public HUD3DView setViewRoot(SceneObject root)
 	{
 		this.viewRoot = root;
 		return this;
 	}
-	
+
 	public HUD3DView setViewCamera(Camera camera)
 	{
 		this.viewCamera = camera;
 		return this;
 	}
-	
+
 	public void onPostRender(double delta, RenderEngine renderEngine)
 	{
 	}
-	
+
 	public void render(Shader shader, Camera cam, double delta, RenderEngine engine)
 	{
 		TextureResource oldid = engine.getRenderTarget();
 		renderTexture.bindAsRenderTarget();
-		glClearColor(0, 0, 1, 1);
+		glClearColor(1, 1, 1, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
 		if(this.viewCamera != null && viewRoot != null)
 		{
@@ -72,9 +71,7 @@ public class HUD3DView extends HUDWidget
 			Window.getCurrent().bindAsRenderTarget();
 		else
 			oldid.bindAsRenderTarget();
-		
-		shader.bind();
-		shader.updateUniforms(getTransform(), cam, renderMaterial, engine);
+
 		sprite.render(shader, getTransform(), cam, delta, engine);
 	}
 

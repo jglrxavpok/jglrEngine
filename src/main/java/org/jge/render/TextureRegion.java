@@ -4,16 +4,16 @@ public class TextureRegion
 {
 
 	private Texture texture;
-	private double minU;
-	private double minV;
-	private double maxU;
-	private double maxV;
+	private double  minU;
+	private double  minV;
+	private double  maxU;
+	private double  maxV;
 
 	public TextureRegion(Texture texture)
 	{
-		this(texture, 0,0,1,1);
+		this(texture, 0, 0, 1, 1);
 	}
-	
+
 	public TextureRegion(Texture texture, double minU, double minV, double maxU, double maxV)
 	{
 		this.texture = texture;
@@ -47,13 +47,37 @@ public class TextureRegion
 	{
 		return maxV;
 	}
-	
+
 	public TextureRegion setTexture(Texture text)
 	{
 		this.texture = text;
 		return this;
 	}
-	
+
+	public TextureRegion setMinV(double newMinV)
+	{
+		this.minV = newMinV;
+		return this;
+	}
+
+	public TextureRegion setMaxU(double newMaxU)
+	{
+		this.maxU = newMaxU;
+		return this;
+	}
+
+	public TextureRegion setMinU(double newMinU)
+	{
+		this.minU = newMinU;
+		return this;
+	}
+
+	public TextureRegion setMaxV(double newMaxV)
+	{
+		this.maxV = newMaxV;
+		return this;
+	}
+
 	public TextureRegion flip(boolean horizontaly, boolean verticaly)
 	{
 		if(horizontaly)
@@ -62,7 +86,7 @@ public class TextureRegion
 			maxU = minU;
 			minU = oldMaxU;
 		}
-		
+
 		if(verticaly)
 		{
 			double oldMaxV = maxV;

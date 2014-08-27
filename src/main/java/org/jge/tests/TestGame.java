@@ -6,7 +6,7 @@ import java.util.Properties;
 import org.jge.CoreEngine;
 import org.jge.EngineException;
 import org.jge.LoadingTask;
-import org.jge.MonoThreadedLoadingScreen;
+import org.jge.MultiThreadedLoadingScreen;
 import org.jge.ResourceLocation;
 import org.jge.Window;
 import org.jge.ZipSimpleResourceLoader;
@@ -306,7 +306,7 @@ public class TestGame extends Game
 
 		if(Input.isKeyJustPressed(Input.KEY_G))
 		{
-			MonoThreadedLoadingScreen loadingScreen = new MonoThreadedLoadingScreen(this);
+			MultiThreadedLoadingScreen loadingScreen = new MultiThreadedLoadingScreen(this);
 			loadingScreen.addTask(new LoadingTask()
 			{
 				@Override

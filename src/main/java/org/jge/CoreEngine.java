@@ -26,6 +26,7 @@ import org.jge.util.Strings;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.opencl.CL;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GLContext;
 
 /**
@@ -316,6 +317,11 @@ public final class CoreEngine
 			for(Music m : Music.musicsPlaying())
 			{
 				m.stop();
+			}
+
+			if(game.getLoadingScreen().getType() == LoadingScreenType.MULTI_THREADED)
+			{
+				Display.sync(60);
 			}
 			game.getLoadingScreen().refreshScreen();
 			game.getLoadingScreen().runFirstTaskGroupAvailable();

@@ -1,8 +1,8 @@
-package org.jge;
+package org.jge.render;
 
-import java.util.LinkedList;
-
-import org.jge.game.Game;
+import org.jge.components.Camera;
+import org.jge.maths.Transform;
+import org.jge.render.shaders.Shader;
 
 /**
  * The MIT License (MIT)
@@ -26,53 +26,55 @@ import org.jge.game.Game;
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- * 
- * @author jglrxavpok
- * 
  */
-public class MonoThreadedLoadingScreen extends LoadingScreen
+public class Animation
 {
 
-	private LinkedList<LoadingTask> tasksList = new LinkedList<LoadingTask>();
+	private double   speedInTicks;
+	private boolean  loop;
+	private Sprite[] sprites;
+	private int	  index;
 
-	public MonoThreadedLoadingScreen(Game game)
+	public Animation(double speedInTicks, boolean loop, Sprite... sprites)
 	{
-		super(game, LoadingScreenType.MONO_THREADED);
+		this.speedInTicks = speedInTicks;
+		this.loop = loop;
+		this.sprites = sprites;
 	}
 
-	public LoadingScreen convertTo(LoadingScreenType type)
+	public void render(Shader shader, Transform transform, Camera camera, double delta, RenderEngine engine, int tick)
 	{
-		if(type == LoadingScreenType.MONO_THREADED)
-			return this;
-		else if(type == LoadingScreenType.MULTI_THREADED)
-		{
-			MultiThreadedLoadingScreen multiThreaded = new MultiThreadedLoadingScreen(getGameInstance());
-			for(LoadingTask task : tasksList)
-				multiThreaded.addTask(task);
-			return multiThreaded;
-		}
-		return null;
+		getSpriteForTick(tick).render(shader, transform, camera, delta, engine);
 	}
 
-	public int runFirstTaskGroupAvailable()
+	public Sprite getSpriteForTick(int tick)
 	{
-		if(tasksList.isEmpty()) return 0;
-		if(!tasksList.get(0).run()) return -1;
-		tasksList.remove(0);
-		return tasksList.size();
+		updateIndex(tick);
+		return sprites[index];
 	}
 
-	@Override
-	public void addTaskGroup(LoadingTask... runnables)
+	private void updateIndex(int tick)
 	{
-		for(LoadingTask r : runnables)
-			tasksList.add(r);
+		index = (int)((tick * speedInTicks) % sprites.length);
 	}
 
-	@Override
-	public boolean isFinished()
+	public double getSpeedInTicks()
 	{
-		return tasksList.isEmpty();
+		return speedInTicks;
 	}
 
+	public void setSpeedInTicks(double speedInTicks)
+	{
+		this.speedInTicks = speedInTicks;
+	}
+
+	public boolean isLooping()
+	{
+		return loop;
+	}
+
+	public void setLooping(boolean looping)
+	{
+		this.loop = looping;
+	}
 }

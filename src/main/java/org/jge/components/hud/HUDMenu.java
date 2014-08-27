@@ -7,7 +7,7 @@ public class HUDMenu extends HUDWidget
 
 	public HUDMenu()
 	{
-		super(Window.getCurrent().getRealWidth(), Window.getCurrent().getRealHeight());
+		super(Window.getCurrent().getPhysicalWidth(), Window.getCurrent().getPhysicalHeight());
 	}
 
 }

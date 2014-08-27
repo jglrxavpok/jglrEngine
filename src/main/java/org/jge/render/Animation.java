@@ -1,5 +1,8 @@
 package org.jge.render;
 
+import org.jge.CoreEngine;
+import org.jge.ITickable;
+import org.jge.Time;
 import org.jge.components.Camera;
 import org.jge.maths.Transform;
 import org.jge.render.shaders.Shader;
@@ -27,45 +30,56 @@ import org.jge.render.shaders.Shader;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class Animation
+public class Animation implements ITickable
 {
 
-	private double   speedInTicks;
+	private double   delayBetweenFrames;
 	private boolean  loop;
 	private Sprite[] sprites;
-	private int	  index;
+	private double   index;
 
-	public Animation(double speedInTicks, boolean loop, Sprite... sprites)
+	public static Animation fromAtlas(TextureAtlas atlas, double delayBetweenFramesInSeconds, boolean loop)
 	{
-		this.speedInTicks = speedInTicks;
+		Sprite[] spritesList = new Sprite[atlas.getXNbr() * atlas.getYNbr()];
+		int index = 0;
+		for(int y = 0; y < atlas.getYNbr(); y++ )
+		{
+			for(int x = 0; x < atlas.getXNbr(); x++ )
+			{
+				spritesList[index] = new Sprite(atlas.getTiles()[x][y]).setWidth(64).setHeight(64);
+				index++ ;
+			}
+		}
+		return new Animation(delayBetweenFramesInSeconds, loop, spritesList);
+	}
+
+	public Animation(double delayBetweenFramesInSeconds, boolean loop, Sprite... sprites)
+	{
+		CoreEngine.getCurrent().addTickableObject(this);
+		this.delayBetweenFrames = delayBetweenFramesInSeconds;
 		this.loop = loop;
 		this.sprites = sprites;
 	}
 
 	public void render(Shader shader, Transform transform, Camera camera, double delta, RenderEngine engine, int tick)
 	{
-		getSpriteForTick(tick).render(shader, transform, camera, delta, engine);
+		getSprite().render(shader, transform, camera, delta, engine);
 	}
 
-	public Sprite getSpriteForTick(int tick)
+	public Sprite getSprite()
 	{
-		updateIndex(tick);
-		return sprites[index];
+		return sprites[(int)index];
 	}
 
-	private void updateIndex(int tick)
+	public double getDelayBetweenFrames()
 	{
-		index = (int)((tick * speedInTicks) % sprites.length);
+		return delayBetweenFrames;
 	}
 
-	public double getSpeedInTicks()
+	public Animation setDelayBetweenFrames(double delayBetweenFramesInSeconds)
 	{
-		return speedInTicks;
-	}
-
-	public void setSpeedInTicks(double speedInTicks)
-	{
-		this.speedInTicks = speedInTicks;
+		this.delayBetweenFrames = delayBetweenFramesInSeconds;
+		return this;
 	}
 
 	public boolean isLooping()
@@ -73,8 +87,25 @@ public class Animation
 		return loop;
 	}
 
-	public void setLooping(boolean looping)
+	public Animation setLooping(boolean looping)
 	{
 		this.loop = looping;
+		return this;
+	}
+
+	public double getSpriteWidth()
+	{
+		return getSprite().getWidth();
+	}
+
+	public double getSpriteHeight()
+	{
+		return getSprite().getHeight();
+	}
+
+	public void tick(boolean inLoadingScreen)
+	{
+		index += (1.0 / delayBetweenFrames) * Time.getDelta();
+		if((int)index >= sprites.length && loop) index = 0.0;
 	}
 }

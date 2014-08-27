@@ -23,7 +23,7 @@ public class Sprite extends TextureRegion
 
 	public Sprite(TextureRegion region)
 	{
-		this(region.getTexture(), region.getMinU(), region.getMinV(), region.getMaxU(), region.getMaxV(), Maths.abs(region.getMaxU() - region.getMinU()) / region.getTexture().getWidth(), Maths.abs(region.getMaxV() - region.getMinV()) / region.getTexture().getHeight());
+		this(region.getTexture(), region.getMinU(), region.getMinV(), region.getMaxU(), region.getMaxV(), Maths.abs(region.getMaxU() - region.getMinU()) * region.getTexture().getWidth(), Maths.abs(region.getMaxV() - region.getMinV()) * region.getTexture().getHeight());
 	}
 
 	public Sprite(Texture texture, double pixelX, double pixelY, double pixelW, double pixelH)

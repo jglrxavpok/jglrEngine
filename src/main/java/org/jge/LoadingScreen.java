@@ -31,7 +31,7 @@ public abstract class LoadingScreen
 		{
 			e.printStackTrace();
 		}
-		camera = new Camera(new Matrix4().initOrthographic(0, Window.getCurrent().getRealWidth(), 0, Window.getCurrent().getRealHeight(), -1.0, 100));
+		camera = new Camera(new Matrix4().initOrthographic(0, Window.getCurrent().getPhysicalWidth(), 0, Window.getCurrent().getPhysicalHeight(), -1.0, 100));
 		new DummySceneObject(camera);
 	}
 
@@ -64,16 +64,21 @@ public abstract class LoadingScreen
 		game.getWindow().bindAsRenderTarget();
 		glClearColor(0, 0, 0, 0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		CoreEngine.getCurrent().getRenderEngine().disableGLCap(GL_CULL_FACE);
+		RenderEngine engine = CoreEngine.getCurrent().getRenderEngine();
+		engine.pushState();
+		engine.disableGLCap(GL_CULL_FACE);
+		engine.disableGLCap(GL_DEPTH_TEST);
+		engine.enableGLCap(GL_BLEND);
+		engine.setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		render(backgroundImage, CoreEngine.getCurrent().getRenderEngine(), camera);
-		CoreEngine.getCurrent().getRenderEngine().enableGLCap(GL_CULL_FACE);
+		engine.popState();
 		game.getWindow().refresh();
 	}
 
 	public void render(Sprite backgroundImage, RenderEngine engine, Camera camera)
 	{
-		backgroundImage.setWidth(Window.getCurrent().getRealWidth());
-		backgroundImage.setHeight(Window.getCurrent().getRealHeight());
+		backgroundImage.setWidth(Window.getCurrent().getPhysicalWidth());
+		backgroundImage.setHeight(Window.getCurrent().getPhysicalHeight());
 		backgroundImage.render(engine.defaultShader, Transform.NULL, camera, 1, engine);
 	}
 

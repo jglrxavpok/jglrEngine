@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.imageio.ImageIO;
@@ -84,6 +85,7 @@ public final class CoreEngine
 	private PhysicsEngine				 physEngine;
 	private DiskSimpleResourceLoader	  diskResLoader;
 	private static CoreEngine			 current;
+	private ArrayList<ITickable>		  tickables				   = new ArrayList<ITickable>();
 
 	public CoreEngine(Game game)
 	{
@@ -312,6 +314,8 @@ public final class CoreEngine
 			screenshotKey = false;
 		}
 
+		Time.setDelta(delta);
+		int lastRecordedTick = tick;
 		while(game.getLoadingScreen() != null && !game.getLoadingScreen().isFinished())
 		{
 			for(Music m : Music.musicsPlaying())
@@ -323,14 +327,23 @@ public final class CoreEngine
 			{
 				Display.sync(60);
 			}
+			tick++ ; // We fake the tick counter to update animations
+			tickTickables(true);
 			game.getLoadingScreen().refreshScreen();
 			game.getLoadingScreen().runFirstTaskGroupAvailable();
 		}
+		tick = lastRecordedTick;
 		physEngine.update(delta);
 		soundEngine.update(delta);
 		game.update(delta);
-
+		tickTickables(false);
 		tick++ ;
+	}
+
+	private void tickTickables(boolean inLoadingScreen)
+	{
+		for(ITickable tickable : tickables)
+			tickable.tick(inLoadingScreen);
 	}
 
 	public RenderEngine getRenderEngine()
@@ -342,7 +355,7 @@ public final class CoreEngine
 	{
 		renderEngine.clearBuffers();
 		glColor4f(1, 1, 1, 1);
-		glViewport(0, 0, window.getRealWidth(), window.getRealHeight());
+		glViewport(0, 0, window.getPhysicalWidth(), window.getPhysicalHeight());
 		game.render(renderEngine, delta);
 	}
 
@@ -385,6 +398,11 @@ public final class CoreEngine
 	{
 		running = false;
 		cleanup();
+	}
+
+	public void addTickableObject(ITickable tickable)
+	{
+		tickables.add(tickable);
 	}
 
 }

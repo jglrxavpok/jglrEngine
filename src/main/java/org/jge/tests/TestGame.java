@@ -32,10 +32,12 @@ import org.jge.phys.PhysicsComponent;
 import org.jge.phys.PhysicsShape;
 import org.jge.phys.shapes.BoxPhysShape;
 import org.jge.phys.shapes.MeshPhysShape;
+import org.jge.render.Animation;
 import org.jge.render.Material;
 import org.jge.render.ParticleGenerator;
 import org.jge.render.Sprite;
 import org.jge.render.Texture;
+import org.jge.render.TextureAtlas;
 import org.jge.render.fonts.Font;
 import org.jge.render.fonts.SimpleFont;
 import org.jge.render.mesh.Mesh;
@@ -307,6 +309,16 @@ public class TestGame extends Game
 		if(Input.isKeyJustPressed(Input.KEY_G))
 		{
 			MultiThreadedLoadingScreen loadingScreen = new MultiThreadedLoadingScreen(this);
+			try
+			{
+				Texture t = new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures/ascensionPlayer.png")), Texture.FILTER_NEAREST);
+				Animation anim = Animation.fromAtlas(new TextureAtlas(t, 16, 16), 0.15, true);
+				loadingScreen.setAnimation(anim);
+			}
+			catch(Exception e1)
+			{
+				e1.printStackTrace();
+			}
 			loadingScreen.addTask(new LoadingTask()
 			{
 				@Override
@@ -392,7 +404,7 @@ public class TestGame extends Game
 		PhysicsShape monkeyShape = new MeshPhysShape(lowMonkeyMesh);
 		monkey.addComponentAs("physics", new PhysicsComponent(1, monkeyShape));
 
-		Camera viewCamera = new Camera(Maths.toRadians(150), (double)Window.getCurrent().getRealWidth() / (double)Window.getCurrent().getRealHeight(), 0.0001, 1000);
+		Camera viewCamera = new Camera(Maths.toRadians(150), (double)Window.getCurrent().getPhysicalWidth() / (double)Window.getCurrent().getPhysicalHeight(), 0.0001, 1000);
 		monkey.addComponent(viewCamera);
 		viewCamera.setName("monkey");
 

@@ -6,6 +6,7 @@ import java.util.Stack;
 import org.jge.components.Camera;
 import org.jge.game.Game;
 import org.jge.maths.Transform;
+import org.jge.maths.Vector3;
 import org.jge.render.Animation;
 import org.jge.render.RenderEngine;
 import org.jge.render.Sprite;
@@ -119,17 +120,22 @@ public class MultiThreadedLoadingScreen extends LoadingScreen
 		taskGroups.push(runnables);
 	}
 
+	public void setAnimation(Animation anim)
+	{
+		this.animation = anim;
+	}
+
 	public void render(Sprite backgroundImage, RenderEngine engine, Camera camera)
 	{
-		if(animation == null)
+		super.render(backgroundImage, engine, camera);
+		if(animation != null)
 		{
-			backgroundImage.setWidth(Window.getCurrent().getRealWidth());
-			backgroundImage.setHeight(Window.getCurrent().getRealHeight());
-			backgroundImage.render(engine.defaultShader, Transform.NULL, camera, 1, engine);
-		}
-		else
-		{
-
+			int tick = CoreEngine.getCurrent().getTick();
+			double x = backgroundImage.getWidth() - animation.getSpriteWidth();
+			double y = 0;
+			Transform.GLOBAL.setPosition(new Vector3(x, y, 0));
+			animation.render(engine.defaultShader, Transform.GLOBAL, camera, 1, engine, tick);
+			Transform.GLOBAL.setPosition(Vector3.NULL);
 		}
 	}
 }

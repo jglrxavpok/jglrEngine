@@ -10,6 +10,7 @@ import org.jge.maths.Maths;
 import org.jge.maths.Vector3;
 import org.jge.util.Buffers;
 import org.jge.util.Log;
+
 import org.lwjgl.openal.AL10;
 
 public class Sound implements Disposable
@@ -99,7 +100,7 @@ public class Sound implements Disposable
 
 	public Sound pause(int source)
 	{
-		AL10.alSourcePause(source);
+		if(isPlaying(source)) AL10.alSourcePause(source);
 		printIfError();
 		return this;
 	}
@@ -111,7 +112,7 @@ public class Sound implements Disposable
 
 	public Sound stop(int source)
 	{
-		AL10.alSourceStop(source);
+		if(isPlaying(source)) AL10.alSourceStop(source);
 		printIfError();
 		return this;
 	}

@@ -39,9 +39,6 @@ import org.jge.render.Texture;
 import org.jge.render.fonts.Font;
 import org.jge.render.fonts.SimpleFont;
 import org.jge.render.mesh.Mesh;
-import org.jge.render.shaders.JGESimpleVertexShader;
-import org.jge.render.shaders.JavaShader;
-import org.jge.render.shaders.filters.FilterInvertFragmentShader;
 import org.jge.sound.Music;
 import org.jge.util.BinaryUtils;
 import org.jge.util.Buffers;
@@ -105,7 +102,8 @@ public class TestGame extends Game
 			font = SimpleFont.instance;
 			// getRenderEngine().addPostProcessingFilter(new Shader(new
 			// ResourceLocation("shaders", "filter-texwaves")));
-			getRenderEngine().addPostProcessingFilter(new JavaShader(130, JGESimpleVertexShader.class, FilterInvertFragmentShader.class));
+			// getRenderEngine().addPostProcessingFilter(new JavaShader(130,
+			// JGESimpleVertexShader.class, FilterInvertFragmentShader.class));
 			// getRenderEngine().addPostProcessingFilter(new Shader(new
 			// ResourceLocation("shaders", "filter-oldtv")));
 			menu = new TestMenu();
@@ -155,7 +153,7 @@ public class TestGame extends Game
 
 			SceneObject test1 = new SceneObject().addComponent(new MeshRenderer(mesh1, material));
 			SceneObject test2 = new SceneObject().addComponent(new MeshRenderer(mesh2, material));
-			Camera camera = new Camera(Maths.toRadians(90), (double)Window.getCurrent().getWidth() / (double)Window.getCurrent().getHeight(), 0.1, 400);
+			Camera camera = new Camera(Maths.toRadians(70), (double)Window.getCurrent().getWidth() / (double)Window.getCurrent().getHeight(), 0.1, 400);
 			cameraObject = new SceneObject().addComponent(camera).addComponent(new FreeLook(0.5, true)).addComponent(new FreeMove(0.5));
 
 			addToWorld(cameraObject);

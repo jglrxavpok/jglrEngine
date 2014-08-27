@@ -16,45 +16,44 @@ public class Sound implements Disposable
 {
 
 	private static HashMap<AbstractResource, SoundResource> loadedResources = new HashMap<AbstractResource, SoundResource>();
-    private SoundResource data;
-	private AbstractResource res;
-	private int[] sources;
-	private int sourceIndex = 0;
+	private SoundResource								   data;
+	private AbstractResource								res;
+	private int[]										   sources;
+	private int											 sourceIndex	 = 0;
 
 	public Sound(AbstractResource res)
 	{
 		this(res, CoreEngine.getCurrent().getSoundEngine().getMaxSourcesPerSound());
 	}
-	
+
 	public Sound(AbstractResource res, int buffers)
 	{
 		sources = new int[Maths.min(buffers, CoreEngine.getCurrent().getSoundEngine().getMaxSourcesPerSound())];
 		this.res = res;
 		SoundResource existingResource = loadedResources.get(res);
-    	
-    	if(existingResource != null)
-    	{
-    		JGEngine.getDisposer().add(this);
-    		data = existingResource;
-    		data.increaseCounter();
-    	}
-    	else
-    	{
-    		data = CoreEngine.getCurrent().getSoundEngine().loadSound(res);
-            loadedResources.put(res, data);
-    	}
+
+		if(existingResource != null)
+		{
+			JGEngine.getDisposer().add(this);
+			data = existingResource;
+			data.increaseCounter();
+		}
+		else
+		{
+			data = CoreEngine.getCurrent().getSoundEngine().loadSound(res);
+			loadedResources.put(res, data);
+		}
 	}
 
 	public void dispose()
-    {
-    	if(data.decreaseCounter())
-    	{
-    		data.dispose();
-    		if(res != null)
-    			loadedResources.remove(res);
-    	}
-    }
-	
+	{
+		if(data.decreaseCounter())
+		{
+			data.dispose();
+			if(res != null) loadedResources.remove(res);
+		}
+	}
+
 	public int play()
 	{
 		nextSoundIndex();
@@ -65,13 +64,12 @@ public class Sound implements Disposable
 
 	int nextSoundIndex()
 	{
-		sourceIndex++;
+		sourceIndex++ ;
 		if(sourceIndex >= sources.length)
 		{
 			sourceIndex = 0;
 		}
-		if(sources[sourceIndex] == 0)
-			sources[sourceIndex] = data.createSourceID();
+		if(sources[sourceIndex] == 0) sources[sourceIndex] = data.createSourceID();
 		return sources[sourceIndex];
 	}
 
@@ -81,48 +79,48 @@ public class Sound implements Disposable
 		printIfError();
 		return this;
 	}
-	
+
 	public Sound rewind()
 	{
 		return rewind(sources[sourceIndex]);
 	}
-	
+
 	public Sound resume(int source)
 	{
 		AL10.alSourcePlay(source);
 		printIfError();
 		return this;
 	}
-	
+
 	public Sound resume()
 	{
 		return resume(sources[sourceIndex]);
 	}
-	
+
 	public Sound pause(int source)
 	{
 		AL10.alSourcePause(source);
 		printIfError();
 		return this;
 	}
-	
+
 	public Sound pause()
 	{
 		return pause(sources[sourceIndex]);
 	}
-	
+
 	public Sound stop(int source)
 	{
 		AL10.alSourceStop(source);
 		printIfError();
 		return this;
 	}
-	
+
 	public Sound stop()
 	{
 		return stop(sources[sourceIndex]);
 	}
-	
+
 	private static void printIfError()
 	{
 		int error = AL10.alGetError();
@@ -137,18 +135,18 @@ public class Sound implements Disposable
 		AL10.alSource(id, AL10.AL_POSITION, Buffers.createFlippedBuffer(pos));
 		return this;
 	}
-	
+
 	public Sound setSourceVelocity(int id, Vector3 vel)
 	{
 		AL10.alSource(id, AL10.AL_VELOCITY, Buffers.createFlippedBuffer(vel));
 		return this;
 	}
-	
+
 	public boolean isPlaying()
 	{
 		return isPlaying(sources[sourceIndex]);
 	}
-	
+
 	public boolean isPlaying(int source)
 	{
 		return AL10.alGetSourcei(source, AL10.AL_PLAYING) != 0;
@@ -158,8 +156,7 @@ public class Sound implements Disposable
 	{
 		for(int source : sources)
 		{
-			if(source != 0)
-				AL10.alSourcei(source, AL10.AL_LOOPING, loop ? AL10.AL_TRUE : AL10.AL_FALSE);
+			if(source != 0) AL10.alSourcei(source, AL10.AL_LOOPING, loop ? AL10.AL_TRUE : AL10.AL_FALSE);
 		}
 		return this;
 	}
@@ -168,8 +165,7 @@ public class Sound implements Disposable
 	{
 		for(int source : sources)
 		{
-			if(source != 0)
-				AL10.alSourcef(source, AL10.AL_GAIN, gain);
+			if(source != 0) AL10.alSourcef(source, AL10.AL_GAIN, gain);
 		}
 		return this;
 	}

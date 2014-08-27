@@ -16,7 +16,7 @@ public class MeshPhysShape extends PhysicsShape
 	{
 		this.mesh = mesh;
 	}
-	
+
 	@Override
 	protected CollisionShape toCollisionShape()
 	{

@@ -15,8 +15,7 @@ public class ShadowColorCommand extends AbstractCommand
 	@Override
 	public String run(CommandArgument[] args)
 	{
-		if(args.length != 3)
-			return BAD_USAGE;
+		if(args.length != 3) return BAD_USAGE;
 		CoreEngine.getCurrent().getRenderEngine().setVector3("shadowColor", new Vector3(args[0].getContentAsDouble(), args[1].getContentAsDouble(), args[2].getContentAsDouble()));
 		return "Successfully changed shadow color";
 	}
@@ -26,13 +25,13 @@ public class ShadowColorCommand extends AbstractCommand
 	{
 		return 1;
 	}
-	
+
 	public String[] getCorrectUsages()
 	{
 		return new String[]
-				{
-					getCommand()+" <red> <green> <blue>"
-				};
+		{
+			getCommand() + " <red> <green> <blue>"
+		};
 	}
 
 	public String getDescription()

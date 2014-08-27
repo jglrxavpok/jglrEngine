@@ -4,11 +4,11 @@ import org.jge.maths.Matrix4;
 
 public class ShadowingInfo
 {
-	private Matrix4 projection;
-	private boolean flipFaces;
-	private float varianceMin;
-	private float shadowSoftness;
-	private float lightBleedingReduction;
+	private Matrix4	   projection;
+	private boolean	   flipFaces;
+	private float		 varianceMin;
+	private float		 shadowSoftness;
+	private float		 lightBleedingReduction;
 	private ShadowMapSize shadowMapSize;
 
 	public ShadowingInfo(Matrix4 projection)
@@ -24,12 +24,12 @@ public class ShadowingInfo
 	{
 		return projection;
 	}
-	
+
 	public boolean flipFaces()
 	{
 		return flipFaces;
 	}
-	
+
 	public ShadowingInfo flipFaces(boolean cull)
 	{
 		this.flipFaces = cull;
@@ -79,16 +79,15 @@ public class ShadowingInfo
 		this.projection = projection;
 		return this;
 	}
-	
+
 	public ShadowingInfo setShadowMapSize(ShadowMapSize size)
 	{
 		this.shadowMapSize = size;
 		return this;
 	}
-	
+
 	public ShadowMapSize getShadowMapSize()
 	{
 		return shadowMapSize;
 	}
 }
-

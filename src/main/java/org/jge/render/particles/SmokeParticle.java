@@ -15,28 +15,28 @@ public class SmokeParticle extends Particle
 	{
 		this(pos, velocity, 60, black);
 	}
-	
+
 	public SmokeParticle(Vector3 pos, Vector3 velocity, int life, boolean black)
 	{
 		this(pos, velocity, life, Vector3.NULL, black);
 	}
-	
+
 	public SmokeParticle(Vector3 pos, Vector3 velocity, int life, Vector3 gravity, boolean black)
 	{
-		super(pos, velocity, life, gravity, new Sprite(ParticleSystem.particleMaterial.getTexture("diffuse"), 0,0,16,16));
-		
+		super(pos, velocity, life, gravity, new Sprite(ParticleSystem.particleMaterial.getTexture("diffuse"), 0, 0, 16, 16));
+
 		int spritesNbr = 10;
 		spritesArray = new Sprite[spritesNbr];
-		for(int i = 0 ; i<spritesNbr; i++)
+		for(int i = 0; i < spritesNbr; i++ )
 		{
-			spritesArray[i] = new Sprite(ParticleSystem.particleMaterial.getTexture("diffuse"), 0+i*16, black ? 32 : 16 ,16,16);
+			spritesArray[i] = new Sprite(ParticleSystem.particleMaterial.getTexture("diffuse"), 0 + i * 16, black ? 32 : 16, 16, 16);
 		}
 	}
-	
+
 	public Sprite getSprite()
 	{
-		double time = (double)getTicksExisted()/(double)getMaxLife();
-		return spritesArray[(int)(Maths.floor(time* spritesArray.length-1))];
+		double time = (double)getTicksExisted() / (double)getMaxLife();
+		return spritesArray[(int)(Maths.floor(time * spritesArray.length - 1))];
 	}
-	
+
 }

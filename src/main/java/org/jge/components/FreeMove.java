@@ -6,12 +6,13 @@ import org.jge.maths.Vector3;
 public class FreeMove extends SceneComponent
 {
 
-	public static final boolean AZERTY_KEYBOARD = true;
-	private static final Vector3 yAxis = new Vector3(0, 1, 0);
-	private double speed;
-	
+	public static final boolean  AZERTY_KEYBOARD = true;
+	private static final Vector3 yAxis		   = new Vector3(0, 1, 0);
+	private double			   speed;
+
 	/**
-	 * @param speed: in m/s!
+	 * @param speed
+	 *            : in m/s!
 	 */
 	public FreeMove(double speed)
 	{
@@ -25,8 +26,7 @@ public class FreeMove extends SceneComponent
 
 	public void moveBackwards(double amnt)
 	{
-		this.move(getParent().getTransform().getRotation().getForward()
-				.negative(), amnt);
+		this.move(getParent().getTransform().getRotation().getForward().negative(), amnt);
 	}
 
 	public void strafeLeft(double amnt)
@@ -69,7 +69,7 @@ public class FreeMove extends SceneComponent
 			strafeRight(speed);
 		}
 
-		if(Input.isKeyDown( AZERTY_KEYBOARD ? Input.KEY_Q : Input.KEY_A))
+		if(Input.isKeyDown(AZERTY_KEYBOARD ? Input.KEY_Q : Input.KEY_A))
 		{
 			strafeLeft(speed);
 		}
@@ -97,7 +97,6 @@ public class FreeMove extends SceneComponent
 
 	public void move(Vector3 dir, double amt)
 	{
-		getParent().getTransform().setPosition(
-				getParent().getTransform().getPosition().add(dir.mul(amt)));
+		getParent().getTransform().setPosition(getParent().getTransform().getPosition().add(dir.mul(amt)));
 	}
 }

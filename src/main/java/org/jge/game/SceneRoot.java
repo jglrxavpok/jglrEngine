@@ -8,6 +8,6 @@ public class SceneRoot extends SceneObject
 	public SceneRoot()
 	{
 		addChildAs("world", new WorldObject());
-		addChildAs("hud", new HUDObject());		
+		addChildAs("hud", new HUDObject());
 	}
 }

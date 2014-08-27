@@ -24,8 +24,7 @@ public class ParticleSystem extends SceneObject
 	{
 		try
 		{
-			particleMaterial.setTexture("diffuse", new Texture(CoreEngine.getCurrent().getClasspathResourceLoader().getResource(new ResourceLocation("textures", "particles.png")),
-					GL_NEAREST));
+			particleMaterial.setTexture("diffuse", new Texture(CoreEngine.getCurrent().getClasspathResourceLoader().getResource(new ResourceLocation("textures", "particles.png")), GL_NEAREST));
 		}
 		catch(Exception e)
 		{
@@ -71,9 +70,9 @@ public class ParticleSystem extends SceneObject
 	public void render(Shader shader, Camera cam, double delta, RenderEngine engine)
 	{
 		if(particles.isEmpty()) return;
-		
+
 		engine.pushState();
-		
+
 		engine.setLightMatrix(new Matrix4().initIdentity());
 		engine.disableGLCap(GL_CULL_FACE);
 

@@ -7,16 +7,15 @@ public abstract class WidgetEvent extends Event
 {
 
 	private HUDWidget source;
-	
+
 	public WidgetEvent(HUDWidget source)
 	{
 		this.source = source;
 	}
-	
+
 	public HUDWidget getSource()
 	{
 		return source;
 	}
-	
 
 }

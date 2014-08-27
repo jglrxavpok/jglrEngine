@@ -6,31 +6,31 @@ import org.jge.maths.Vector3;
 public class Particle
 {
 
-	private Vector3 pos;
-	private Vector3 velocity;
-	private int life;
-	private boolean dead;
-	private Vector3 gravityForce;
-	private Sprite sprite;
+	private Vector3   pos;
+	private Vector3   velocity;
+	private int	   life;
+	private boolean   dead;
+	private Vector3   gravityForce;
+	private Sprite	sprite;
 	private Transform trans;
-	private int ticksExisted;
-	private int maxLife;
+	private int	   ticksExisted;
+	private int	   maxLife;
 
 	public Particle(Vector3 pos, Vector3 velocity)
 	{
 		this(pos, velocity, 60);
 	}
-	
+
 	public Particle(Vector3 pos, Vector3 velocity, int life)
 	{
 		this(pos, velocity, life, Vector3.NULL);
 	}
-	
+
 	public Particle(Vector3 pos, Vector3 velocity, int life, Vector3 gravity)
 	{
-		this(pos, velocity, life, gravity, new Sprite(ParticleSystem.particleMaterial.getTexture("diffuse"), 0,0,16,16));
+		this(pos, velocity, life, gravity, new Sprite(ParticleSystem.particleMaterial.getTexture("diffuse"), 0, 0, 16, 16));
 	}
-	
+
 	public Particle(Vector3 pos, Vector3 velocity, int life, Vector3 gravity, Sprite sprite)
 	{
 		this.pos = pos;
@@ -44,24 +44,23 @@ public class Particle
 
 	public void update(double delta)
 	{
-		life--;
-		ticksExisted++;
+		life-- ;
+		ticksExisted++ ;
 		velocity.set(velocity.add(gravityForce.mul(delta)));
 		pos.set(pos.add(velocity.mul(delta)));
-		if(life <= 0)
-			dead = true;
+		if(life <= 0) dead = true;
 	}
-	
+
 	public int getMaxLife()
 	{
 		return maxLife;
 	}
-	
+
 	public int getTicksExisted()
 	{
 		return ticksExisted;
 	}
-	
+
 	public Vector3 getPos()
 	{
 		return pos;

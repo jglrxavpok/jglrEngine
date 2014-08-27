@@ -5,24 +5,24 @@ import org.jge.Disposable;
 public class TextureAtlas implements Disposable
 {
 
-	private Texture texture;
-	private int tileWidth;
-	private int tileHeight;
-	private int xSpacing;
-	private int ySpacing;
-	
+	private Texture		   texture;
+	private int			   tileWidth;
+	private int			   tileHeight;
+	private int			   xSpacing;
+	private int			   ySpacing;
+
 	/**
-	 *  [Column][Row]
+	 * [Column][Row]
 	 */
 	private TextureRegion[][] tiles;
-	private int xNbr;
-	private int yNbr;
+	private int			   xNbr;
+	private int			   yNbr;
 
 	public TextureAtlas(Texture texture, int tileWidth, int tileHeight)
 	{
-		this(texture, tileWidth, tileHeight, 0,0);
+		this(texture, tileWidth, tileHeight, 0, 0);
 	}
-	
+
 	public TextureAtlas(Texture texture, int tileWidth, int tileHeight, int xSpacing, int ySpacing)
 	{
 		this.texture = texture;
@@ -30,40 +30,40 @@ public class TextureAtlas implements Disposable
 		this.tileHeight = tileHeight;
 		this.xSpacing = xSpacing;
 		this.ySpacing = ySpacing;
-		
-		for(int i = 0;i<texture.getWidth();i+=tileWidth+xSpacing)
+
+		for(int i = 0; i < texture.getWidth(); i += tileWidth + xSpacing)
 		{
-			xNbr++;
+			xNbr++ ;
 		}
-		
-		for(int i = 0;i<texture.getHeight();i+=tileHeight+ySpacing)
+
+		for(int i = 0; i < texture.getHeight(); i += tileHeight + ySpacing)
 		{
-			yNbr++;
+			yNbr++ ;
 		}
 		tiles = new TextureRegion[xNbr][yNbr];
-		for(int x = 0;x<xNbr;x++)
+		for(int x = 0; x < xNbr; x++ )
 		{
-			for(int y = 0;y<yNbr;y++)
+			for(int y = 0; y < yNbr; y++ )
 			{
-				double minU = (x*(tileWidth+xSpacing))/(double)texture.getWidth();
-				double minV = (y*(tileHeight+ySpacing))/(double)texture.getHeight();
-				
-				double maxU = (x*(tileWidth+xSpacing)+(tileWidth+xSpacing))/(double)texture.getWidth();
-				double maxV = (y*(tileHeight+ySpacing)+(tileHeight+ySpacing))/(double)texture.getHeight();
-				
+				double minU = (x * (tileWidth + xSpacing)) / (double)texture.getWidth();
+				double minV = (y * (tileHeight + ySpacing)) / (double)texture.getHeight();
+
+				double maxU = (x * (tileWidth + xSpacing) + (tileWidth + xSpacing)) / (double)texture.getWidth();
+				double maxV = (y * (tileHeight + ySpacing) + (tileHeight + ySpacing)) / (double)texture.getHeight();
+
 				tiles[x][y] = new TextureRegion(texture, minU, minV, maxU, maxV);
 			}
 		}
 	}
-	
+
 	/**
-	 *  [Column][Row]
+	 * [Column][Row]
 	 */
 	public TextureRegion[][] getTiles()
 	{
 		return tiles;
 	}
-	
+
 	public void dispose()
 	{
 		texture.dispose();

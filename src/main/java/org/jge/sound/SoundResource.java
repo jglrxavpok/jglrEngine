@@ -13,48 +13,47 @@ public class SoundResource implements Disposable
 
 	private int referenceCounter;
 	private int bufferPointer;
-	
+
 	public SoundResource(byte[] bufferData, int format, int freq)
 	{
 		this(Buffers.createFlippedByteBuffer(bufferData), format, freq);
 	}
-	
+
 	public SoundResource(ByteBuffer bufferData, int format, int freq)
 	{
 		JGEngine.getDisposer().add(this);
-		
+
 		bufferPointer = AL10.alGenBuffers();
-		if(AL10.alGetError() != AL10.AL_NO_ERROR)
-			throw new RuntimeEngineException("Error while creating sound buffer");
+		if(AL10.alGetError() != AL10.AL_NO_ERROR) throw new RuntimeEngineException("Error while creating sound buffer");
 		AL10.alBufferData(bufferPointer, format, bufferData, freq);
 	}
-	
+
 	public int getBufferPointer()
 	{
 		return bufferPointer;
 	}
-	
+
 	public boolean decreaseCounter()
-    {
-    	referenceCounter--;
-    	return referenceCounter <= 0;
-    }
-    
-    public void increaseCounter()
-    {
-    	referenceCounter++;
-    }
-    
-    @Override
-    protected void finalize()
-    {
-    	dispose();
-    }
-    
-    public void dispose()
-    {
-    	
-    }
+	{
+		referenceCounter-- ;
+		return referenceCounter <= 0;
+	}
+
+	public void increaseCounter()
+	{
+		referenceCounter++ ;
+	}
+
+	@Override
+	protected void finalize()
+	{
+		dispose();
+	}
+
+	public void dispose()
+	{
+
+	}
 
 	public int createSourceID()
 	{

@@ -12,7 +12,7 @@ public class ThreadReadConsoleInput extends Thread
 		super("Read Console commands");
 		this.running = true;
 	}
-	
+
 	public void run()
 	{
 		Scanner sc = new Scanner(System.in);
@@ -20,8 +20,8 @@ public class ThreadReadConsoleInput extends Thread
 		{
 			try
 			{
-    			String line = sc.nextLine();
-    			Console.executeStringCommand(line);
+				String line = sc.nextLine();
+				Console.executeStringCommand(line);
 			}
 			catch(Exception e)
 			{

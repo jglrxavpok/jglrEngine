@@ -12,12 +12,13 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * VERY OLD, TO UPDATE
+ * 
  * @author jglrxavpok
- *
+ * 
  */
 public final class IO
 {
-	
+
 	/**
 	 * @param is
 	 * @param os
@@ -30,53 +31,52 @@ public final class IO
 		byte[] buffer = new byte[bufferLength];
 		while((i = is.read(buffer, 0, buffer.length)) != -1)
 		{
-			os.write(buffer,0,i);
+			os.write(buffer, 0, i);
 		}
 		return os;
 	}
-	
+
 	public static OutputStream copy(InputStream in, String output) throws FileNotFoundException, IOException
 	{
 		return copy(in, new BufferedOutputStream(new FileOutputStream(output)), 65565);
 	}
-	
+
 	public static void copy(InputStream in, OutputStream output) throws FileNotFoundException, IOException
 	{
 		copy(in, output, 65565);
 	}
-	
+
 	public static String readString(InputStream in, String charset) throws UnsupportedEncodingException, IOException
 	{
 		return new String(read(in), charset);
 	}
-	
+
 	public static byte[] read(InputStream in) throws IOException
 	{
-			byte[] buffer = new byte[65565];
-			ByteArrayOutputStream ous = new ByteArrayOutputStream(buffer.length);
-			int i = 0;
-			while((i = in.read(buffer, 0, buffer.length)) != -1)
-			{
-				ous.write(buffer, 0, i);
-			}
-			ous.close();
-			return ous.toByteArray();
+		byte[] buffer = new byte[65565];
+		ByteArrayOutputStream ous = new ByteArrayOutputStream(buffer.length);
+		int i = 0;
+		while((i = in.read(buffer, 0, buffer.length)) != -1)
+		{
+			ous.write(buffer, 0, i);
+		}
+		ous.close();
+		return ous.toByteArray();
 	}
 
-    public static void deleteFolderContents(File folder)
-    {
-        File[] files = folder.listFiles();
-        if(files != null)
-            for(File f : files)
-            {
-                if(f.isDirectory())
-                {
-                    deleteFolderContents(f);
-                    f.delete();
-                }
-                else
-                    f.delete();
-            }
-    }
-	
+	public static void deleteFolderContents(File folder)
+	{
+		File[] files = folder.listFiles();
+		if(files != null) for(File f : files)
+		{
+			if(f.isDirectory())
+			{
+				deleteFolderContents(f);
+				f.delete();
+			}
+			else
+				f.delete();
+		}
+	}
+
 }

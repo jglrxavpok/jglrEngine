@@ -12,7 +12,7 @@ public class SetGravityCommand extends AbstractCommand
 	{
 		return "gravity";
 	}
-	
+
 	@Override
 	public String run(CommandArgument[] args)
 	{
@@ -36,12 +36,11 @@ public class SetGravityCommand extends AbstractCommand
 	public String[] getCorrectUsages()
 	{
 		return new String[]
-				{
-			getCommand()+" <forceOnAxisX> <forceOnAxisY> <forceOnAxisZ>",
-			getCommand()+" <force>"
-				};
+		{
+				getCommand() + " <forceOnAxisX> <forceOnAxisY> <forceOnAxisZ>", getCommand() + " <force>"
+		};
 	}
-	
+
 	public String getDescription()
 	{
 		return "Sets the gravity in the world";

@@ -8,26 +8,26 @@ public class SoundSource extends SceneComponent
 
 	public Vector3 pos;
 	public Vector3 vel;
-	private Sound sound;
-	private long delayBetweenPlays;
-	private long delay;
-	
+	private Sound  sound;
+	private long   delayBetweenPlays;
+	private long   delay;
+
 	public SoundSource(Sound sound, long delayBetweenPlays)
 	{
 		this.sound = sound;
 		this.delayBetweenPlays = delayBetweenPlays;
-		pos = new Vector3(0,0,0);
-		vel = new Vector3(0,0,0);
+		pos = new Vector3(0, 0, 0);
+		vel = new Vector3(0, 0, 0);
 	}
-	
+
 	public void onAddToScene()
 	{
-		
+
 	}
-	
+
 	public void update(double delta)
 	{
-		if((delay += delta*1000) >= delayBetweenPlays && delayBetweenPlays > -1)
+		if((delay += delta * 1000) >= delayBetweenPlays && delayBetweenPlays > -1)
 		{
 			delay = 0;
 			int id = sound.play();
@@ -35,12 +35,12 @@ public class SoundSource extends SceneComponent
 			sound.setSourceVelocity(id, getVel());
 		}
 	}
-	
+
 	public Vector3 getVel()
 	{
 		return vel;
 	}
-	
+
 	public SoundSource setVel(Vector3 newVel)
 	{
 		this.vel = newVel;

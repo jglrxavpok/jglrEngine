@@ -7,7 +7,7 @@ import org.jge.render.Texture;
 public class Cursor
 {
 
-	private String name;
+	private String  name;
 	private Texture text;
 
 	public Cursor(String name, AbstractResource image)
@@ -32,5 +32,5 @@ public class Cursor
 	{
 		return text;
 	}
-	
+
 }

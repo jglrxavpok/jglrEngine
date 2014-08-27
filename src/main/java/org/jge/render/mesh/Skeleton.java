@@ -7,6 +7,6 @@ public class Skeleton
 
 	public Skeleton(Mesh mesh, ArrayList<SkeletonBone> bones)
 	{
-		
+
 	}
 }

@@ -9,27 +9,27 @@ public class CommandArgument
 	{
 		this.content = content;
 	}
-	
+
 	public String getContentAsString()
 	{
 		return content;
 	}
-	
+
 	public int getContentAsInt()
 	{
 		return Integer.parseInt(content);
 	}
-	
+
 	public double getContentAsDouble()
 	{
 		return Double.parseDouble(content);
 	}
-	
+
 	public float getContentAsFloat()
 	{
 		return Float.parseFloat(content);
 	}
-	
+
 	public boolean getContentAsBoolean()
 	{
 		return Boolean.parseBoolean(content);

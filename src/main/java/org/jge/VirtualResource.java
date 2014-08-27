@@ -12,7 +12,6 @@ public class VirtualResource extends AbstractResource
 		super(new ResourceLocation(type), new ByteArrayInputStream(data), loader);
 		this.bytes = data;
 	}
-	
 
 	@Override
 	public byte[] getData()

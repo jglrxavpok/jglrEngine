@@ -9,20 +9,19 @@ public abstract class JGEFragmentShader extends ShaderBase
 {
 	@Deprecated
 	public Quaternion gl_FragColor;
-	
+
 	@Deprecated
 	public Quaternion gl_FragCoord;
-	
+
 	public Quaternion texture(Sampler2D texture, Vector2 coords)
 	{
-		return new Quaternion(0,0,0,0);
+		return new Quaternion(0, 0, 0, 0);
 	}
-	
+
 	@Deprecated
 	public Quaternion texture2D(Sampler2D texture, Vector2 coords)
 	{
-		return new Quaternion(0,0,0,0);
+		return new Quaternion(0, 0, 0, 0);
 	}
-	
 
 }

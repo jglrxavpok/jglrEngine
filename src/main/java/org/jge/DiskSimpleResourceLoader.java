@@ -18,31 +18,25 @@ public class DiskSimpleResourceLoader extends ResourceLoader
 		if(!doesResourceExists(location))
 		{
 			File f = new File(location.getFullPath());
-			if(!f.getParentFile().exists())
-				f.getParentFile().mkdirs();
+			if(!f.getParentFile().exists()) f.getParentFile().mkdirs();
 			f.createNewFile();
 		}
-		
+
 		return getResource(location);
 	}
-	
+
 	@Override
-	public AbstractResource getResource(ResourceLocation location)
-			throws Exception
+	public AbstractResource getResource(ResourceLocation location) throws Exception
 	{
 		if(!isLoaded(location))
 		{
 			File file = new File(location.getFullPath());
 			if(file.exists())
-				resources.put(location.getFullPath(),
-						new DiskSimpleResource(location, file, this));
+				resources.put(location.getFullPath(), new DiskSimpleResource(location, file, this));
 			else
-				throw new FileNotFoundException("Resource "
-						+ location.getFullPath() + " not found.");
+				throw new FileNotFoundException("Resource " + location.getFullPath() + " not found.");
 		}
-		if(!isLoaded(location))
-			throw new FileNotFoundException("Resource "
-					+ location.getFullPath() + " not found.");
+		if(!isLoaded(location)) throw new FileNotFoundException("Resource " + location.getFullPath() + " not found.");
 		return resources.get(location.getFullPath());
 	}
 
@@ -52,8 +46,7 @@ public class DiskSimpleResourceLoader extends ResourceLoader
 	}
 
 	@Override
-	public List<AbstractResource> getAllResources(ResourceLocation location)
-			throws Exception
+	public List<AbstractResource> getAllResources(ResourceLocation location) throws Exception
 	{
 		return Lists.asList(getResource(location));
 	}

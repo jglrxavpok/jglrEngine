@@ -22,11 +22,11 @@ public class JavaShader extends Shader
 {
 
 	public static final boolean DEBUG_PRINT_GLSL_TRANSLATION = true;
-	
+
 	public JavaShader(int glslversion, Class<? extends ShaderBase>... shaderClasses)
 	{
 		VirtualResourceLoader resLoader = new VirtualResourceLoader();
-		
+
 		GLSLEncoder encoder = new GLSLEncoder(glslversion);
 		GLSLEncoder.DEBUG = false;
 		BytecodeDecoder.DEBUG = false;
@@ -34,7 +34,7 @@ public class JavaShader extends Shader
 		encoder.setGLSLTranslation(Vector2.class.getCanonicalName(), "vec2");
 		encoder.setGLSLTranslation(Vector3.class.getCanonicalName(), "vec3");
 		encoder.setGLSLTranslation(Quaternion.class.getCanonicalName(), "vec4");
-		
+
 		JLSLContext context = new JLSLContext(new BytecodeDecoder(), encoder);
 		String name = null;
 		for(Class<? extends ShaderBase> shaderClass : shaderClasses)
@@ -47,51 +47,49 @@ public class JavaShader extends Shader
 			else if(FragmentShader.class.isAssignableFrom(shaderClass) || JGEFragmentShader.class.isAssignableFrom(shaderClass))
 			{
 				type = ".fs";
-			}	
-			
+			}
+
 			if(type != null && shaderClass != JGESimpleVertexShader.class)
 			{
 				name = shaderClass.getSimpleName();
 			}
-				
+
 			StringWriter sout = new StringWriter();
 			PrintWriter out = new PrintWriter(sout);
 			context.execute(shaderClass, out);
-			if(DEBUG_PRINT_GLSL_TRANSLATION)
-				System.out.println(sout.getBuffer().toString());
-			if(type != null)
-				resLoader.addResource(type, sout.getBuffer().toString().getBytes());
+			if(DEBUG_PRINT_GLSL_TRANSLATION) System.out.println(sout.getBuffer().toString());
+			if(type != null) resLoader.addResource(type, sout.getBuffer().toString().getBytes());
 		}
-		
+
 		setResource(new ShaderResource().bindName(name));
 		ResourceLocation partialPath = new ResourceLocation("");
-        ResourceLocation vertLoc = new ResourceLocation(partialPath.getFullPath()+".vs");
-        ResourceLocation geomLoc = new ResourceLocation(partialPath.getFullPath()+".gs");
-        ResourceLocation fragLoc = new ResourceLocation(partialPath.getFullPath()+".fs");
-        try
-        {
-            if(resLoader.doesResourceExists(vertLoc))
-            {
-            	addVertexShader(resLoader.getResource(vertLoc));
-            }
-            
-            if(resLoader.doesResourceExists(geomLoc))
-            {
-            	addGeometryShader(resLoader.getResource(geomLoc));
-            }
-            
-            if(resLoader.doesResourceExists(fragLoc))
-            {
-            	addFragmentShader(resLoader.getResource(fragLoc));
-            }
-        }
-        catch(Exception e)
-        {
-        	throw new RuntimeEngineException(e);
-        }
-        compileShader();
-    
-    	loadAllUniforms();
+		ResourceLocation vertLoc = new ResourceLocation(partialPath.getFullPath() + ".vs");
+		ResourceLocation geomLoc = new ResourceLocation(partialPath.getFullPath() + ".gs");
+		ResourceLocation fragLoc = new ResourceLocation(partialPath.getFullPath() + ".fs");
+		try
+		{
+			if(resLoader.doesResourceExists(vertLoc))
+			{
+				addVertexShader(resLoader.getResource(vertLoc));
+			}
+
+			if(resLoader.doesResourceExists(geomLoc))
+			{
+				addGeometryShader(resLoader.getResource(geomLoc));
+			}
+
+			if(resLoader.doesResourceExists(fragLoc))
+			{
+				addFragmentShader(resLoader.getResource(fragLoc));
+			}
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeEngineException(e);
+		}
+		compileShader();
+
+		loadAllUniforms();
 	}
 
 }

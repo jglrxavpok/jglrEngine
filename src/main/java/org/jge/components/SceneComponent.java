@@ -6,41 +6,41 @@ import org.jge.render.shaders.Shader;
 
 public abstract class SceneComponent implements Disposable
 {
-    private SceneObject parent;
+	private SceneObject parent;
 
-    public SceneObject getParent()
-    {
-        return parent;
-    }
-    
-    public void onAddToScene()
-    {
-    	
-    }
+	public SceneObject getParent()
+	{
+		return parent;
+	}
 
-    public void init(SceneObject parent)
-    {
-        this.parent = parent;
-    }
-    
-    public void update(double delta)
-    {
-        
-    }
-    
-    public void render(Shader shader, Camera cam, double delta, RenderEngine renderEngine)
-    {
-        
-    }
-    
-    public void dispose()
-    {
-        
-    }
+	public void onAddToScene()
+	{
+
+	}
+
+	public void init(SceneObject parent)
+	{
+		this.parent = parent;
+	}
+
+	public void update(double delta)
+	{
+
+	}
+
+	public void render(Shader shader, Camera cam, double delta, RenderEngine renderEngine)
+	{
+
+	}
+
+	public void dispose()
+	{
+
+	}
 
 	public void onPostRender(double delta, RenderEngine renderEngine)
 	{
-		
+
 	}
-    
+
 }

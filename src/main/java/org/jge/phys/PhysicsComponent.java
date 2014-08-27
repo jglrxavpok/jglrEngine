@@ -18,22 +18,22 @@ public class PhysicsComponent extends SceneComponent
 {
 
 	private PhysicsEngine physicsEngine;
-	private RigidBody body;
-	private double mass;
-	private PhysicsShape physShape;
+	private RigidBody	 body;
+	private double		mass;
+	private PhysicsShape  physShape;
 
 	public PhysicsComponent(double mass, PhysicsShape shape)
 	{
 		this.mass = mass;
 		this.physShape = shape;
 	}
-	
+
 	public void init(SceneObject object)
 	{
 		super.init(object);
 		physicsEngine = CoreEngine.getCurrent().getPhysicsEngine();
 	}
-	
+
 	public void onAddToScene()
 	{
 		Transform startTrans = PhysicsEngine.toBullet(getParent().getTransform());
@@ -44,12 +44,12 @@ public class PhysicsComponent extends SceneComponent
 		body = new RigidBody(constructionInfo);
 		physicsEngine.addPhysObject(this);
 	}
-	
+
 	public void update(double delta)
 	{
 		Transform out = new Transform();
 		out = body.getWorldTransform(out);
-		Quat4f rot = new Quat4f(0,0,0,1); 
+		Quat4f rot = new Quat4f(0, 0, 0, 1);
 		rot = out.getRotation(rot);
 		Quaternion newRot = PhysicsEngine.toJGE(rot);
 		Vector3 physicalPos = PhysicsEngine.toJGE(out.origin);
@@ -59,7 +59,7 @@ public class PhysicsComponent extends SceneComponent
 			Vector3 parentPos = parentTransform.getTransformedPos();
 			physicalPos = physicalPos.sub(parentPos);
 			physicalPos = physicalPos.rotate(parentTransform.getTransformedRotation().conjugate());
-			
+
 			newRot = newRot.mul(parentTransform.getTransformedRotation().conjugate());
 		}
 		this.getParent().getTransform().setPosition(physicalPos);

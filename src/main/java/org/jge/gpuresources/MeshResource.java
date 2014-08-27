@@ -9,52 +9,52 @@ import static org.lwjgl.opengl.GL30.*;
 
 public class MeshResource implements Disposable
 {
-	private int vbo;
-    private int ibo;
-    private int size;
-    private int referenceCounter;
+	private int	  vbo;
+	private int	  ibo;
+	private int	  size;
+	private int	  referenceCounter;
 	private Vertex[] vertices;
-	private int[] indices;	
-	private int vao;
-    
-    public MeshResource()
-    {
-    	vbo = glGenBuffers();
-    	ibo = glGenBuffers();
-    	vao = glGenVertexArrays();
-    	size = 0;
-    	referenceCounter = 1;
-    }
-    
-    public boolean decreaseCounter()
-    {
-    	referenceCounter--;
-    	return referenceCounter <= 0;
-    }
-    
-    public void increaseCounter()
-    {
-    	referenceCounter++;
-    }
-    
-    @Override
-    protected void finalize()
-    {
-    	dispose();
-    }
-    
-    public void dispose()
-    {
-    	glDeleteVertexArrays(vao);
-    	GL15.glDeleteBuffers(ibo);
-    	GL15.glDeleteBuffers(vbo);
-    }
+	private int[]	indices;
+	private int	  vao;
 
-    public int getVao()
+	public MeshResource()
+	{
+		vbo = glGenBuffers();
+		ibo = glGenBuffers();
+		vao = glGenVertexArrays();
+		size = 0;
+		referenceCounter = 1;
+	}
+
+	public boolean decreaseCounter()
+	{
+		referenceCounter-- ;
+		return referenceCounter <= 0;
+	}
+
+	public void increaseCounter()
+	{
+		referenceCounter++ ;
+	}
+
+	@Override
+	protected void finalize()
+	{
+		dispose();
+	}
+
+	public void dispose()
+	{
+		glDeleteVertexArrays(vao);
+		GL15.glDeleteBuffers(ibo);
+		GL15.glDeleteBuffers(vbo);
+	}
+
+	public int getVao()
 	{
 		return vao;
 	}
-    
+
 	public int getVbo()
 	{
 		return vbo;
@@ -84,7 +84,7 @@ public class MeshResource implements Disposable
 	{
 		return vertices;
 	}
-	
+
 	public void setIndices(int[] indices)
 	{
 		this.indices = indices;

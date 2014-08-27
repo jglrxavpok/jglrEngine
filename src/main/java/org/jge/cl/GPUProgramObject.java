@@ -10,43 +10,43 @@ public class GPUProgramObject implements Disposable
 
 	Object value;
 	String type;
-	
+
 	public GPUProgramObject(int val)
 	{
 		value = val;
 		type = "int";
 	}
-	
+
 	public GPUProgramObject(double val)
 	{
 		value = val;
 		type = "double";
 	}
-	
+
 	public GPUProgramObject(float val)
 	{
 		value = val;
 		type = "float";
 	}
-	
+
 	public GPUProgramObject(long val)
 	{
 		value = val;
 		type = "long";
 	}
-	
+
 	public GPUProgramObject(short val)
 	{
 		value = val;
 		type = "short";
 	}
-	
+
 	public GPUProgramObject(byte val)
 	{
 		value = val;
 		type = "byte";
 	}
-	
+
 	public GPUProgramObject(CLMem val)
 	{
 		value = val;

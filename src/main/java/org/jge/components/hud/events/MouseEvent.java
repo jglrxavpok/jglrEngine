@@ -7,7 +7,7 @@ public abstract class MouseEvent extends WidgetEvent
 
 	public int x;
 	public int y;
-	
+
 	public MouseEvent(HUDWidget source, int x, int y)
 	{
 		super(source);

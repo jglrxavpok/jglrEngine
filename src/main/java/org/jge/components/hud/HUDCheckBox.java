@@ -17,30 +17,30 @@ public class HUDCheckBox extends HUDWidget
 	{
 		this(w, h, false);
 	}
-	
+
 	public HUDCheckBox(double w, double h, boolean selected)
 	{
 		super(w, h);
 		this.selected = selected;
 		this.registerListener(this);
 	}
-	
+
 	public boolean isSelected()
 	{
 		return selected;
 	}
-	
+
 	public void render(Shader shader, Camera camera, double delta, RenderEngine engine)
 	{
 		double startX = isMouseOn ? 64 : 0;
 		double startY = 96;
 		drawBox(shader, camera, engine, startX, startY);
-		
+
 		if(selected)
 		{
-			Sprite sign = new Sprite(widgetTexture, isMouseOn ? 24 : 0, 144, 24,24);
+			Sprite sign = new Sprite(widgetTexture, isMouseOn ? 24 : 0, 144, 24, 24);
 			sign.setX(4).setY(4);
-			sign.setWidth(getWidth()-8).setHeight(getHeight()-8);
+			sign.setWidth(getWidth() - 8).setHeight(getHeight() - 8);
 			sign.render(shader, getTransform(), camera, delta, engine);
 		}
 	}

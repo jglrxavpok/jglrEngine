@@ -14,12 +14,12 @@ public class SpherePhysShape extends PhysicsShape
 	{
 		this.radius = radius;
 	}
-	
+
 	public SpherePhysShape(double radius)
 	{
 		this((float)radius);
 	}
-	
+
 	@Override
 	protected CollisionShape toCollisionShape()
 	{

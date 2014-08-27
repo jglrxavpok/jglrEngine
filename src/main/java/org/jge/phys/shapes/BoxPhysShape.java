@@ -15,7 +15,7 @@ public class BoxPhysShape extends PhysicsShape
 	{
 		this.halfExtend = halfExtend;
 	}
-	
+
 	@Override
 	protected CollisionShape toCollisionShape()
 	{

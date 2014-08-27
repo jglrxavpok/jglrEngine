@@ -2,7 +2,6 @@ package org.jge.sound;
 
 import org.jge.EngineException;
 
-
 public abstract class SoundLoader
 {
 

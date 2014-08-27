@@ -8,7 +8,7 @@ public class OSInfos extends CrashInfos
 	{
 		String osName = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");
-		return SECTION_START+" Operating System "+SECTION_END+"\n\tName: "+osName+"\n\tVersion: "+osVersion;
+		return SECTION_START + " Operating System " + SECTION_END + "\n\tName: " + osName + "\n\tVersion: " + osVersion;
 	}
 
 }

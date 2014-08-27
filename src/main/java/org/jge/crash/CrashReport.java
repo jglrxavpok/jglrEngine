@@ -11,12 +11,10 @@ public class CrashReport
 {
 
 	private static String[] comments = new String[]
-			{
-				null,
-				null,
-				"Well, this was a disappointment."
-			};
-	
+									 {
+			null, null, "Well, this was a disappointment."
+									 };
+
 	static
 	{
 		try
@@ -29,10 +27,10 @@ public class CrashReport
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static class UndefinedException extends Exception
 	{
-		
+
 		public UndefinedException(String message)
 		{
 			super(message);
@@ -47,51 +45,49 @@ public class CrashReport
 	{
 		this(new UndefinedException(message).fillInStackTrace());
 	}
-	
+
 	public CrashReport(Throwable throwable)
 	{
 		this.exception = throwable;
 	}
-	
+
 	public void printStack()
 	{
-		if(!Log.save)
-			Log.save = true; // Force output
+		if(!Log.save) Log.save = true; // Force output
 		StringBuffer buffer = new StringBuffer();
-		buffer.append(CrashInfos.SECTION_START+" Crash "+CrashInfos.SECTION_END+"\n");
+		buffer.append(CrashInfos.SECTION_START + " Crash " + CrashInfos.SECTION_END + "\n");
 		String comment = generateRandomComment();
-		buffer.append(comment+"\n");
-		buffer.append("\n\t"+exception.getClass().getCanonicalName());
+		buffer.append(comment + "\n");
+		buffer.append("\n\t" + exception.getClass().getCanonicalName());
 		StackTraceElement[] stackTrace = exception.getStackTrace();
 		if(exception.getLocalizedMessage() != null)
 		{
-			buffer.append(" reason: "+exception.getLocalizedMessage());
+			buffer.append(" reason: " + exception.getLocalizedMessage());
 		}
-		else if(exception.getMessage() != null)
-			buffer.append(" reason: "+exception.getMessage());
+		else if(exception.getMessage() != null) buffer.append(" reason: " + exception.getMessage());
 		buffer.append("\n");
 		if(stackTrace != null && stackTrace.length > 0)
 		{
 			for(StackTraceElement elem : stackTrace)
 			{
-				buffer.append("\t\t"+elem.toString()+"\n");
+				buffer.append("\t\t" + elem.toString() + "\n");
 			}
 		}
 		else
 		{
 			buffer.append("\t**** Stack Trace is empty ****");
 		}
-		buffer.append(new DateInfos()+"\n");
-		buffer.append(new OSInfos()+"\n");
-		buffer.append(new OpenALInfos()+"\n");
-		buffer.append(new OpenGLInfos()+"\n");
-		buffer.append(new RenderStateInfos()+"\n");
+		buffer.append(new DateInfos() + "\n");
+		buffer.append(new OSInfos() + "\n");
+		buffer.append(new OpenALInfos() + "\n");
+		buffer.append(new OpenGLInfos() + "\n");
+		buffer.append(new RenderStateInfos() + "\n");
 		Log.error(buffer.toString(), false);
 	}
 
 	private String generateRandomComment()
 	{
-		return comments[(int)Maths.floor(Maths.rand()*comments.length)];
+		return comments[(int)Maths.floor(Maths.rand() * comments.length)];
 	}
 
 }

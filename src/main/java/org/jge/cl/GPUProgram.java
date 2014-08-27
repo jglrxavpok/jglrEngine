@@ -10,28 +10,28 @@ import org.jge.JGEngine;
 
 public class GPUProgram implements Disposable
 {
-	
+
 	private static HashMap<AbstractResource, GPUProgramResource> loadedResources = new HashMap<AbstractResource, GPUProgramResource>();
-    private GPUProgramResource data;
-	private AbstractResource res;
+	private GPUProgramResource								   data;
+	private AbstractResource									 res;
 
 	public GPUProgram(AbstractResource res) throws EngineException
 	{
 		this.res = res;
-		
+
 		GPUProgramResource existingResource = loadedResources.get(res);
-    	
-    	if(existingResource != null)
-    	{
-    		JGEngine.getDisposer().add(this);
-    		data = existingResource;
-    		data.increaseCounter();
-    	}
-    	else
-    	{
-    		data = new GPUProgramResource(res);
-            loadedResources.put(res, data);
-    	}
+
+		if(existingResource != null)
+		{
+			JGEngine.getDisposer().add(this);
+			data = existingResource;
+			data.increaseCounter();
+		}
+		else
+		{
+			data = new GPUProgramResource(res);
+			loadedResources.put(res, data);
+		}
 
 	}
 
@@ -39,16 +39,15 @@ public class GPUProgram implements Disposable
 	{
 		return data;
 	}
-	
+
 	public void dispose()
-    {
-    	if(data.decreaseCounter())
-    	{
-    		data.dispose();
-    		if(res != null)
-    			loadedResources.remove(res);
-    	}
-    }
+	{
+		if(data.decreaseCounter())
+		{
+			data.dispose();
+			if(res != null) loadedResources.remove(res);
+		}
+	}
 
 	public GPUProgramObject createMemory(float[] data)
 	{
@@ -64,7 +63,7 @@ public class GPUProgram implements Disposable
 	{
 		return data.createMemory(size);
 	}
-	
+
 	public void read(GPUProgramObject o, FloatBuffer writeTo, boolean blocking)
 	{
 		data.read(o, writeTo, blocking);

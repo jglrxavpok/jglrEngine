@@ -12,7 +12,7 @@ public class JGESimpleVertexShader extends JGEVertexShader
 
 	@Attribute
 	public Vector3 position;
-	
+
 	@Attribute
 	public Vector2 texCoord;
 
@@ -25,14 +25,14 @@ public class JGESimpleVertexShader extends JGEVertexShader
 	@SuppressWarnings("deprecation")
 	public void main()
 	{
-		gl_Position = T_projectedView.mul(T_worldTransform).transform(new Quaternion(position,1.0));
-	    texCoord0 = texCoord;
-	    vertexMain();
+		gl_Position = T_projectedView.mul(T_worldTransform).transform(new Quaternion(position, 1.0));
+		texCoord0 = texCoord;
+		vertexMain();
 	}
-	
+
 	public void vertexMain()
 	{
-		
+
 	}
 
 }

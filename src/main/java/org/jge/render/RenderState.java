@@ -12,12 +12,12 @@ public class RenderState extends MappedValues implements Cloneable
 {
 
 	private HashMap<Integer, Boolean> glCaps = new HashMap<Integer, Boolean>();
-	private Matrix4 lightMatrix;
-	private int blendFuncSrc;
-	private int blendFuncDst;
-	private int alphaFunc;
-	private float alphaRef;
-	
+	private Matrix4				   lightMatrix;
+	private int					   blendFuncSrc;
+	private int					   blendFuncDst;
+	private int					   alphaFunc;
+	private float					 alphaRef;
+
 	public RenderState clone()
 	{
 		RenderState copy = new RenderState();
@@ -30,27 +30,27 @@ public class RenderState extends MappedValues implements Cloneable
 		copyInto(copy);
 		return copy;
 	}
-	
+
 	public float getAlphaRef()
 	{
 		return alphaRef;
 	}
-	
+
 	public int getAlphaFunc()
 	{
 		return alphaFunc;
 	}
-	
+
 	public int getBlendFuncSrc()
 	{
 		return blendFuncSrc;
 	}
-	
+
 	public int getBlendFuncDst()
 	{
 		return blendFuncDst;
 	}
-	
+
 	public HashMap<Integer, Boolean> getGLCaps()
 	{
 		return glCaps;
@@ -64,28 +64,28 @@ public class RenderState extends MappedValues implements Cloneable
 			String key = keys.next();
 			map.setInt(key, getInt(key));
 		}
-		
+
 		keys = this.getFloats().keySet().iterator();
 		while(keys.hasNext())
 		{
 			String key = keys.next();
 			map.setFloat(key, getFloat(key));
 		}
-		
+
 		keys = this.getBooleans().keySet().iterator();
 		while(keys.hasNext())
 		{
 			String key = keys.next();
 			map.setBoolean(key, getBoolean(key));
 		}
-		
+
 		keys = this.getTextures().keySet().iterator();
 		while(keys.hasNext())
 		{
 			String key = keys.next();
 			map.setTexture(key, getTexture(key));
 		}
-		
+
 		keys = this.getVector3s().keySet().iterator();
 		while(keys.hasNext())
 		{
@@ -94,7 +94,7 @@ public class RenderState extends MappedValues implements Cloneable
 		}
 		return this;
 	}
-	
+
 	public RenderState setGLCap(int cap, boolean enabled)
 	{
 		glCaps.put(cap, enabled);
@@ -110,8 +110,7 @@ public class RenderState extends MappedValues implements Cloneable
 			while(itCurrent.hasNext())
 			{
 				int cap = itCurrent.next();
-				if(current.glCaps.get(cap) && !glCaps.containsKey(cap))
-					glCaps.put(cap, false);
+				if(current.glCaps.get(cap) && !glCaps.containsKey(cap)) glCaps.put(cap, false);
 			}
 			Iterator<Integer> it = glCaps.keySet().iterator();
 			while(it.hasNext())
@@ -125,8 +124,7 @@ public class RenderState extends MappedValues implements Cloneable
 			copyInto(renderEngine);
 			glBlendFunc(blendFuncSrc, blendFuncDst);
 			glAlphaFunc(alphaFunc, alphaRef);
-			if(lightMatrix != null)
-				renderEngine.getLightMatrix().set(lightMatrix);
+			if(lightMatrix != null) renderEngine.getLightMatrix().set(lightMatrix);
 		}
 	}
 

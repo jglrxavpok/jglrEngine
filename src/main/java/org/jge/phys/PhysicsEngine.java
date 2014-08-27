@@ -22,10 +22,10 @@ import org.jge.render.mesh.Mesh;
 public class PhysicsEngine
 {
 
-	private ProfileTimer physProfileTimer = new ProfileTimer();
-	private DiscreteDynamicsWorld			 world;
-	private CollisionDispatcher			   dispatcher;
-	private DefaultCollisionConfiguration	 collisionConfiguration;
+	private ProfileTimer				  physProfileTimer = new ProfileTimer();
+	private DiscreteDynamicsWorld		 world;
+	private CollisionDispatcher		   dispatcher;
+	private DefaultCollisionConfiguration collisionConfiguration;
 
 	public PhysicsEngine()
 	{
@@ -36,11 +36,11 @@ public class PhysicsEngine
 	{
 		collisionConfiguration = new DefaultCollisionConfiguration();
 		dispatcher = new CollisionDispatcher(collisionConfiguration);
-		Vector3f worldAabbMin = new Vector3f(-1000000,-1000000,-1000000);
-		Vector3f worldAabbMax = new Vector3f(1000000,1000000,1000000);
+		Vector3f worldAabbMin = new Vector3f(-1000000, -1000000, -1000000);
+		Vector3f worldAabbMax = new Vector3f(1000000, 1000000, 1000000);
 		AxisSweep3 overlappingPairCache = new AxisSweep3(worldAabbMin, worldAabbMax);
 		SequentialImpulseConstraintSolver solver = new SequentialImpulseConstraintSolver();
-		
+
 		world = new DiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 		world.setGravity(toBullet(new Vector3(0, -9.81, 0)));
 	}
@@ -63,21 +63,17 @@ public class PhysicsEngine
 		return m;
 	}
 
-	public static com.bulletphysics.linearmath.Transform toBullet(
-			Transform transform)
+	public static com.bulletphysics.linearmath.Transform toBullet(Transform transform)
 	{
 		com.bulletphysics.linearmath.Transform t = new com.bulletphysics.linearmath.Transform();
 		t.setRotation(toBullet(transform.getTransformedRotation()));
-		t.origin.set((float)transform.getTransformedPos().getX(),
-				(float)transform.getTransformedPos().getY(), (float)transform
-						.getTransformedPos().getZ());
+		t.origin.set((float)transform.getTransformedPos().getX(), (float)transform.getTransformedPos().getY(), (float)transform.getTransformedPos().getZ());
 		return t;
 	}
 
 	public static Quat4f toBullet(Quaternion r)
 	{
-		return new Quat4f((float)r.getX(), (float)r.getY(), (float)r.getZ(),
-				(float)r.getW());
+		return new Quat4f((float)r.getX(), (float)r.getY(), (float)r.getZ(), (float)r.getW());
 	}
 
 	public static Vector3f toBullet(Vector3 v)
@@ -116,7 +112,7 @@ public class PhysicsEngine
 	{
 		return displayProfileInfo(0);
 	}
-	
+
 	public double displayProfileInfo(double divisor)
 	{
 		return physProfileTimer.displayAndReset("Physics simulation time", divisor);

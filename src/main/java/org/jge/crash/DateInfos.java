@@ -8,7 +8,7 @@ public class DateInfos extends CrashInfos
 	@Override
 	public String toString()
 	{
-		return SECTION_START+" Date "+SECTION_END+"\n\t"+Time.getTimeAsText();
+		return SECTION_START + " Date " + SECTION_END + "\n\t" + Time.getTimeAsText();
 	}
 
 }

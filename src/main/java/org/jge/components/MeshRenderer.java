@@ -8,19 +8,19 @@ import org.jge.render.shaders.Shader;
 public class MeshRenderer extends SceneComponent
 {
 
-    private Mesh mesh;
-    private Material material;
+	private Mesh	 mesh;
+	private Material material;
 
-    public MeshRenderer(Mesh mesh, Material material)
-    {
-        this.mesh = mesh;
-        this.material = material;
-    }
-    
-    public void render(Shader shader, Camera cam, double delta, RenderEngine renderEngine)
-    {
-        shader.bind();
-        shader.updateUniforms(getParent().getTransform(), cam, material, renderEngine);
-        mesh.draw();
-    }
+	public MeshRenderer(Mesh mesh, Material material)
+	{
+		this.mesh = mesh;
+		this.material = material;
+	}
+
+	public void render(Shader shader, Camera cam, double delta, RenderEngine renderEngine)
+	{
+		shader.bind();
+		shader.updateUniforms(getParent().getTransform(), cam, material, renderEngine);
+		mesh.draw();
+	}
 }

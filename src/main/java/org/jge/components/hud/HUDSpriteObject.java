@@ -15,7 +15,7 @@ public class HUDSpriteObject extends SceneObject
 	{
 		this.sprite = testSprite;
 	}
-	
+
 	public void render(Shader shader, Camera cam, double delta, RenderEngine engine)
 	{
 		sprite.render(shader, getTransform(), cam, delta, engine);

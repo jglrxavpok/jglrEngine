@@ -55,7 +55,7 @@ public class Script
 
 	public Varargs run(String method, Object... args) throws IOException
 	{
-		return globals.get(method).call((String)args[0]);
+		return globals.get(method).call(LuaValue.valueOf((Integer)args[0]));
 	}
 
 	public LuaValue run()

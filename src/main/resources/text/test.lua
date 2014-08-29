@@ -1,7 +1,7 @@
-function test(str)
-	if (str == "Test string") then
-		print "That's my boy!";
-	elseif str == "Hello world :)" then
-		print("Hi, you're welcome!");
+days = {"Sunday", "Monday", "Tuesday", "Wednesday",
+            "Thursday", "Friday", "Saturday"};
+function test(nbr)
+	for i,day in ipairs(days) do
+		print("At "..i.." we have " .. day);
 	end;
 end;

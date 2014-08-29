@@ -41,6 +41,7 @@ import org.jge.render.TextureAtlas;
 import org.jge.render.fonts.Font;
 import org.jge.render.fonts.SimpleFont;
 import org.jge.render.mesh.Mesh;
+import org.jge.script.Script;
 import org.jge.sound.Music;
 import org.jge.util.BinaryUtils;
 import org.jge.util.Buffers;
@@ -99,6 +100,8 @@ public class TestGame extends Game
 	{
 		try
 		{
+			Script script = new Script(getClasspathResourceLoader().getResource(new ResourceLocation("text", "test.lua")));
+			Log.message(script.run("test", "Hello world :)").toString());
 			ZipSimpleResourceLoader loader = new ZipSimpleResourceLoader(getDiskResourceLoader().getResource(new ResourceLocation("./test.zip")));
 			Log.error(BinaryUtils.toString(loader.getResource(new ResourceLocation("test/test.txt")).getData()));
 			font = SimpleFont.instance;

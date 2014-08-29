@@ -9,6 +9,7 @@ import org.jge.util.Lists;
 public class VirtualResourceLoader extends ResourceLoader
 {
 
+	private static VirtualResourceLoader	  quickLoader;
 	private HashMap<String, AbstractResource> resources = new HashMap<String, AbstractResource>();
 
 	@Override
@@ -49,6 +50,13 @@ public class VirtualResourceLoader extends ResourceLoader
 	public void addResource(String type, byte[] bytes)
 	{
 		resources.put(type, new VirtualResource(type, bytes, this));
+	}
+
+	public static AbstractResource quickCreateResource(byte[] bytes) throws Exception
+	{
+		if(quickLoader == null) quickLoader = new VirtualResourceLoader();
+		quickLoader.addResource("object_" + bytes.hashCode(), bytes);
+		return quickLoader.getResource(new ResourceLocation("object_" + bytes.hashCode()));
 	}
 
 }

@@ -1,7 +1,6 @@
 require("color.lua");
 
 local color = WHITE;
-print(color.getRed(), color.getBlue(), color.getGreen());
 
 days = {"Sunday", "Monday", "Tuesday", "Wednesday",
             "Thursday", "Friday", "Saturday"};

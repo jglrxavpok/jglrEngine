@@ -3,9 +3,8 @@ package org.jge.script.lua;
 import java.io.UnsupportedEncodingException;
 
 import org.jge.AbstractResource;
-import org.jge.util.BinaryUtils;
+import org.jge.script.Script;
 
-import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaFunction;
 import org.luaj.vm2.LuaValue;
 
@@ -36,11 +35,9 @@ public class RequireFunction extends LuaFunction
 {
 
 	private AbstractResource scriptResource;
-	private Globals		  globals;
 
-	public RequireFunction(Globals globals, AbstractResource scriptResource)
+	public RequireFunction(AbstractResource scriptResource)
 	{
-		this.globals = globals;
 		this.scriptResource = scriptResource;
 	}
 
@@ -49,8 +46,8 @@ public class RequireFunction extends LuaFunction
 		String scriptName = arg.toString();
 		try
 		{
-			String requiredSource = BinaryUtils.toString(scriptResource.getLoader().getResource(scriptResource.getResourceLocation().getDirectParent().getChild(scriptName)).getData());
-			globals.load(requiredSource, scriptName).call();
+			AbstractResource newRes = scriptResource.getLoader().getResource(scriptResource.getResourceLocation().getDirectParent().getChild(scriptName));
+			new Script(newRes);
 		}
 		catch(UnsupportedEncodingException e)
 		{
@@ -62,5 +59,4 @@ public class RequireFunction extends LuaFunction
 		}
 		return LuaValue.NIL;
 	}
-
 }

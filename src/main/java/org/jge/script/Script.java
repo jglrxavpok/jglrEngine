@@ -40,7 +40,6 @@ public class Script
 {
 
 	private String		   scriptSource;
-	private LuaValue		 compiledScript;
 	private Globals		  globals;
 	private AbstractResource scriptResource;
 
@@ -48,15 +47,15 @@ public class Script
 	{
 		scriptSource = BinaryUtils.toString(scriptRes.getData());
 		this.scriptResource = scriptRes;
-		compile(scriptSource);
+		compile();
 	}
 
-	private void compile(String scriptContent2)
+	private void compile()
 	{
 		globals = JsePlatform.standardGlobals();
-		globals.set("require", new RequireFunction(globals, scriptResource));
-		globals.set("print", new PrintFunction(globals, scriptResource));
-		compiledScript = globals.load(scriptSource, scriptResource.getResourceLocation().getPath()).call();
+		globals.set("require", new RequireFunction(scriptResource));
+		globals.set("print", new PrintFunction(scriptResource));
+		globals.load(scriptSource, scriptResource.getResourceLocation().getPath()).call();
 	}
 
 	public Varargs run(String method, Object... args) throws IOException

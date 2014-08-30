@@ -3,7 +3,6 @@ package org.jge.script.lua;
 import org.jge.AbstractResource;
 import org.jge.util.Log;
 
-import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.LibFunction;
 
@@ -33,14 +32,10 @@ import org.luaj.vm2.lib.LibFunction;
 public class PrintFunction extends LibFunction
 {
 
-	private Globals		  globals;
-	private AbstractResource scriptResource;
-	private String		   scriptName;
+	private String scriptName;
 
-	public PrintFunction(Globals globals, AbstractResource scriptResource)
+	public PrintFunction(AbstractResource scriptResource)
 	{
-		this.globals = globals;
-		this.scriptResource = scriptResource;
 		scriptName = scriptResource.getResourceLocation().getPath();
 	}
 

@@ -101,7 +101,7 @@ public class TestGame extends Game
 		try
 		{
 			Script script = new Script(getClasspathResourceLoader().getResource(new ResourceLocation("text", "test.lua")));
-			Log.message(script.run().toString());
+			Log.message(script.run("test", "1").toString());
 			ZipSimpleResourceLoader loader = new ZipSimpleResourceLoader(getDiskResourceLoader().getResource(new ResourceLocation("./test.zip")));
 			Log.error(BinaryUtils.toString(loader.getResource(new ResourceLocation("test/test.txt")).getData()));
 			font = SimpleFont.instance;

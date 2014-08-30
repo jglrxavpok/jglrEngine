@@ -103,4 +103,9 @@ public class ResourceLocation
 		}
 		return false;
 	}
+
+	public ResourceLocation getChild(String scriptName)
+	{
+		return new ResourceLocation(getFullPath() + "/" + scriptName);
+	}
 }

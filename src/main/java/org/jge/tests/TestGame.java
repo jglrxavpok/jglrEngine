@@ -427,4 +427,5 @@ public class TestGame extends Game
 	{
 		Log.error("test is " + loaded.getProperty("test"));
 	}
+
 }

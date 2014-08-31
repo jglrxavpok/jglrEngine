@@ -13,6 +13,8 @@ import org.jge.ResourceLoader;
 import org.jge.Window;
 import org.jge.components.SceneObject;
 import org.jge.crash.CrashReport;
+import org.jge.events.Event.EventSubscribe;
+import org.jge.events.WindowResizeEvent;
 import org.jge.phys.PhysicsEngine;
 import org.jge.render.RenderEngine;
 import org.jge.sound.SoundEngine;
@@ -253,4 +255,11 @@ public abstract class Game
 	{
 		this.properties = properties;
 	}
+
+	@EventSubscribe
+	public void onWindowResize(WindowResizeEvent event)
+	{
+		System.out.println("resized! " + event.width + ", " + event.height);
+	}
+
 }

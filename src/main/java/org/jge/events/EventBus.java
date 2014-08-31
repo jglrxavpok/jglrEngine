@@ -2,8 +2,10 @@ package org.jge.events;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import org.jge.events.Event.EventSubscribe;
 import org.jge.util.Log;
@@ -62,7 +64,14 @@ public class EventBus
 	{
 		if(!hasListener(object))
 		{
-			Method[] methods = object.getClass().getDeclaredMethods();
+			List<Method> methods = asList(object.getClass().getDeclaredMethods());
+			Class<?> clazz = object.getClass().getSuperclass();
+			while(clazz != null)
+			{
+				List<Method> superclassMethods = Arrays.asList(clazz.getDeclaredMethods());
+				superclassMethods.forEach(method -> methods.add(method));
+				clazz = clazz.getSuperclass();
+			}
 			for(Method method : methods)
 			{
 				if(method.isAnnotationPresent(EventSubscribe.class))
@@ -98,6 +107,14 @@ public class EventBus
 			}
 		}
 		return this;
+	}
+
+	private ArrayList<Method> asList(Method[] declaredMethods)
+	{
+		ArrayList<Method> methods = new ArrayList<Method>();
+		for(Method declared : declaredMethods)
+			methods.add(declared);
+		return methods;
 	}
 
 	public boolean hasListener(Object object)

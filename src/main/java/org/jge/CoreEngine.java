@@ -177,6 +177,7 @@ public final class CoreEngine
 				e.printStackTrace();
 			}
 			renderEngine = new RenderEngine();
+			renderEngine.getEventBus().registerListener(game);
 			physEngine = new PhysicsEngine();
 			RenderEngine.printIfGLError();
 			Texture loadingScreenText = null;

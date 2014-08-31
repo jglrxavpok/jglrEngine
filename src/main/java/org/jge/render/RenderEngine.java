@@ -18,6 +18,8 @@ import org.jge.components.Camera;
 import org.jge.components.SceneObject;
 import org.jge.components.ShadowMapSize;
 import org.jge.components.ShadowingInfo;
+import org.jge.events.EventBus;
+import org.jge.events.WindowResizeEvent;
 import org.jge.game.DummySceneObject;
 import org.jge.game.HUDObject;
 import org.jge.gpuresources.MappedValues;
@@ -115,8 +117,11 @@ public class RenderEngine extends MappedValues
 
 	private Stack<Runnable>					 beforeRenders;
 
+	private EventBus							eventBus;
+
 	public RenderEngine()
 	{
+		eventBus = new EventBus();
 		renderState = new RenderState();
 		enableGLCap(GL_TEXTURE_2D);
 		renderStatesStack = new Stack<RenderState>();
@@ -650,5 +655,15 @@ public class RenderEngine extends MappedValues
 	public void invokeBeforeRender(Runnable r)
 	{
 		beforeRenders.push(r);
+	}
+
+	public void fireEvent(WindowResizeEvent event)
+	{
+		eventBus.fireEvent(event);
+	}
+
+	public EventBus getEventBus()
+	{
+		return eventBus;
 	}
 }

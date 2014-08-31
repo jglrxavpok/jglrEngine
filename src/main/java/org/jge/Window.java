@@ -12,10 +12,10 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JFrame;
 
+import org.jge.events.WindowResizeEvent;
 import org.jge.maths.Maths;
 import org.jge.util.ImageUtils;
 import org.jge.util.Log;
@@ -58,21 +58,20 @@ import org.lwjgl.opengl.PixelFormat;
 public class Window
 {
 
-	private double						   fpsCap;
-	private int							  w;
-	private int							  h;
-	private boolean						  init;
-	private boolean						  shouldGoFullscreen;
-	private boolean						  isFullscreen;
-	private JFrame						   parentFrame;
-	private Canvas						   parentCanvas;
-	private String						   title;
-	private boolean						  stop;
-	protected boolean						preventStop;
-	private boolean						  vsync;
-	private org.lwjgl.input.Cursor		   emptyCursor;
-	private final AtomicReference<Dimension> newCanvasSize = new AtomicReference<Dimension>();
-	private static Window					current;
+	private double				 fpsCap;
+	private int					w;
+	private int					h;
+	private boolean				init;
+	private boolean				shouldGoFullscreen;
+	private boolean				isFullscreen;
+	private JFrame				 parentFrame;
+	private Canvas				 parentCanvas;
+	private String				 title;
+	private boolean				stop;
+	protected boolean			  preventStop;
+	private boolean				vsync;
+	private org.lwjgl.input.Cursor emptyCursor;
+	private static Window		  current;
 
 	public Window(int w, int h) throws EngineException
 	{
@@ -127,7 +126,7 @@ public class Window
 				@Override
 				public void componentResized(ComponentEvent e)
 				{
-					newCanvasSize.set(parentCanvas.getSize());
+					CoreEngine.getCurrent().getRenderEngine().fireEvent(new WindowResizeEvent(parentCanvas.getWidth(), parentCanvas.getHeight()));
 				}
 			});
 			parentFrame.addWindowFocusListener(new WindowAdapter()
@@ -379,21 +378,7 @@ public class Window
 
 	public Window updateSizeIfNeeded()
 	{
-		Dimension newDim = newCanvasSize.getAndSet(null);
-		if(newDim != null)
-		{
-			try
-			{
-				setSize(newDim.width, newDim.height);
-				glViewport(0, 0, newDim.width, newDim.height);
-			}
-			catch(EngineException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		else
-			glViewport(0, 0, getWidth(), getHeight());
+		glViewport(0, 0, getPhysicalWidth(), getPhysicalHeight());
 		return this;
 	}
 

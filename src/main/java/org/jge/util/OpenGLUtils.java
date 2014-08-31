@@ -11,6 +11,7 @@ import java.util.HashMap;
 import org.jge.AbstractResource;
 import org.jge.EngineException;
 import org.jge.gpuresources.TextureResource;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
@@ -36,24 +37,27 @@ public class OpenGLUtils
 		Field[] fields = glClass.getFields();
 		for(Field field : fields)
 		{
-			if(Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers()) && Modifier.isFinal(field.getModifiers())) try
+			if(Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers()) && Modifier.isFinal(field.getModifiers()))
 			{
-				if(field.getType() == Integer.TYPE)
+				try
 				{
-					int value = (Integer)field.get(null);
-					if(!capNamesMap.containsKey(value))
+					if(field.getType() == Integer.TYPE)
 					{
-						capNamesMap.put(value, field.getName());
+						int value = (Integer)field.get(null);
+						if(!capNamesMap.containsKey(value))
+						{
+							capNamesMap.put(value, field.getName());
+						}
 					}
 				}
-			}
-			catch(IllegalArgumentException e)
-			{
-				e.printStackTrace();
-			}
-			catch(IllegalAccessException e)
-			{
-				e.printStackTrace();
+				catch(IllegalArgumentException e)
+				{
+					e.printStackTrace();
+				}
+				catch(IllegalAccessException e)
+				{
+					e.printStackTrace();
+				}
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 package org.jge;
 
-public abstract class LoadingTask
+@FunctionalInterface
+public interface LoadingTask
 {
-
-	public abstract boolean run();
+	public boolean run();
 }

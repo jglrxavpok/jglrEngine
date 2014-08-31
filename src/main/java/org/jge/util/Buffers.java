@@ -24,7 +24,7 @@ public class Buffers
 		return BufferUtils.createByteBuffer(size);
 	}
 
-	public static IntBuffer createFlippedIntBuffer(int[] indices)
+	public static IntBuffer createFlippedIntBuffer(int... indices)
 	{
 		IntBuffer buffer = createIntBuffer(indices.length);
 		for(int i = 0; i < indices.length; i++ )
@@ -46,7 +46,7 @@ public class Buffers
 		return buffer;
 	}
 
-	public static ByteBuffer createFlippedByteBuffer(byte[] bufferData)
+	public static ByteBuffer createFlippedByteBuffer(byte... bufferData)
 	{
 		ByteBuffer buf = createByteBuffer(bufferData.length);
 		for(int i = 0; i < bufferData.length; i++ )
@@ -55,7 +55,7 @@ public class Buffers
 		return buf;
 	}
 
-	public static FloatBuffer createFlippedFloatBuffer(float[] data)
+	public static FloatBuffer createFlippedFloatBuffer(float... data)
 	{
 		FloatBuffer buf = createFloatBuffer(data.length);
 		for(int i = 0; i < data.length; i++ )

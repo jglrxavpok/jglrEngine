@@ -2,26 +2,39 @@ package org.jge.util;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import java.io.FileOutputStream;
 import java.nio.IntBuffer;
 
-import javax.imageio.ImageIO;
+import org.jge.JGEngine;
+import org.jge.crash.CrashReport;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Controller;
-import org.lwjgl.input.Controllers;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 /**
- * VERY OLD, MUCH TO UPDATE
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2014 jglrxavpok
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  * 
  * @author jglrxavpok
  */
@@ -29,21 +42,19 @@ public class LWJGLHandler
 {
 
 	private static boolean loaded;
-	private static int	 joystickPort;
 
 	/**
 	 * @throws Exception
 	 */
-	public static void load(String nativesFolder) throws Exception
+	public static void load(File folder) throws Exception
 	{
 		if(!loaded)
 		{
-			File folder = new File(nativesFolder);
 			if(!folder.exists()) folder.mkdirs();
 			if(folder.isDirectory())
 			{
 				installNatives(folder);
-				System.setProperty("org.lwjgl.librarypath", nativesFolder);
+				System.setProperty("org.lwjgl.librarypath", folder.getAbsolutePath());
 			}
 			loaded = true;
 		}
@@ -51,34 +62,35 @@ public class LWJGLHandler
 
 	private static void installNatives(File folder) throws Exception
 	{
+		OperatingSystem os = SystemUtils.getOS();
 		Log.message("OS found : " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
 		Log.message("Installing natives...");
-		if(getNameOfOS().equalsIgnoreCase("windows"))
+		if(os == OperatingSystem.WINDOWS)
 		{
 			if(!new File(folder.getPath() + "/jinput-dx8_64.dll").exists())
 			{
-				IO.copy(getFFJar("/windows/jinput-dx8_64.dll", LWJGLHandler.class), folder.getPath() + "/jinput-dx8_64.dll").close();
-				IO.copy(getFFJar("/windows/jinput-dx8.dll", LWJGLHandler.class), folder.getPath() + "/jinput-dx8.dll").close();
-				IO.copy(getFFJar("/windows/jinput-raw_64.dll", LWJGLHandler.class), folder.getPath() + "/jinput-raw_64.dll").close();
-				IO.copy(getFFJar("/windows/jinput-raw.dll", LWJGLHandler.class), folder.getPath() + "/jinput-raw.dll").close();
-				IO.copy(getFFJar("/windows/lwjgl.dll", LWJGLHandler.class), folder.getPath() + "/lwjgl.dll").close();
-				IO.copy(getFFJar("/windows/lwjgl64.dll", LWJGLHandler.class), folder.getPath() + "/lwjgl64.dll").close();
-				IO.copy(getFFJar("/windows/OpenAL32.dll", LWJGLHandler.class), folder.getPath() + "/OpenAL32.dll").close();
-				IO.copy(getFFJar("/windows/OpenAL64.dll", LWJGLHandler.class), folder.getPath() + "/OpenAL64.dll").close();
+				extractFromClasspath("/windows/jinput-dx8_64.dll", folder);
+				extractFromClasspath("/windows/jinput-dx8.dll", folder);
+				extractFromClasspath("/windows/jinput-raw_64.dll", folder);
+				extractFromClasspath("/windows/jinput-raw.dll", folder);
+				extractFromClasspath("/windows/lwjgl.dll", folder);
+				extractFromClasspath("/windows/lwjgl64.dll", folder);
+				extractFromClasspath("/windows/OpenAL32.dll", folder);
+				extractFromClasspath("/windows/OpenAL64.dll", folder);
 			}
 			else
 			{
 				Log.message("Natives already exist.");
 			}
 		}
-		if(getNameOfOS().equalsIgnoreCase("solaris"))
+		else if(os == OperatingSystem.SOLARIS)
 		{
 			if(!new File(folder.getPath() + "/liblwjgl.so").exists())
 			{
-				IO.copy(getFFJar("/solaris/liblwjgl.so", LWJGLHandler.class), folder.getPath() + "/liblwjgl.so").close();
-				IO.copy(getFFJar("/solaris/liblwjgl64.so", LWJGLHandler.class), folder.getPath() + "/liblwjgl64.so").close();
-				IO.copy(getFFJar("/solaris/libopenal.so", LWJGLHandler.class), folder.getPath() + "/libopenal.so").close();
-				IO.copy(getFFJar("/solaris/libopenal64.so", LWJGLHandler.class), folder.getPath() + "/libopenal64.so").close();
+				extractFromClasspath("/solaris/liblwjgl.so", folder);
+				extractFromClasspath("/solaris/liblwjgl64.so", folder);
+				extractFromClasspath("/solaris/libopenal.so", folder);
+				extractFromClasspath("/solaris/libopenal64.so", folder);
 			}
 			else
 			{
@@ -86,14 +98,14 @@ public class LWJGLHandler
 			}
 
 		}
-		if(getNameOfOS().equalsIgnoreCase("linux"))
+		else if(os == OperatingSystem.LINUX)
 		{
 			if(!new File(folder.getPath() + "/liblwjgl.so").exists())
 			{
-				IO.copy(getFFJar("/linux/liblwjgl.so", LWJGLHandler.class), folder.getPath() + "/liblwjgl.so").close();
-				IO.copy(getFFJar("/linux/liblwjgl64.so", LWJGLHandler.class), folder.getPath() + "/liblwjgl64.so").close();
-				IO.copy(getFFJar("/linux/libopenal.so", LWJGLHandler.class), folder.getPath() + "/libopenal.so").close();
-				IO.copy(getFFJar("/linux/libopenal64.so", LWJGLHandler.class), folder.getPath() + "/libopenal64.so").close();
+				extractFromClasspath("/linux/liblwjgl.so", folder);
+				extractFromClasspath("/linux/liblwjgl64.so", folder);
+				extractFromClasspath("/linux/libopenal.so", folder);
+				extractFromClasspath("/linux/libopenal64.so", folder);
 			}
 			else
 			{
@@ -101,226 +113,42 @@ public class LWJGLHandler
 			}
 
 		}
-		if(getNameOfOS().equalsIgnoreCase("macosx"))
+		else if(os == OperatingSystem.MACOSX)
 		{
 			if(!new File(folder.getPath() + "/openal.dylib").exists())
 			{
-				IO.copy(getFFJar("/macosx/liblwjgl.jnilib", LWJGLHandler.class), folder.getPath() + "/liblwjgl.jnilib").close();
-				IO.copy(getFFJar("/macosx/liblwjgl-osx.jnilib", LWJGLHandler.class), folder.getPath() + "/liblwjgl-osx.jnilib").close();
-				IO.copy(getFFJar("/macosx/openal.dylib", LWJGLHandler.class), folder.getPath() + "/openal.dylib").close();
+				extractFromClasspath("/macosx/liblwjgl.jnilib", folder);
+				extractFromClasspath("/macosx/liblwjgl-osx.jnilib", folder);
+				extractFromClasspath("/macosx/openal.dylib", folder);
 			}
 			else
 			{
 				Log.message("Natives already exist.");
 			}
-
 		}
-		System.setProperty("net.java.games.input.librarypath", folder.getPath() + "/");
-	}
-
-	public static String getNameOfOS()
-	{
-		String os = System.getProperty("os.name").toLowerCase();
-		if(os.contains("win"))
+		else
 		{
-			return "Windows";
+			JGEngine.crash(new CrashReport("Unknown OS: " + System.getProperty("os.name")));
 		}
-		if(os.contains("sunos") || os.contains("solaris"))
-		{
-			return "Solaris";
-		}
-		if(os.contains("unix"))
-		{
-			return "Linux";
-		}
-		if(os.contains("mac"))
-		{
-			return "Macosx";
-		}
-		return "Unknown";
+		System.setProperty("net.java.games.input.librarypath", folder.getAbsolutePath());
 	}
 
-	private static InputStream getFFJar(String string, Class<?> class1)
+	private static void extractFromClasspath(String fileName, File folder)
 	{
-		return new BufferedInputStream(class1.getResourceAsStream(string));
-	}
-
-	public static int getJoystickPort()
-	{
-		return joystickPort;
-	}
-
-	public static int setJoystickPort(int value)
-	{
-		return (joystickPort = value);
-	}
-
-	/**
-	 */
-	public static float getValueOfJoystick(final String value) throws LWJGLException
-	{
-		Controllers.create();
-		Controller joystick = createJoystick();
-		Controllers.destroy();
-		if(joystick != null)
+		String[] split = fileName.split("/");
+		String diskFileName = split[split.length - 1];
+		try(FileOutputStream in = new FileOutputStream(new File(folder, diskFileName)))
 		{
-			if(value.equalsIgnoreCase("x"))
-				return joystick.getXAxisValue();
-			else if(value.equalsIgnoreCase("y"))
-				return (float)-(joystick.getYAxisValue());
-			else if(value.equalsIgnoreCase("z"))
-				return joystick.getZAxisValue();
-			else if(value.equalsIgnoreCase("povx"))
-				return joystick.getPovX();
-			else if(value.equalsIgnoreCase("povy"))
-				return joystick.getPovY();
-			else
-				return 0;
+			IO.copy(LWJGLHandler.class.getResourceAsStream(fileName), in);
 		}
-		return 0;
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
-	public static String	 POS_X	 = "x";
-	public static String	 POS_Y	 = "y";
-	public static String	 POS_POV_X = "povx";
-	public static String	 POS_POV_Y = "povy";
 	private static int[]	 screenshotBufferArray;
 	private static IntBuffer screenshotBuffer;
-
-	/**
-	 * @throws LWJGLException
-	 */
-	public static boolean isButtonDown(int button) throws LWJGLException
-	{
-		Controllers.create();
-		Controller joystick = createJoystick();
-		Controllers.destroy();
-		if(joystick != null)
-		{
-			if(button <= joystick.getButtonCount())
-			{
-				return joystick.isButtonPressed(button);
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * @throws LWJGLException
-	 */
-	public static Controller createJoystick() throws LWJGLException
-	{
-		Controllers.create();
-		Controller joystick = null;
-		if(Controllers.getControllerCount() > 0) joystick = Controllers.getController(getJoystickPort());
-		Controllers.destroy();
-		return joystick;
-	}
-
-	public static boolean isButtonDown(int button, Controller controller) throws LWJGLException
-	{
-		Controllers.create();
-		Controller joystick = null;
-		if(Controllers.getControllerCount() > 0) joystick = Controllers.getController(controller.getIndex());
-		Controllers.destroy();
-		if(joystick != null)
-		{
-			if(button <= joystick.getButtonCount())
-			{
-				return joystick.isButtonPressed(button);
-			}
-		}
-		return false;
-	}
-
-	public static float getValueOfJoystick(String value, Controller controller) throws LWJGLException
-	{
-		Controllers.create();
-		Controller joystick = null;
-		if(Controllers.getControllerCount() > 0) joystick = Controllers.getController(controller.getIndex());
-		Controllers.destroy();
-		if(joystick != null)
-		{
-			if(value.equalsIgnoreCase("x"))
-				return joystick.getXAxisValue();
-			else if(value.equalsIgnoreCase("y"))
-				return (float)-(joystick.getYAxisValue());
-			else if(value.equalsIgnoreCase("z"))
-				return joystick.getZAxisValue();
-			else if(value.equalsIgnoreCase("povx"))
-				return joystick.getPovX();
-			else if(value.equalsIgnoreCase("povy"))
-				return joystick.getPovY();
-			else
-				return 0;
-		}
-		return 0;
-	}
-
-	public static int loadTexture(InputStream in)
-	{
-		BufferedImage i;
-		try
-		{
-			i = ImageIO.read(in);
-			return loadTexture(i);
-		}
-		catch(IOException e1)
-		{
-			e1.printStackTrace();
-			return -1;
-		}
-	}
-
-	public static int loadTexture(BufferedImage img)
-	{
-		int[] pixels = img.getRGB(0, 0, img.getWidth(), img.getHeight(), null, 0, img.getWidth());
-
-		int bufLen = pixels.length * 4;
-		ByteBuffer oglPixelBuf = BufferUtils.createByteBuffer(bufLen);
-
-		for(int y = img.getHeight() - 1; y >= 0; y-- )
-		{
-			for(int x = 0; x < img.getWidth(); x++ )
-			{
-				int rgb = pixels[y * img.getWidth() + x];
-				float a = ((rgb >> 24) & 0xFF) / 255f;
-				float r = ((rgb >> 16) & 0xFF) / 255f;
-				float g = ((rgb >> 8) & 0xFF) / 255f;
-				float b = ((rgb >> 0) & 0xFF) / 255f;
-				oglPixelBuf.put((byte)(r * 255f));
-				oglPixelBuf.put((byte)(g * 255f));
-				oglPixelBuf.put((byte)(b * 255f));
-				oglPixelBuf.put((byte)(a * 255f));
-			}
-		}
-
-		oglPixelBuf.flip();
-
-		ByteBuffer temp = ByteBuffer.allocateDirect(4);
-		temp.order(ByteOrder.nativeOrder());
-		IntBuffer textBuf = temp.asIntBuffer();
-		GL11.glGenTextures(textBuf);
-		int textureID = textBuf.get(0);
-
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-		GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
-
-		// TODO: We take a flag for whether or not to store the alpha, but if we
-		// don't check that flag for the options
-		// below - they assume alpha, and if useTextureAlpha is false we only
-		// allocate num pixels * 3, so the
-		// call below then throws an exception. Long story short either always
-		// assume we want alpha or fix the
-		// code below to change those options depending on flag setting.
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, img.getWidth(), img.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, oglPixelBuf);
-
-		return textureID;
-	}
 
 	public static BufferedImage takeScreenshot()
 	{

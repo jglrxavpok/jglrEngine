@@ -11,6 +11,27 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
 /**
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2014 jglrxavpok
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  * VERY OLD, TO UPDATE
  * 
  * @author jglrxavpok
@@ -25,10 +46,10 @@ public final class IO
 	 * @param bufferLength
 	 * @throws IOException
 	 */
-	public static OutputStream copy(InputStream is, OutputStream os, int bufferLength) throws IOException
+	public static OutputStream copy(InputStream is, OutputStream os) throws IOException
 	{
 		int i = 0;
-		byte[] buffer = new byte[bufferLength];
+		byte[] buffer = new byte[65565];
 		while((i = is.read(buffer, 0, buffer.length)) != -1)
 		{
 			os.write(buffer, 0, i);
@@ -38,12 +59,7 @@ public final class IO
 
 	public static OutputStream copy(InputStream in, String output) throws FileNotFoundException, IOException
 	{
-		return copy(in, new BufferedOutputStream(new FileOutputStream(output)), 65565);
-	}
-
-	public static void copy(InputStream in, OutputStream output) throws FileNotFoundException, IOException
-	{
-		copy(in, output, 65565);
+		return copy(in, new BufferedOutputStream(new FileOutputStream(output)));
 	}
 
 	public static String readString(InputStream in, String charset) throws UnsupportedEncodingException, IOException

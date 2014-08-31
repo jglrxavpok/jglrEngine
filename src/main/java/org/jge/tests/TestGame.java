@@ -81,7 +81,7 @@ public class TestGame extends Game
 	{
 		try
 		{
-			new CoreEngine(new TestGame()).start(new Window(960, 600));
+			new CoreEngine(new TestGame()).start(new Window(960, 600), args);
 		}
 		catch(EngineException e)
 		{

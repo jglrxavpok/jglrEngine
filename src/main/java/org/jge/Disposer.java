@@ -8,8 +8,7 @@ public class Disposer
 
 	public void disposeAll()
 	{
-		for(Disposable d : disposables)
-			d.dispose();
+		disposables.forEach(Disposable::dispose);
 		disposables.clear();
 	}
 

@@ -11,6 +11,7 @@ import org.jge.maths.Matrix4;
 import org.jge.maths.Quaternion;
 import org.jge.maths.Vector2;
 import org.jge.maths.Vector3;
+
 import org.jglrxavpok.jlsl.BytecodeDecoder;
 import org.jglrxavpok.jlsl.JLSLContext;
 import org.jglrxavpok.jlsl.glsl.FragmentShader;
@@ -21,15 +22,13 @@ import org.jglrxavpok.jlsl.glsl.VertexShader;
 public class JavaShader extends Shader
 {
 
-	public static final boolean DEBUG_PRINT_GLSL_TRANSLATION = true;
+	public static boolean DEBUG_PRINT_GLSL_TRANSLATION = false;
 
 	public JavaShader(int glslversion, Class<? extends ShaderBase>... shaderClasses)
 	{
 		VirtualResourceLoader resLoader = new VirtualResourceLoader();
 
 		GLSLEncoder encoder = new GLSLEncoder(glslversion);
-		GLSLEncoder.DEBUG = false;
-		BytecodeDecoder.DEBUG = false;
 		encoder.setGLSLTranslation(Matrix4.class.getCanonicalName(), "mat4");
 		encoder.setGLSLTranslation(Vector2.class.getCanonicalName(), "vec2");
 		encoder.setGLSLTranslation(Vector3.class.getCanonicalName(), "vec3");

@@ -5,11 +5,14 @@ import static org.lwjgl.opengl.GL30.*;
 
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JFrame;
 
@@ -55,20 +58,21 @@ import org.lwjgl.opengl.PixelFormat;
 public class Window
 {
 
-	private double				 fpsCap;
-	private int					w;
-	private int					h;
-	private boolean				init;
-	private boolean				shouldGoFullscreen;
-	private boolean				isFullscreen;
-	private JFrame				 parentFrame;
-	private Canvas				 parentCanvas;
-	private String				 title;
-	private boolean				stop;
-	protected boolean			  preventStop;
-	private boolean				vsync;
-	private org.lwjgl.input.Cursor emptyCursor;
-	private static Window		  current;
+	private double						   fpsCap;
+	private int							  w;
+	private int							  h;
+	private boolean						  init;
+	private boolean						  shouldGoFullscreen;
+	private boolean						  isFullscreen;
+	private JFrame						   parentFrame;
+	private Canvas						   parentCanvas;
+	private String						   title;
+	private boolean						  stop;
+	protected boolean						preventStop;
+	private boolean						  vsync;
+	private org.lwjgl.input.Cursor		   emptyCursor;
+	private final AtomicReference<Dimension> newCanvasSize = new AtomicReference<Dimension>();
+	private static Window					current;
 
 	public Window(int w, int h) throws EngineException
 	{
@@ -118,6 +122,22 @@ public class Window
 			Display.setVSyncEnabled(vsync);
 			parentFrame.setTitle(title);
 			parentFrame.setVisible(true);
+			parentCanvas.addComponentListener(new ComponentAdapter()
+			{
+				@Override
+				public void componentResized(ComponentEvent e)
+				{
+					newCanvasSize.set(parentCanvas.getSize());
+				}
+			});
+			parentFrame.addWindowFocusListener(new WindowAdapter()
+			{
+				@Override
+				public void windowGainedFocus(WindowEvent e)
+				{
+					parentCanvas.requestFocusInWindow();
+				}
+			});
 		}
 		catch(Exception e)
 		{
@@ -237,11 +257,9 @@ public class Window
 			preventStop = false;
 			return;
 		}
-
 		try
 		{
 			DisplayMode targetDisplayMode = null;
-
 			if(fullscreen)
 			{
 				DisplayMode[] modes = Display.getAvailableDisplayModes();
@@ -278,14 +296,15 @@ public class Window
 			else
 			{
 				targetDisplayMode = new DisplayMode(width, height);
-
-				parentFrame.dispose();
+				// parentFrame.dispose();
+				System.out.println("test_setting1");
 				parentCanvas.setPreferredSize(new Dimension(width, height));
-				parentFrame.setUndecorated(false);
+				// parentFrame.setUndecorated(false);
 				parentFrame.pack();
 				parentFrame.setLocationRelativeTo(null);
 				parentFrame.setVisible(true);
 				parentFrame.setAlwaysOnTop(false);
+				System.out.println("test_setting2");
 			}
 
 			if(targetDisplayMode == null)
@@ -302,13 +321,14 @@ public class Window
 					parentFrame.setVisible(true);
 					parentFrame.setAlwaysOnTop(false);
 				}
-
 				preventStop = false;
 				return;
 			}
 
-			Display.setDisplayMode(targetDisplayMode);
+			System.out.println("test_setting4");
 			Display.setFullscreen(fullscreen);
+			System.out.println("test_setting3");
+			Display.setDisplayMode(targetDisplayMode);
 
 		}
 		catch(LWJGLException e)
@@ -354,6 +374,26 @@ public class Window
 	public Window refresh()
 	{
 		Display.update();
+		return this;
+	}
+
+	public Window updateSizeIfNeeded()
+	{
+		Dimension newDim = newCanvasSize.getAndSet(null);
+		if(newDim != null)
+		{
+			try
+			{
+				setSize(newDim.width, newDim.height);
+				glViewport(0, 0, newDim.width, newDim.height);
+			}
+			catch(EngineException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else
+			glViewport(0, 0, getWidth(), getHeight());
 		return this;
 	}
 

@@ -68,13 +68,13 @@ public class BinaryUtils
 	public static double asDouble(byte[] data, int index, int length)
 	{
 		byte[] bytes = extract(data, index, length);
-		return ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getDouble();
+		return ByteBuffer.wrap(bytes).order(ByteOrder.nativeOrder()).getDouble();
 	}
 
 	public static float asFloat(byte[] data, int index, int length)
 	{
 		byte[] bytes = extract(data, index, length);
-		return ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getFloat();
+		return ByteBuffer.wrap(bytes).order(ByteOrder.nativeOrder()).getFloat();
 	}
 
 	protected final static char[] hexArray = "0123456789ABCDEF".toCharArray();

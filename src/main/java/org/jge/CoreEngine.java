@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
 import javax.imageio.ImageIO;
@@ -17,6 +18,7 @@ import org.jge.game.Input;
 import org.jge.phys.PhysicsEngine;
 import org.jge.render.RenderEngine;
 import org.jge.render.Texture;
+import org.jge.render.shaders.JavaShader;
 import org.jge.sound.Music;
 import org.jge.sound.SoundEngine;
 import org.jge.util.LWJGLHandler;
@@ -24,6 +26,8 @@ import org.jge.util.Log;
 import org.jge.util.OpenGLUtils;
 import org.jge.util.Strings;
 
+import org.jglrxavpok.jlsl.BytecodeDecoder;
+import org.jglrxavpok.jlsl.glsl.GLSLEncoder;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.opencl.CL;
@@ -106,40 +110,64 @@ public final class CoreEngine
 
 	public void start(Window window)
 	{
-		try
+		start(window, new String[0]);
+	}
+
+	public void start(Window window, String args[])
+	{
+		new Thread(() ->
 		{
-			addTickableObject((inLoadingScreen) ->
-			{
-				System.out.println("Test");
-			});
-			new ThreadReadConsoleInput().start();
-			classResLoader = new ClasspathSimpleResourceLoader();
-			diskResLoader = new DiskSimpleResourceLoader();
-			running = true;
-			this.window = window;
-			expectedFrameRate = window.getFPSCap();
-			timeBetweenUpdates = 1000000000 / expectedFrameRate;
 			try
 			{
-				LWJGLHandler.load(JGEngine.getEngineFolder().getAbsolutePath() + "/natives");
-				window.setTitle(game.getGameName());
-				window.init();
-				if(!GLContext.getCapabilities().OpenGL33)
+				new ThreadReadConsoleInput().start();
+				classResLoader = new ClasspathSimpleResourceLoader();
+				diskResLoader = new DiskSimpleResourceLoader();
+				running = true;
+				this.window = window;
+				expectedFrameRate = window.getFPSCap();
+				timeBetweenUpdates = 1000000000 / expectedFrameRate;
+				try
 				{
-					Log.message("Incompatible OpenGL version: " + OpenGLUtils.getOpenGLVersion());
-					Log.message("Must be at least: 3.3.0");
-					cleanup();
-				}
-				soundEngine = new SoundEngine();
-				OpenGLUtils.loadCapNames();
-				CL.create();
-				Log.message("[------OpenGL infos------]");
-				Log.message("  Version: " + OpenGLUtils.getOpenGLVersion());
-				Log.message("  Vendor: " + OpenGLUtils.getOpenGLVendor());
-				Log.message("[------OpenAL infos------]");
-				Log.message("  Version: " + AL10.alGetString(AL10.AL_VERSION));
-				Log.message("  Vendor: " + AL10.alGetString(AL10.AL_VENDOR));
-				// TODO OpenCL infos
+					LWJGLHandler.load(new File(JGEngine.getEngineFolder(), "natives"));
+					window.setTitle(game.getGameName());
+					window.init();
+					String currentParameter = null;
+					HashMap<String, String> props = new HashMap<String, String>();
+					for(int i = 0; i < args.length; i++ )
+					{
+						if(args[i].startsWith("-"))
+						{
+							currentParameter = args[i].substring(1);
+						}
+						else
+						{
+							props.put(currentParameter, args[i]);
+						}
+					}
+					if(props.get("debugAll").equals("true"))
+					{
+						Log.save = true;
+						GLSLEncoder.DEBUG = true;
+						BytecodeDecoder.DEBUG = true;
+						JavaShader.DEBUG_PRINT_GLSL_TRANSLATION = true;
+					}
+					if(!GLContext.getCapabilities().OpenGL33)
+					{
+						Log.message("Incompatible OpenGL version: " + OpenGLUtils.getOpenGLVersion());
+						Log.message("Must be at least: 3.3.0");
+						cleanup();
+					}
+					soundEngine = new SoundEngine();
+
+					OpenGLUtils.loadCapNames();
+					CL.create();
+					Log.message("[------OpenGL infos------]");
+					Log.message("  Version: " + OpenGLUtils.getOpenGLVersion());
+					Log.message("  Vendor: " + OpenGLUtils.getOpenGLVendor());
+					Log.message("[------OpenAL infos------]");
+					Log.message("  Version: " + AL10.alGetString(AL10.AL_VERSION));
+					Log.message("  Vendor: " + AL10.alGetString(AL10.AL_VENDOR));
+					// TODO OpenCL infos
 				Log.message("[------Engine infos------]");
 				Log.message("  Version: " + JGEngine.getEngineVersion());
 				Log.message("------------------------");
@@ -190,6 +218,7 @@ public final class CoreEngine
 		}
 		cleanup();
 		System.exit(0);
+	}   ).start();
 	}
 
 	private void cleanup()
@@ -306,7 +335,7 @@ public final class CoreEngine
 				{
 					screenshotsFolder.mkdirs();
 				}
-				ImageIO.write(LWJGLHandler.takeScreenshot(), "png", new File(screenshotsFolder, Strings.createCorrectedFileName(Time.getTimeAsText()) + ".png"));
+				ImageIO.write(LWJGLHandler.takeScreenshot(), "png", new File(screenshotsFolder, Strings.createCorrectedFileName(Time.getTimeAsString()) + ".png"));
 			}
 			catch(IOException e)
 			{
@@ -357,9 +386,9 @@ public final class CoreEngine
 
 	private void render(double delta)
 	{
+		window.updateSizeIfNeeded();
 		renderEngine.clearBuffers();
 		glColor4f(1, 1, 1, 1);
-		glViewport(0, 0, window.getPhysicalWidth(), window.getPhysicalHeight());
 		game.render(renderEngine, delta);
 	}
 

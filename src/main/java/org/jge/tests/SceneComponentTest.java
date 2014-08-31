@@ -1,10 +1,11 @@
-package org.jge.script.lua;
+package org.jge.tests;
 
-import org.jge.util.Log;
-
-import org.luaj.vm2.Globals;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.lib.LibFunction;
+import org.jge.CoreEngine;
+import org.jge.EngineException;
+import org.jge.ResourceLocation;
+import org.jge.components.MeshRenderer;
+import org.jge.render.Material;
+import org.jge.render.mesh.Mesh;
 
 /**
  * The MIT License (MIT)
@@ -29,34 +30,12 @@ import org.luaj.vm2.lib.LibFunction;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class PrintFunction extends LibFunction
+public class SceneComponentTest extends MeshRenderer
 {
 
-	private Globals globals;
-
-	public PrintFunction(Globals globals)
+	public SceneComponentTest() throws EngineException, Exception
 	{
-		this.globals = globals;
-	}
-
-	public LuaValue call(LuaValue arg)
-	{
-		try
-		{
-			String toPrint = "";
-			for(int i = 0; i < arg.narg(); i++ )
-			{
-				if(i != 0) toPrint += "\t";
-				toPrint += arg.arg(i + 1);
-			}
-			String scriptName = globals.get("debug").get("getinfo").call("1").get("source").toString();
-			Log.message("[Script " + scriptName + "] " + toPrint);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		return LuaValue.NIL;
+		super(new Mesh(CoreEngine.getCurrent().getClasspathResourceLoader().getResource(new ResourceLocation("test/models", "torus.obj"))), new Material());
 	}
 
 }

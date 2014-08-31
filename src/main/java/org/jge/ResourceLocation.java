@@ -94,6 +94,19 @@ public class ResourceLocation
 		return parent;
 	}
 
+	public String getName()
+	{
+		if(path.contains("/"))
+		{
+			String tokens[] = path.split("/");
+			return tokens[tokens.length - 1];
+		}
+		else
+		{
+			return path;
+		}
+	}
+
 	public boolean equals(Object o)
 	{
 		if(o instanceof ResourceLocation)

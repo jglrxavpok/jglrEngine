@@ -3,8 +3,10 @@ package org.jge.script.lua;
 import java.io.UnsupportedEncodingException;
 
 import org.jge.AbstractResource;
-import org.jge.script.Script;
+import org.jge.CoreEngine;
+import org.jge.ResourceLocation;
 
+import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaFunction;
 import org.luaj.vm2.LuaValue;
 
@@ -35,10 +37,12 @@ public class RequireFunction extends LuaFunction
 {
 
 	private AbstractResource scriptResource;
+	private Globals		  globals;
 
-	public RequireFunction(AbstractResource scriptResource)
+	public RequireFunction(AbstractResource scriptResource, Globals globals)
 	{
 		this.scriptResource = scriptResource;
+		this.globals = globals;
 	}
 
 	public LuaValue call(LuaValue arg)
@@ -46,8 +50,15 @@ public class RequireFunction extends LuaFunction
 		String scriptName = arg.toString();
 		try
 		{
-			AbstractResource newRes = scriptResource.getLoader().getResource(scriptResource.getResourceLocation().getDirectParent().getChild(scriptName));
-			new Script(newRes);
+			if(scriptName.equals("__jglrEngine__"))
+			{
+				new LuaScript(CoreEngine.getCurrent().getClasspathResourceLoader().getResource(new ResourceLocation("text", "engine.lua")), globals);
+			}
+			else
+			{
+				AbstractResource newRes = scriptResource.getLoader().getResource(scriptResource.getResourceLocation().getDirectParent().getChild(scriptName));
+				new LuaScript(newRes, globals);
+			}
 		}
 		catch(UnsupportedEncodingException e)
 		{

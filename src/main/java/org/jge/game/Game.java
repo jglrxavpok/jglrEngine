@@ -185,7 +185,12 @@ public abstract class Game
 
 	public Game addToWorld(SceneObject object)
 	{
-		getSceneRoot().getChild("world").addChild(object);
+		return addToWorld(object.getClass().getCanonicalName() + "_" + object.hashCode(), object);
+	}
+
+	public Game addToWorld(String name, SceneObject object)
+	{
+		getSceneRoot().getChild("world").addChildAs(name, object);
 		object.onAddToSceneAll(getSceneRoot());
 		return this;
 	}

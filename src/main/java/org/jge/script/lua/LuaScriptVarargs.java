@@ -1,10 +1,8 @@
 package org.jge.script.lua;
 
-import org.jge.util.Log;
+import org.jge.script.ScriptValue;
 
-import org.luaj.vm2.Globals;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.lib.LibFunction;
+import org.luaj.vm2.Varargs;
 
 /**
  * The MIT License (MIT)
@@ -29,34 +27,74 @@ import org.luaj.vm2.lib.LibFunction;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class PrintFunction extends LibFunction
+public class LuaScriptVarargs extends ScriptValue
 {
 
-	private Globals globals;
+	private Varargs value;
 
-	public PrintFunction(Globals globals)
+	public LuaScriptVarargs(Varargs val)
 	{
-		this.globals = globals;
+		this.value = val;
 	}
 
-	public LuaValue call(LuaValue arg)
+	@Override
+	public ScriptValue getComponent(int index)
 	{
-		try
-		{
-			String toPrint = "";
-			for(int i = 0; i < arg.narg(); i++ )
-			{
-				if(i != 0) toPrint += "\t";
-				toPrint += arg.arg(i + 1);
-			}
-			String scriptName = globals.get("debug").get("getinfo").call("1").get("source").toString();
-			Log.message("[Script " + scriptName + "] " + toPrint);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		return LuaValue.NIL;
+		return new LuaScriptValue(value.arg(index));
+	}
+
+	@Override
+	public ScriptValue getComponent(String name)
+	{
+		return new LuaScriptValue(value.arg1().get(name));
+	}
+
+	@Override
+	public int length()
+	{
+		return value.narg();
+	}
+
+	@Override
+	public String toString()
+	{
+		return value.toString();
+	}
+
+	@Override
+	public int asInt()
+	{
+		return 0;
+	}
+
+	@Override
+	public float asFloat()
+	{
+		return 0;
+	}
+
+	@Override
+	public double asDouble()
+	{
+		return 0;
+	}
+
+	@Override
+	public boolean asBoolean()
+	{
+		return true;
+	}
+
+	@Override
+	public ScriptValue invoke(ScriptValue... values)
+	{
+		return this;
+	}
+
+	@Override
+	public String getType()
+	{
+		return ScriptValue.TYPE_TABLE;
 	}
 
 }

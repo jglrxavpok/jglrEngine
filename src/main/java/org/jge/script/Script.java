@@ -4,14 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import org.jge.AbstractResource;
-import org.jge.script.lua.PrintFunction;
-import org.jge.script.lua.RequireFunction;
 import org.jge.util.BinaryUtils;
-
-import org.luaj.vm2.Globals;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
-import org.luaj.vm2.lib.jse.JsePlatform;
 
 /**
  * The MIT License (MIT)
@@ -36,62 +29,38 @@ import org.luaj.vm2.lib.jse.JsePlatform;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class Script
+public abstract class Script
 {
 
-	private String		   scriptSource;
-	private Globals		  globals;
-	private AbstractResource scriptResource;
+	protected String		   scriptSource;
+	protected AbstractResource scriptResource;
+	private String			 filename;
 
 	public Script(AbstractResource scriptRes) throws UnsupportedEncodingException
 	{
+		init(scriptRes);
+	}
+
+	protected void init(AbstractResource scriptRes) throws UnsupportedEncodingException
+	{
 		scriptSource = BinaryUtils.toString(scriptRes.getData());
 		this.scriptResource = scriptRes;
+		this.filename = scriptResource.getResourceLocation().getName();
 		compile();
 	}
 
-	private void compile()
+	public Script()
 	{
-		globals = JsePlatform.standardGlobals();
-		globals.set("require", new RequireFunction(scriptResource));
-		globals.set("print", new PrintFunction(scriptResource));
-		globals.load(scriptSource, scriptResource.getResourceLocation().getPath()).call();
 	}
 
-	public Varargs run(String method, Object... args) throws IOException
+	public String getScriptFileName()
 	{
-		LuaValue[] luaArgs = new LuaValue[args.length];
-		for(int i = 0; i < args.length; i++ )
-		{
-			Object arg = args[i];
-			if(arg instanceof String)
-			{
-				luaArgs[i] = LuaValue.valueOf((String)arg);
-			}
-			else if(arg instanceof Integer)
-			{
-				luaArgs[i] = LuaValue.valueOf((Integer)arg);
-			}
-			else if(arg instanceof Double)
-			{
-				luaArgs[i] = LuaValue.valueOf((Double)arg);
-			}
-			else if(arg instanceof Boolean)
-			{
-				luaArgs[i] = LuaValue.valueOf((Boolean)arg);
-			}
-			else if(arg instanceof byte[])
-			{
-				luaArgs[i] = LuaValue.valueOf((byte[])arg);
-			}
-			else
-				luaArgs[i] = LuaValue.NIL;
-		}
-		return globals.get(method).invoke(LuaValue.varargsOf(luaArgs));
+		return filename;
 	}
 
-	public LuaValue run()
-	{
-		return globals.load(scriptSource).call();
-	}
+	protected abstract void compile();
+
+	public abstract ScriptValue run(String method, Object... args) throws IOException;
+
+	public abstract ScriptValue run();
 }

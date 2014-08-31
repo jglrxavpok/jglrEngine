@@ -1,6 +1,7 @@
 require("color.lua");
+require "__jglrEngine__";
 
-local color = WHITE;
+color = Color(1,1,1);
 
 days = {"Sunday", "Monday", "Tuesday", "Wednesday",
             "Thursday", "Friday", "Saturday"};
@@ -18,3 +19,8 @@ end;
 function getColor()
 	return color;
 end;
+
+object = Engine.SceneObject();
+comp = Engine.SceneComponentTest();
+Engine.addComponent("test", object, comp);
+Engine.addToWorld("test", object);

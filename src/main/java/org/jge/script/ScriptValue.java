@@ -1,10 +1,4 @@
-package org.jge.script.lua;
-
-import org.jge.util.Log;
-
-import org.luaj.vm2.Globals;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.lib.LibFunction;
+package org.jge.script;
 
 /**
  * The MIT License (MIT)
@@ -29,34 +23,34 @@ import org.luaj.vm2.lib.LibFunction;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class PrintFunction extends LibFunction
+public abstract class ScriptValue
 {
 
-	private Globals globals;
+	public static final ScriptValue NULL		 = new NullScriptValue();
+	public static final String	  TYPE_STRING  = "TString";
+	public static final String	  TYPE_INTEGER = "TInt";
+	public static final String	  TYPE_DOUBLE  = "TDouble";
+	public static final String	  TYPE_BOOLEAN = "TBoolean";
+	public static final String	  TYPE_UNKNOWN = "TUnknown";
+	public static final String	  TYPE_TABLE   = "TTable";
 
-	public PrintFunction(Globals globals)
-	{
-		this.globals = globals;
-	}
+	public abstract ScriptValue getComponent(int index);
 
-	public LuaValue call(LuaValue arg)
-	{
-		try
-		{
-			String toPrint = "";
-			for(int i = 0; i < arg.narg(); i++ )
-			{
-				if(i != 0) toPrint += "\t";
-				toPrint += arg.arg(i + 1);
-			}
-			String scriptName = globals.get("debug").get("getinfo").call("1").get("source").toString();
-			Log.message("[Script " + scriptName + "] " + toPrint);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		return LuaValue.NIL;
-	}
+	public abstract ScriptValue getComponent(String name);
 
+	public abstract int length();
+
+	public abstract String toString();
+
+	public abstract int asInt();
+
+	public abstract float asFloat();
+
+	public abstract double asDouble();
+
+	public abstract boolean asBoolean();
+
+	public abstract ScriptValue invoke(ScriptValue... values);
+
+	public abstract String getType();
 }

@@ -10,22 +10,9 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
-		<buildCommand>
-			<name>fr.trevidos.GLShaderTools.cgTools.cgBuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.springsource.ide.eclipse.gradle.core.nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>fr.trevidos.GLShaderTools.cgTools.cgCompiler</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>JLSL_submodule</name>
-			<type>2</type>
-			<location>D:/Code/Java/JavaWorkbench/JLSL/src</location>
-		</link>
-	</linkedResources>
 </projectDescription>

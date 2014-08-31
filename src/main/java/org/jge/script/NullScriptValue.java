@@ -1,10 +1,4 @@
-package org.jge.script.lua;
-
-import org.jge.util.Log;
-
-import org.luaj.vm2.Globals;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.lib.LibFunction;
+package org.jge.script;
 
 /**
  * The MIT License (MIT)
@@ -29,34 +23,67 @@ import org.luaj.vm2.lib.LibFunction;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class PrintFunction extends LibFunction
+public class NullScriptValue extends ScriptValue
 {
 
-	private Globals globals;
-
-	public PrintFunction(Globals globals)
+	@Override
+	public ScriptValue getComponent(int index)
 	{
-		this.globals = globals;
+		throw new NullPointerException("Attempted to access index " + index + " of a null value");
 	}
 
-	public LuaValue call(LuaValue arg)
+	@Override
+	public ScriptValue getComponent(String name)
 	{
-		try
-		{
-			String toPrint = "";
-			for(int i = 0; i < arg.narg(); i++ )
-			{
-				if(i != 0) toPrint += "\t";
-				toPrint += arg.arg(i + 1);
-			}
-			String scriptName = globals.get("debug").get("getinfo").call("1").get("source").toString();
-			Log.message("[Script " + scriptName + "] " + toPrint);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		return LuaValue.NIL;
+		throw new NullPointerException("Attempted to access component " + name + " of a null value");
+	}
+
+	@Override
+	public int length()
+	{
+		return 0;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "null";
+	}
+
+	@Override
+	public int asInt()
+	{
+		return 0;
+	}
+
+	@Override
+	public float asFloat()
+	{
+		return 0;
+	}
+
+	@Override
+	public double asDouble()
+	{
+		return 0;
+	}
+
+	@Override
+	public boolean asBoolean()
+	{
+		return false;
+	}
+
+	@Override
+	public ScriptValue invoke(ScriptValue... values)
+	{
+		return null;
+	}
+
+	@Override
+	public String getType()
+	{
+		return null;
 	}
 
 }

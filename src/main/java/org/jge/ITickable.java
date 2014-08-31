@@ -23,6 +23,7 @@ package org.jge;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+@FunctionalInterface
 public interface ITickable
 {
 	public void tick(boolean inLoadingScreen);

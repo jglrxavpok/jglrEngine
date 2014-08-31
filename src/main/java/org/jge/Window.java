@@ -9,12 +9,12 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 import javax.swing.JFrame;
 
 import org.jge.maths.Maths;
 import org.jge.util.ImageUtils;
-import org.jge.util.Lists;
 import org.jge.util.Log;
 import org.jge.util.OpenGLUtils;
 
@@ -183,7 +183,7 @@ public class Window
 				else
 					throw new EngineException("Error while setting icon of window : invalid image");
 			}
-			parentFrame.setIconImages(Lists.asList(imgs));
+			parentFrame.setIconImages(Arrays.asList(imgs));
 			Display.setIcon(icons);
 		}
 		catch(EngineException e)

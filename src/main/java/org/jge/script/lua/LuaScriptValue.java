@@ -27,7 +27,7 @@ import org.luaj.vm2.LuaValue;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class LuaScriptValue extends ScriptValue
+public class LuaScriptValue implements ScriptValue
 {
 
 	private LuaValue luaVal;

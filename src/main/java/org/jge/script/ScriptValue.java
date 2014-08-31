@@ -23,7 +23,7 @@ package org.jge.script;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public abstract class ScriptValue
+public interface ScriptValue
 {
 
 	public static final ScriptValue NULL		 = new NullScriptValue();
@@ -34,23 +34,23 @@ public abstract class ScriptValue
 	public static final String	  TYPE_UNKNOWN = "TUnknown";
 	public static final String	  TYPE_TABLE   = "TTable";
 
-	public abstract ScriptValue getComponent(int index);
+	public ScriptValue getComponent(int index);
 
-	public abstract ScriptValue getComponent(String name);
+	public ScriptValue getComponent(String name);
 
-	public abstract int length();
+	public int length();
 
-	public abstract String toString();
+	public String toString();
 
-	public abstract int asInt();
+	public int asInt();
 
-	public abstract float asFloat();
+	public float asFloat();
 
-	public abstract double asDouble();
+	public double asDouble();
 
-	public abstract boolean asBoolean();
+	public boolean asBoolean();
 
-	public abstract ScriptValue invoke(ScriptValue... values);
+	public ScriptValue invoke(ScriptValue... values);
 
 	public abstract String getType();
 }

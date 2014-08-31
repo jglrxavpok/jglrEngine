@@ -9,6 +9,7 @@ import java.util.Comparator;
 import org.jge.CoreEngine;
 import org.jge.ResourceLocation;
 import org.jge.components.Camera;
+import org.jge.components.SceneComponent;
 import org.jge.components.SceneObject;
 import org.jge.maths.Matrix4;
 import org.jge.maths.Vector3;
@@ -57,6 +58,19 @@ public class ParticleSystem extends SceneObject
 	{
 		billboardRenderer = new BillboardSprite((Sprite)null);
 		addChildAs("billboardRenderer", billboardRenderer);
+	}
+
+	public void renderAll(Shader shader, Camera cam, double delta, RenderEngine renderEngine)
+	{
+		render(shader, cam, delta, renderEngine);
+		for(SceneComponent component : getComponents())
+		{
+			component.render(shader, cam, delta, renderEngine);
+		}
+		for(SceneObject child : getChildren())
+		{
+			if(child != billboardRenderer) child.renderAll(shader, cam, delta, renderEngine);
+		}
 	}
 
 	public void update(double delta)

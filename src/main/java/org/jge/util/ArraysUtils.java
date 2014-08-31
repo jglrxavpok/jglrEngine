@@ -2,7 +2,7 @@ package org.jge.util;
 
 import java.util.ArrayList;
 
-public class Arrays
+public class ArraysUtils
 {
 
 	public static String[] trim(String[] split)

@@ -1,6 +1,6 @@
 package org.jge;
 
-import org.jge.util.Arrays;
+import org.jge.util.ArraysUtils;
 
 public class ResourceLocation
 {
@@ -83,7 +83,7 @@ public class ResourceLocation
 			if(path.contains("/"))
 			{
 				String tokens[] = path.split("/");
-				parent = new ResourceLocation(section, Arrays.sum(tokens, 0, tokens.length - 1, "/"));
+				parent = new ResourceLocation(section, ArraysUtils.sum(tokens, 0, tokens.length - 1, "/"));
 
 			}
 			else

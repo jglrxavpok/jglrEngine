@@ -108,6 +108,10 @@ public final class CoreEngine
 	{
 		try
 		{
+			addTickableObject((inLoadingScreen) ->
+			{
+				System.out.println("Test");
+			});
 			new ThreadReadConsoleInput().start();
 			classResLoader = new ClasspathSimpleResourceLoader();
 			diskResLoader = new DiskSimpleResourceLoader();

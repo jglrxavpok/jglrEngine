@@ -4,12 +4,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import org.jge.util.Lists;
 
 public class ZipSimpleResourceLoader extends ResourceLoader
 {
@@ -77,7 +76,7 @@ public class ZipSimpleResourceLoader extends ResourceLoader
 	@Override
 	public List<AbstractResource> getAllResources(ResourceLocation location) throws Exception
 	{
-		return Lists.asList(getResource(location));
+		return Arrays.asList(getResource(location));
 	}
 
 	@Override

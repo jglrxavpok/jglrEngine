@@ -23,7 +23,7 @@ package org.jge.script;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class NullScriptValue extends ScriptValue
+public class NullScriptValue implements ScriptValue
 {
 
 	@Override

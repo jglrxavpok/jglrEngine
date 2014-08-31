@@ -6,7 +6,7 @@ import org.jge.AbstractResource;
 import org.jge.EngineException;
 import org.jge.maths.Vector2;
 import org.jge.maths.Vector3;
-import org.jge.util.Arrays;
+import org.jge.util.ArraysUtils;
 import org.jge.util.BinaryUtils;
 import org.jge.util.HashMapWithDefault;
 
@@ -77,7 +77,7 @@ public class OBJLoader extends IndexedModelLoader
 			{
 				if(line != null && !line.trim().equals(""))
 				{
-					String[] parts = Arrays.trim(line.split(" "));
+					String[] parts = ArraysUtils.trim(line.split(" "));
 					if(parts.length == 0) continue;
 					if(parts[0].equals(COMMENT))
 					{

@@ -27,7 +27,7 @@ import org.luaj.vm2.Varargs;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class LuaScriptVarargs extends ScriptValue
+public class LuaScriptVarargs implements ScriptValue
 {
 
 	private Varargs value;

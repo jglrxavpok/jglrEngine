@@ -1,10 +1,9 @@
 package org.jge;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
-import org.jge.util.Lists;
 
 public class VirtualResourceLoader extends ResourceLoader
 {
@@ -30,7 +29,7 @@ public class VirtualResourceLoader extends ResourceLoader
 	@Override
 	public List<AbstractResource> getAllResources(ResourceLocation location) throws Exception
 	{
-		return Lists.asList(getResource(location));
+		return Arrays.asList(getResource(location));
 	}
 
 	@Override

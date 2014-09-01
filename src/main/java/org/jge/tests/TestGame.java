@@ -41,6 +41,9 @@ import org.jge.render.TextureAtlas;
 import org.jge.render.fonts.Font;
 import org.jge.render.fonts.SimpleFont;
 import org.jge.render.mesh.Mesh;
+import org.jge.render.shaders.JGESimpleVertexShader;
+import org.jge.render.shaders.JavaShader;
+import org.jge.render.shaders.filters.FilterInvertFragmentShader;
 import org.jge.script.Script;
 import org.jge.script.lua.LuaScript;
 import org.jge.sound.Music;
@@ -108,8 +111,7 @@ public class TestGame extends Game
 			font = SimpleFont.instance;
 			// getRenderEngine().addPostProcessingFilter(new Shader(new
 			// ResourceLocation("shaders", "filter-texwaves")));
-			// getRenderEngine().addPostProcessingFilter(new JavaShader(130,
-			// JGESimpleVertexShader.class, FilterInvertFragmentShader.class));
+			getRenderEngine().addPostProcessingFilter(new JavaShader(130, JGESimpleVertexShader.class, FilterInvertFragmentShader.class));
 			// getRenderEngine().addPostProcessingFilter(new Shader(new
 			// ResourceLocation("shaders", "filter-oldtv")));
 			menu = new TestMenu();

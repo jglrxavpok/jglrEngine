@@ -23,6 +23,10 @@ public abstract class Font
 	private String	   supportedChars;
 	private Mesh		 mesh;
 	private Material	 material;
+	private Vector2	  topRightUV	= new Vector2(1, 1);
+	private Vector2	  bottomRightUV = new Vector2(1, 0);
+	private Vector2	  topLeftUV	 = new Vector2(0, 1);
+	private Vector2	  bottomLeftUV  = new Vector2(0, 0);
 
 	public Font(TextureAtlas atlas, String supportedChars)
 	{
@@ -40,8 +44,8 @@ public abstract class Font
 		ArrayList<Vertex> vertices = new ArrayList<Vertex>();
 		ArrayList<Integer> indices = new ArrayList<Integer>();
 		int currentIndex = 0;
-		double x = xo;
-		double y = yo;
+		float x = (float)xo;
+		float y = (float)yo;
 
 		boolean bold = false;
 		boolean italic = false;
@@ -111,10 +115,11 @@ public abstract class Font
 				int xPos = index % atlas.getXNbr();
 				int yPos = index / atlas.getXNbr();
 				TextureRegion region = atlas.getTiles()[xPos][yPos];
-				vertices.add(new Vertex(new Vector3(x - 2, y, 0), new Vector2(region.getMinU(), region.getMaxV())));
-				vertices.add(new Vertex(new Vector3(x + 2 + getCharWidth(c), y, 0), new Vector2(region.getMaxU(), region.getMaxV())));
-				vertices.add(new Vertex(new Vector3(x + 2 + getCharWidth(c), y + getCharHeight(c), 0), new Vector2(region.getMaxU(), region.getMinV())));
-				vertices.add(new Vertex(new Vector3(x - 2, y + getCharHeight(c), 0), new Vector2(region.getMinU(), region.getMinV())));
+
+				vertices.add(new Vertex(Vector3.get(x - 2, y, 0), new Vector2(region.getMinU(), region.getMaxV())));
+				vertices.add(new Vertex(Vector3.get(x + 2 + getCharWidth(c), y, 0), new Vector2(region.getMaxU(), region.getMaxV())));
+				vertices.add(new Vertex(Vector3.get(x + 2 + getCharWidth(c), y + getCharHeight(c), 0), new Vector2(region.getMaxU(), region.getMinV())));
+				vertices.add(new Vertex(Vector3.get(x - 2, y + getCharHeight(c), 0), new Vector2(region.getMinU(), region.getMinV())));
 
 				indices.add(currentIndex + 0);
 				indices.add(currentIndex + 2);
@@ -139,18 +144,18 @@ public abstract class Font
 				TextureRegion region = atlas.getTiles()[xPos][yPos];
 				if(!italic)
 				{
-					vertices.add(new Vertex(new Vector3(x, y, 0), new Vector2(region.getMinU(), region.getMaxV())));
-					vertices.add(new Vertex(new Vector3(x + getCharWidth(c), y, 0), new Vector2(region.getMaxU(), region.getMaxV())));
-					vertices.add(new Vertex(new Vector3(x + getCharWidth(c), y + getCharHeight(c), 0), new Vector2(region.getMaxU(), region.getMinV())));
-					vertices.add(new Vertex(new Vector3(x, y + getCharHeight(c), 0), new Vector2(region.getMinU(), region.getMinV())));
+					vertices.add(new Vertex(Vector3.get(x, y, 0), new Vector2(region.getMinU(), region.getMaxV())));
+					vertices.add(new Vertex(Vector3.get(x + getCharWidth(c), y, 0), new Vector2(region.getMaxU(), region.getMaxV())));
+					vertices.add(new Vertex(Vector3.get(x + getCharWidth(c), y + getCharHeight(c), 0), new Vector2(region.getMaxU(), region.getMinV())));
+					vertices.add(new Vertex(Vector3.get(x, y + getCharHeight(c), 0), new Vector2(region.getMinU(), region.getMinV())));
 				}
 				else
 				{
-					double italicFactor = 2.5;
-					vertices.add(new Vertex(new Vector3(x - italicFactor, y, 0), new Vector2(region.getMinU(), region.getMaxV())));
-					vertices.add(new Vertex(new Vector3(x + getCharWidth(c) - italicFactor, y, 0), new Vector2(region.getMaxU(), region.getMaxV())));
-					vertices.add(new Vertex(new Vector3(x + getCharWidth(c), y + getCharHeight(c), 0), new Vector2(region.getMaxU(), region.getMinV())));
-					vertices.add(new Vertex(new Vector3(x + italicFactor, y + getCharHeight(c), 0), new Vector2(region.getMinU(), region.getMinV())));
+					float italicFactor = 2.5f;
+					vertices.add(new Vertex(Vector3.get(x - italicFactor, y, 0), new Vector2(region.getMinU(), region.getMaxV())));
+					vertices.add(new Vertex(Vector3.get(x + getCharWidth(c) - italicFactor, y, 0), new Vector2(region.getMaxU(), region.getMaxV())));
+					vertices.add(new Vertex(Vector3.get(x + getCharWidth(c), y + getCharHeight(c), 0), new Vector2(region.getMaxU(), region.getMinV())));
+					vertices.add(new Vertex(Vector3.get(x + italicFactor, y + getCharHeight(c), 0), new Vector2(region.getMinU(), region.getMinV())));
 				}
 
 				indices.add(currentIndex + 0);
@@ -163,7 +168,7 @@ public abstract class Font
 
 				currentIndex += 4;
 				x += getCharWidth(c) + getCharSpacing(c, next);
-				x = Maths.floor(x);
+				x = (float)Maths.floor(x);
 			}
 		}
 		flush(shader, vertices, indices, currentColor, transform, camera, renderEngine);
@@ -195,7 +200,7 @@ public abstract class Font
 		int r = color >> 16 & 0xFF;
 		int g = color >> 8 & 0xFF;
 		int b = color >> 0 & 0xFF;
-		Quaternion colorVec = new Quaternion((double)r / 255.0, (double)g / 255.0, (double)b / 255.0, (double)a / 255.0);
+		Quaternion colorVec = new Quaternion((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, (float)a / 255.0f);
 		renderEngine.setRemplacingColor(colorVec);
 
 		shader.updateUniforms(transform, camera, material, renderEngine);
@@ -220,13 +225,13 @@ public abstract class Font
 		return supportedChars;
 	}
 
-	public abstract double getCharWidth(char c);
+	public abstract float getCharWidth(char c);
 
-	public abstract double getCharHeight(char c);
+	public abstract float getCharHeight(char c);
 
-	public double getTextLength(String text)
+	public float getTextLength(String text)
 	{
-		double l = 0;
+		float l = 0;
 		for(int i = 0; i < text.length(); i++ )
 		{
 			char c = text.charAt(i);

@@ -20,7 +20,7 @@ public class HUDProgressBar extends HUDWidget
 	private int	 underterminedCounter;
 	private boolean showProgressString;
 
-	public HUDProgressBar(double w, double h, Font font)
+	public HUDProgressBar(float w, float h, Font font)
 	{
 		super(w, h);
 		this.font = font;
@@ -98,7 +98,7 @@ public class HUDProgressBar extends HUDWidget
 
 	public void render(Shader shader, Camera camera, double delta, RenderEngine engine)
 	{
-		double startY = 168;
+		float startY = 168;
 		drawBox(shader, camera, engine, 0, startY);
 		progress += 0.001;
 		if(progress > 1.0) progress = 0.0;
@@ -109,7 +109,7 @@ public class HUDProgressBar extends HUDWidget
 		}
 		if(!undertermined)
 		{
-			drawBox(shader, camera, engine, 64, startY, progress * getWidth(), getHeight());
+			drawBox(shader, camera, engine, 64, startY, (float)progress * getWidth(), getHeight());
 			underterminedCounter = 0;
 		}
 		else

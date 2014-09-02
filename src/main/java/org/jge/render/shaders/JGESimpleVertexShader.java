@@ -4,6 +4,7 @@ import org.jge.maths.Matrix4;
 import org.jge.maths.Quaternion;
 import org.jge.maths.Vector2;
 import org.jge.maths.Vector3;
+
 import org.jglrxavpok.jlsl.glsl.GLSL.Attribute;
 import org.jglrxavpok.jlsl.glsl.GLSL.Varying;
 
@@ -25,7 +26,7 @@ public class JGESimpleVertexShader extends JGEVertexShader
 	@SuppressWarnings("deprecation")
 	public void main()
 	{
-		gl_Position = T_projectedView.mul(T_worldTransform).transform(new Quaternion(position, 1.0));
+		gl_Position = T_projectedView.mul(T_worldTransform).transform(new Quaternion(position, 1.0f));
 		texCoord0 = texCoord;
 		vertexMain();
 	}

@@ -66,7 +66,7 @@ import org.lwjgl.util.glu.GLU;
  */
 public class RenderEngine extends MappedValues
 {
-	private static final Matrix4				bias				   = new Matrix4().initScale(0.5, 0.5, 0.5).mul(new Matrix4().initTranslation(1, 1, 1));
+	private static final Matrix4				bias				   = new Matrix4().initScale(0.5f, 0.5f, 0.5f).mul(new Matrix4().initTranslation(1, 1, 1));
 
 	private static boolean					  TEST_DRAW_SHADOW_MAP   = false;
 
@@ -226,7 +226,7 @@ public class RenderEngine extends MappedValues
 			enableGLCap(GL32.GL_DEPTH_CLAMP);
 
 			glShadeModel(GL_SMOOTH);
-			setVector3("ambient", new Vector3(0.75, 0.75, 0.75));
+			setVector3("ambient", Vector3.get(0.75f, 0.75f, 0.75f));
 			shadowMaps = new Texture[ShadowMapSize.values().length];
 			shadowMapTempTargets = new Texture[ShadowMapSize.values().length];
 			for(int i = 0; i < ShadowMapSize.values().length; i++ )
@@ -254,13 +254,13 @@ public class RenderEngine extends MappedValues
 			altCamera = new Camera(initMatrix = new Matrix4().initIdentity());
 			altCamera.setName("alternative camera");
 			renderToTextCameraObject = new DummySceneObject(altCamera);
-			renderToTextCameraObject.getTransform().rotate(new Vector3(0, 1, 0), Maths.toRadians(180));
+			renderToTextCameraObject.getTransform().rotate(Vector3.get(0, 1, 0), (float)Maths.toRadians(180));
 
-			altTransform.rotate(new Vector3(1, 0, 0), Maths.toRadians(90));
-			altTransform.rotate(new Vector3(0, 1, 0), Maths.toRadians(180));
+			altTransform.rotate(Vector3.get(1, 0, 0), (float)Maths.toRadians(90));
+			altTransform.rotate(Vector3.get(0, 1, 0), (float)Maths.toRadians(180));
 			planeMesh = new Mesh(JGEngine.getResourceLoader().getResource(new ResourceLocation("models", "planePrimitive.obj")));
 
-			setVector3("shadowColor", new Vector3(0, 0, 0));
+			setVector3("shadowColor", Vector3.get(0, 0, 0));
 		}
 		catch(Exception e)
 		{
@@ -299,10 +299,10 @@ public class RenderEngine extends MappedValues
 	public void blurShadowMap(int index, float blurScale)
 	{
 		Texture text = shadowMaps[index];
-		setVector3("blurScale", new Vector3(blurScale / (text.getWidth()), 0, 0));
+		setVector3("blurScale", Vector3.get(blurScale / (text.getWidth()), 0, 0));
 		applyFilter(gausBlurFilterShader, text, shadowMapTempTargets[index]);
 
-		setVector3("blurScale", new Vector3(0, blurScale / (text.getHeight()), 0));
+		setVector3("blurScale", Vector3.get(0, blurScale / (text.getHeight()), 0));
 		applyFilter(gausBlurFilterShader, shadowMapTempTargets[index], text);
 	}
 
@@ -314,7 +314,7 @@ public class RenderEngine extends MappedValues
 			dest.bindAsRenderTarget();
 
 		setTexture("filterTexture", source);
-		altCamera.getParent().getTransform().setPosition(new Vector3(0, 0, 0));
+		altCamera.getParent().getTransform().setPosition(Vector3.NULL);
 		altCamera.getParent().getTransform().setRotation(new Quaternion());
 		altCamera.setProjection(initMatrix);
 		glClear(GL_DEPTH_BUFFER_BIT);
@@ -354,7 +354,7 @@ public class RenderEngine extends MappedValues
 			{
 				setFloat("shadowLightBleedingReduction", shadowingInfo.getLightBleedingReduction());
 				setFloat("shadowVarianceMin", shadowingInfo.getVarianceMin());
-				setVector3("shadowTexelSize", new Vector3(1.0f / (double)ShadowMapSize.values()[shadowMapIndex].getSize(), 1.0f / (double)ShadowMapSize.values()[shadowMapIndex].getSize(), 0));
+				setVector3("shadowTexelSize", Vector3.get(1.0f / (float)ShadowMapSize.values()[shadowMapIndex].getSize(), 1.0f / (float)ShadowMapSize.values()[shadowMapIndex].getSize(), 0f));
 				altCamera.setProjection(shadowingInfo.getProjection());
 				LightCamTrans tr = activeLight.getLightCamTrans(renderCamera);
 				altCamera.getParent().getTransform().setPosition(tr.pos);
@@ -430,7 +430,7 @@ public class RenderEngine extends MappedValues
 		renderScene(object, this.renderCamera, renderToTextTarget, renderToTextTargetTemp, delta);
 		Window.getCurrent().bindAsRenderTarget();
 
-		altCamera.getParent().getTransform().setPosition(new Vector3(0, 0, 0));
+		altCamera.getParent().getTransform().setPosition(Vector3.NULL);
 		altCamera.getParent().getTransform().setRotation(new Quaternion());
 		altCamera.setProjection(initMatrix);
 		glClearColor(0.0f, 0.0f, 1f, 1.0f);
@@ -451,12 +451,12 @@ public class RenderEngine extends MappedValues
 			disableGLCap(GL_DEPTH_TEST);
 			planeMaterial.setTexture("diffuse", getTexture("shadowMap"));
 			defaultShader.bind();
-			altTransform.setScale(new Vector3(0.1, 0.1, 0.1));
-			altTransform.setPosition(new Vector3(-0.9, -0.9, 0));
+			altTransform.setScale(Vector3.get(0.1f, 0.1f, 0.1f));
+			altTransform.setPosition(Vector3.get(-0.9f, -0.9f, 0f));
 			defaultShader.updateUniforms(altTransform, altCamera, planeMaterial, this);
 			planeMesh.draw();
-			altTransform.setPosition(new Vector3(0, 0, 0));
-			altTransform.setScale(new Vector3(1, 1, 1));
+			altTransform.setPosition(Vector3.get(0, 0, 0));
+			altTransform.setScale(Vector3.get(1, 1, 1));
 			planeMaterial.setTexture("diffuse", renderToTextTarget);
 			enableGLCap(GL_DEPTH_TEST);
 		}
@@ -647,9 +647,9 @@ public class RenderEngine extends MappedValues
 		return this;
 	}
 
-	public RenderEngine setAmbientColor(double r, double g, double b)
+	public RenderEngine setAmbientColor(float r, float g, float b)
 	{
-		return setAmbientColor(new Vector3(r, g, b));
+		return setAmbientColor(Vector3.get(r, g, b));
 	}
 
 	public void invokeBeforeRender(Runnable r)

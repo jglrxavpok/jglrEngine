@@ -22,19 +22,19 @@ public class TestMenu extends HUDMenu
 	{
 		super();
 		view = new HUD3DView(400, 400);
-		view.getTransform().setPosition(new Vector3(500, 50, 0));
+		view.getTransform().setPosition(Vector3.get(500, 50, 0));
 		addChild(view);
 
 		HUDButton button = new HUDButton(200, 40, "Hi", SimpleFont.instance);
-		button.getTransform().setPosition(new Vector3(300, 50, 0));
+		button.getTransform().setPosition(Vector3.get(300, 50, 0));
 		addChild(button);
 
 		HUDCheckBox checkBox = new HUDCheckBox(32, 32);
-		checkBox.getTransform().setPosition(new Vector3(200, 50, 0));
+		checkBox.getTransform().setPosition(Vector3.get(200, 50, 0));
 		addChild(checkBox);
 
 		HUDProgressBar bar = new HUDProgressBar(200, 20, SimpleFont.instance);
-		bar.getTransform().setPosition(new Vector3(200, 100, 0));
+		bar.getTransform().setPosition(Vector3.get(200, 100, 0));
 		addChild(bar);
 		registerListener(this);
 	}

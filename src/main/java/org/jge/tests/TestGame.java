@@ -117,11 +117,11 @@ public class TestGame extends Game
 			menu = new TestMenu();
 			Sprite sprite = new Sprite(new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "heart.png")), Texture.FILTER_NEAREST)).setWidth(32).setHeight(32);
 			SceneObject spriteObject = new HUDSpriteObject(sprite);
-			spriteObject.getTransform().setPosition(new Vector3(50, 50, 0));
+			spriteObject.getTransform().setPosition(Vector3.get(50, 50, 0));
 			addToHUD(new TextLabelObject(font, "Hello t§uhere! How are you doing §cFFFF0000today, §r§bhm?", 0xFFFFFFFF));
 			addToHUD(menu);
 			addToHUD(spriteObject);
-			getRenderEngine().setAmbientColor(0.15, 0.15, 0.15);
+			getRenderEngine().setAmbientColor(0.15f, 0.15f, 0.15f);
 			material = new Material();
 			material.setTexture("diffuse", new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "bricks2.png"))));
 			material.setTexture("normalMap", new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "bricks2_normal.png"))));
@@ -151,7 +151,7 @@ public class TestGame extends Game
 			addToWorld(plane);
 
 			spotLightObject = new SceneObject();
-			spotLight = new SpotLight(new Vector3(1, 1, 1), 0.8f, new Vector3(0, 0, 0.005f), (float)Maths.toRadians(90));
+			spotLight = new SpotLight(Vector3.get(1, 1, 1), 0.8f, Vector3.get(0, 0, 0.005f), (float)Maths.toRadians(90));
 			spotLightObject.addComponent(spotLight);
 			spotLight.getShadowingInfo().setShadowMapSize(ShadowMapSize._128x128);
 
@@ -161,23 +161,23 @@ public class TestGame extends Game
 
 			SceneObject test1 = new SceneObject().addComponent(new MeshRenderer(mesh1, material));
 			SceneObject test2 = new SceneObject().addComponent(new MeshRenderer(mesh2, material));
-			Camera camera = new Camera(Maths.toRadians(70), (double)Window.getCurrent().getWidth() / (double)Window.getCurrent().getHeight(), 0.1, 400);
-			cameraObject = new SceneObject().addComponent(camera).addComponent(new FreeLook(0.5, true)).addComponent(new FreeMove(0.5));
+			Camera camera = new Camera((float)Maths.toRadians(70), (float)Window.getCurrent().getWidth() / (float)Window.getCurrent().getHeight(), 0.1f, 400);
+			cameraObject = new SceneObject().addComponent(camera).addComponent(new FreeLook(0.5, true)).addComponent(new FreeMove(0.5f));
 
 			addToWorld(cameraObject);
 
-			test1.getTransform().getPosition().set(0, 5, 0);
-			test1.getTransform().setRotation(new Quaternion(new Vector3(0, 1, 0), 0.4));
-			test2.getTransform().getPosition().set(0, 0, 2.5 * 10);
+			test1.getTransform().setPosition(Vector3.get(0, 5, 0));
+			test1.getTransform().setRotation(new Quaternion(Vector3.get(0, 1, 0), 0.4f));
+			test2.getTransform().setPosition(Vector3.get(0, 0, 2.5f * 10));
 			test1.addChild(test2);
 
-			test1.addComponentAs("physics", new PhysicsComponent(0, new BoxPhysShape(new Vector3(8, 0.12, 8))));
-			test2.addComponentAs("physics", new PhysicsComponent(0, new BoxPhysShape(new Vector3(8, 0.12, 8))));
+			test1.addComponentAs("physics", new PhysicsComponent(0, new BoxPhysShape(Vector3.get(8, 0.12f, 8))));
+			test2.addComponentAs("physics", new PhysicsComponent(0, new BoxPhysShape(Vector3.get(8, 0.12f, 8))));
 
 			addToWorld(test1);
 
-			SceneObject directionalLight = new SceneObject().addComponent(new DirectionalLight(new Vector3(1, 1, 1), 1f));
-			directionalLight.getTransform().rotate(new Vector3(1, 0, 0), Maths.toRadians(-45)).rotate(new Vector3(0, 1, 0), Maths.toRadians(45));
+			SceneObject directionalLight = new SceneObject().addComponent(new DirectionalLight(Vector3.get(1, 1, 1), 1f));
+			directionalLight.getTransform().rotate(Vector3.get(1, 0, 0), (float)Maths.toRadians(-45)).rotate(Vector3.get(0, 1, 0), (float)Maths.toRadians(45));
 			addToWorld(directionalLight);
 
 			addToWorld(spotLightObject);
@@ -198,7 +198,7 @@ public class TestGame extends Game
 			plane.getTransform().scale(4, 4, 4);
 
 			ParticleGenerator gen = new ParticleGenerator(1, 1);
-			gen.getTransform().setPosition(new Vector3(0, 5, 0));
+			gen.getTransform().setPosition(Vector3.get(0, 5, 0));
 			addToWorld(gen);
 
 			GPUProgram program = new GPUProgram(getClasspathResourceLoader().getResource(new ResourceLocation("test/cl", "test.cls")));
@@ -253,7 +253,7 @@ public class TestGame extends Game
 			FloatBuffer w = Buffers.createFloatBuffer(size);
 			program.read(resultMem, w, true);
 
-			PhysicsShape planeShape = new BoxPhysShape(new Vector3(31.5f, 0.12f, 31.5f));
+			PhysicsShape planeShape = new BoxPhysShape(Vector3.get(31.5f, 0.12f, 31.5f));
 			plane.addComponentAs("physics", new PhysicsComponent(0, planeShape));
 
 			camera.setName("world");
@@ -281,7 +281,7 @@ public class TestGame extends Game
 		mat.setTexture("diffuse", new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "testDiffuseTorus.png"))));
 		cube.addComponent(new MeshRenderer(mesh, mat));
 		cube.getTransform().setPosition(cameraObject.getTransform().getTransformedPos());
-		cube.getTransform().rotate(new Vector3(0, 1, 0), Maths.toRadians(-30));
+		cube.getTransform().rotate(Vector3.get(0, 1, 0), (float)Maths.toRadians(-30));
 		addToWorld(cube);
 		PhysicsShape cubeShape = new MeshPhysShape(mesh);
 		cube.addComponentAs("physics", new PhysicsComponent(1, cubeShape));
@@ -295,10 +295,10 @@ public class TestGame extends Game
 		mat.setTexture("diffuse", new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "testDiffuseTorus.png"))));
 		cube.addComponent(new MeshRenderer(new Mesh((getClasspathResourceLoader().getResource(new ResourceLocation("test/models", "cube.obj")))), material));
 		cube.getTransform().setPosition(cameraObject.getTransform().getTransformedPos());
-		cube.getTransform().rotate(new Vector3(0, 1, 0), Maths.toRadians(-30));
+		cube.getTransform().rotate(Vector3.get(0, 1, 0), (float)Maths.toRadians(-30));
 		addToWorld(cube);
 		cube.getTransform().scale(2, 2, 2);
-		PhysicsShape cubeShape = new BoxPhysShape(new Vector3(2, 2, 2));
+		PhysicsShape cubeShape = new BoxPhysShape(Vector3.get(2, 2, 2));
 		cube.addComponentAs("physics", new PhysicsComponent(1, cubeShape));
 		// cube.addComponent(new SoundSource(new
 		// Sound(getClasspathResourceLoader().getResource(new
@@ -396,6 +396,7 @@ public class TestGame extends Game
 	{
 		SceneObject monkey = new SceneObject();
 		Mesh monkeyMesh = new Mesh((getClasspathResourceLoader().getResource(new ResourceLocation("test/models/monkey.obj"))));
+		Log.message("Monkey: After material");
 		Material material2 = new Material();
 		material2.setTexture("diffuse", new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "bricks.png"))));
 		material2.setTexture("normalMap", new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "bricks_normal.png"))));
@@ -410,7 +411,7 @@ public class TestGame extends Game
 		PhysicsShape monkeyShape = new MeshPhysShape(lowMonkeyMesh);
 		monkey.addComponentAs("physics", new PhysicsComponent(1, monkeyShape));
 
-		Camera viewCamera = new Camera(Maths.toRadians(150), (double)Window.getCurrent().getPhysicalWidth() / (double)Window.getCurrent().getPhysicalHeight(), 0.0001, 1000);
+		Camera viewCamera = new Camera((float)Maths.toRadians(150), (float)Window.getCurrent().getPhysicalWidth() / (float)Window.getCurrent().getPhysicalHeight(), 0.0001f, 1000);
 		monkey.addComponent(viewCamera);
 		viewCamera.setName("monkey");
 

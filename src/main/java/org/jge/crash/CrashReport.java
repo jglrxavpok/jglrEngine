@@ -2,6 +2,7 @@ package org.jge.crash;
 
 import java.nio.charset.Charset;
 
+import org.jge.CoreEngine;
 import org.jge.JGEngine;
 import org.jge.ResourceLocation;
 import org.jge.maths.Maths;
@@ -77,12 +78,18 @@ public class CrashReport
 		{
 			buffer.append("\t**** Stack Trace is empty ****");
 		}
-		buffer.append(new DateInfos() + "\n");
-		buffer.append(new OSInfos() + "\n");
-		buffer.append(new OpenALInfos() + "\n");
-		buffer.append(new OpenGLInfos() + "\n");
-		buffer.append(new RenderStateInfos() + "\n");
+		add(buffer, () -> CrashInfos.SECTION_START + " Game " + CrashInfos.SECTION_END + "\n\tName: " + CoreEngine.getCurrent().getGame().getGameName());
+		add(buffer, new DateInfos());
+		add(buffer, new OSInfos());
+		add(buffer, new OpenALInfos());
+		add(buffer, new OpenGLInfos());
+		add(buffer, new RenderStateInfos());
 		Log.error(buffer.toString(), false);
+	}
+
+	private void add(StringBuffer buffer, CrashInfos infos)
+	{
+		buffer.append(infos.getInfos() + "\n");
 	}
 
 	private String generateRandomComment()

@@ -7,11 +7,11 @@ import org.jge.CoreEngine;
 import org.jge.render.RenderState;
 import org.jge.util.OpenGLUtils;
 
-public class RenderStateInfos extends CrashInfos
+public class RenderStateInfos implements CrashInfos
 {
 
 	@Override
-	public String toString()
+	public String getInfos()
 	{
 		String renderState = SECTION_START + " Current RenderState " + SECTION_END;
 		RenderState current = CoreEngine.getCurrent().getRenderEngine().getRenderState();

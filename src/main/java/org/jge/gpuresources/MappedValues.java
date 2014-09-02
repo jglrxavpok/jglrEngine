@@ -18,7 +18,7 @@ public abstract class MappedValues
 	public MappedValues()
 	{
 		vectors3 = new HashMapWithDefault<String, Vector3>();
-		vectors3.setDefault(new Vector3(0, 0, 0));
+		vectors3.setDefault(Vector3.NULL);
 		floats = new HashMapWithDefault<String, Float>();
 		floats.setDefault(0f);
 		textures = new HashMapWithDefault<String, Texture>();

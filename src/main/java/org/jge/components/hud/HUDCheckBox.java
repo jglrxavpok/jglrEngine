@@ -13,12 +13,12 @@ public class HUDCheckBox extends HUDWidget
 
 	private boolean selected;
 
-	public HUDCheckBox(double w, double h)
+	public HUDCheckBox(float w, float h)
 	{
 		this(w, h, false);
 	}
 
-	public HUDCheckBox(double w, double h, boolean selected)
+	public HUDCheckBox(float w, float h, boolean selected)
 	{
 		super(w, h);
 		this.selected = selected;
@@ -32,8 +32,8 @@ public class HUDCheckBox extends HUDWidget
 
 	public void render(Shader shader, Camera camera, double delta, RenderEngine engine)
 	{
-		double startX = isMouseOn ? 64 : 0;
-		double startY = 96;
+		float startX = isMouseOn ? 64 : 0;
+		float startY = 96;
 		drawBox(shader, camera, engine, startX, startY);
 
 		if(selected)

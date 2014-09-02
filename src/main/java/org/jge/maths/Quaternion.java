@@ -3,23 +3,24 @@ package org.jge.maths;
 import java.nio.FloatBuffer;
 
 import org.jge.util.BufferWritable;
+
 import org.jglrxavpok.jlsl.glsl.GLSL.Substitute;
 
 public class Quaternion implements BufferWritable
 {
 	public static final Quaternion NULL = new Quaternion(0, 0, 0, 1);
 
-	private double				 x;
-	private double				 y;
-	private double				 z;
-	private double				 w;
+	private float				  x;
+	private float				  y;
+	private float				  z;
+	private float				  w;
 
 	public Quaternion()
 	{
 		this(0, 0, 0, 1);
 	}
 
-	public Quaternion(double x, double y, double z, double w)
+	public Quaternion(float x, float y, float z, float w)
 	{
 		this.x = x;
 		this.y = y;
@@ -27,10 +28,10 @@ public class Quaternion implements BufferWritable
 		this.w = w;
 	}
 
-	public Quaternion(Vector3 axis, double angle)
+	public Quaternion(Vector3 axis, float angle)
 	{
-		double sinHalfAngle = Maths.sin(angle / 2);
-		double cosHalfAngle = Maths.cos(angle / 2);
+		float sinHalfAngle = (float)Maths.sin(angle / 2);
+		float cosHalfAngle = (float)Maths.cos(angle / 2);
 
 		this.x = axis.getX() * sinHalfAngle;
 		this.y = axis.getY() * sinHalfAngle;
@@ -79,7 +80,7 @@ public class Quaternion implements BufferWritable
 			}
 		}
 
-		double length = length();
+		float length = length();
 		x /= length;
 		y /= length;
 		z /= length;
@@ -88,49 +89,49 @@ public class Quaternion implements BufferWritable
 
 	public Matrix4 toRotationMatrix()
 	{
-		Vector3 forward = new Vector3(2.0f * (x * z - w * y), 2.0f * (y * z + w * x), 1.0f - 2.0f * (x * x + y * y));
-		Vector3 up = new Vector3(2.0f * (x * y + w * z), 1.0f - 2.0f * (x * x + z * z), 2.0f * (y * z - w * x));
-		Vector3 right = new Vector3(1.0f - 2.0f * (y * y + z * z), 2.0f * (x * y - w * z), 2.0f * (x * z + w * y));
+		Vector3 forward = Vector3.get(2.0f * (x * z - w * y), 2.0f * (y * z + w * x), 1.0f - 2.0f * (x * x + y * y));
+		Vector3 up = Vector3.get(2.0f * (x * y + w * z), 1.0f - 2.0f * (x * x + z * z), 2.0f * (y * z - w * x));
+		Vector3 right = Vector3.get(1.0f - 2.0f * (y * y + z * z), 2.0f * (x * y - w * z), 2.0f * (x * z + w * y));
 
 		return new Matrix4().initRotation(forward, up, right);
 	}
 
 	public Vector3 getForward()
 	{
-		return new Vector3(0, 0, 1).rotate(this);
+		return Vector3.get(0, 0, 1).rotate(this);
 	}
 
 	public Vector3 getBack()
 	{
-		return new Vector3(0, 0, -1).rotate(this);
+		return Vector3.get(0, 0, -1).rotate(this);
 	}
 
 	public Vector3 getUp()
 	{
-		return new Vector3(0, 1, 0).rotate(this);
+		return Vector3.get(0, 1, 0).rotate(this);
 	}
 
 	public Vector3 getDown()
 	{
-		return new Vector3(0, -1, 0).rotate(this);
+		return Vector3.get(0, -1, 0).rotate(this);
 	}
 
 	public Vector3 getRight()
 	{
-		return new Vector3(1, 0, 0).rotate(this);
+		return Vector3.get(1, 0, 0).rotate(this);
 	}
 
 	public Vector3 getLeft()
 	{
-		return new Vector3(-1, 0, 0).rotate(this);
+		return Vector3.get(-1, 0, 0).rotate(this);
 	}
 
-	public double length()
+	public float length()
 	{
-		return Maths.sqrt(x * x + y * y + z * z + w * w);
+		return (float)Maths.sqrt(x * x + y * y + z * z + w * w);
 	}
 
-	public Quaternion nlerp(Quaternion dest, double lerpFactor, boolean shortest)
+	public Quaternion nlerp(Quaternion dest, float lerpFactor, boolean shortest)
 	{
 		Quaternion correctedDest = dest;
 
@@ -139,11 +140,11 @@ public class Quaternion implements BufferWritable
 		return correctedDest.sub(this).mul(lerpFactor).add(this).normalize();
 	}
 
-	public Quaternion slerp(Quaternion dest, double lerpFactor, boolean shortest)
+	public Quaternion slerp(Quaternion dest, float lerpFactor, boolean shortest)
 	{
-		final double EPSILON = 1e3;
+		final float EPSILON = 1e3f;
 
-		double cos = this.dot(dest);
+		float cos = this.dot(dest);
 		Quaternion correctedDest = dest;
 
 		if(shortest && cos < 0)
@@ -154,12 +155,12 @@ public class Quaternion implements BufferWritable
 
 		if(Math.abs(cos) >= 1 - EPSILON) return nlerp(correctedDest, lerpFactor, false);
 
-		double sin = Maths.sqrt(1.0f - cos * cos);
-		double angle = Math.atan2(sin, cos);
-		double invSin = 1.0f / sin;
+		float sin = (float)Maths.sqrt(1.0f - cos * cos);
+		float angle = (float)Math.atan2(sin, cos);
+		float invSin = 1.0f / sin;
 
-		double srcFactor = Maths.sin((1.0f - lerpFactor) * angle) * invSin;
-		double destFactor = Maths.sin((lerpFactor) * angle) * invSin;
+		float srcFactor = (float)(Maths.sin((1.0f - lerpFactor) * angle) * invSin);
+		float destFactor = (float)(Maths.sin((lerpFactor) * angle) * invSin);
 
 		return this.mul(srcFactor).add(correctedDest.mul(destFactor)).normalize();
 	}
@@ -176,14 +177,14 @@ public class Quaternion implements BufferWritable
 		return new Quaternion(x + r.getX(), y + r.getY(), z + r.getZ(), w + r.getW());
 	}
 
-	public double dot(Quaternion r)
+	public float dot(Quaternion r)
 	{
 		return x * r.getX() + y * r.getY() + z * r.getZ() + w * r.getW();
 	}
 
 	public Quaternion normalize()
 	{
-		double l = length();
+		float l = length();
 		x /= l;
 		y /= l;
 		z /= l;
@@ -197,7 +198,7 @@ public class Quaternion implements BufferWritable
 	}
 
 	@Substitute(value = "*", ownerBefore = true, usesParenthesis = false)
-	public Quaternion mul(double d)
+	public Quaternion mul(float d)
 	{
 		return new Quaternion(x * d, y * d, z * d, w * d);
 	}
@@ -205,10 +206,10 @@ public class Quaternion implements BufferWritable
 	@Substitute(value = "*", ownerBefore = true, usesParenthesis = false)
 	public Quaternion mul(Quaternion r)
 	{
-		double w_ = w * r.getW() - x * r.getX() - y * r.getY() - z * r.getZ();
-		double x_ = x * r.getW() + w * r.getX() + y * r.getZ() - z * r.getY();
-		double y_ = y * r.getW() + w * r.getY() + z * r.getX() - x * r.getZ();
-		double z_ = z * r.getW() + w * r.getZ() + x * r.getY() - y * r.getX();
+		float w_ = w * r.getW() - x * r.getX() - y * r.getY() - z * r.getZ();
+		float x_ = x * r.getW() + w * r.getX() + y * r.getZ() - z * r.getY();
+		float y_ = y * r.getW() + w * r.getY() + z * r.getX() - x * r.getZ();
+		float z_ = z * r.getW() + w * r.getZ() + x * r.getY() - y * r.getX();
 
 		return new Quaternion(x_, y_, z_, w_);
 	}
@@ -216,57 +217,57 @@ public class Quaternion implements BufferWritable
 	@Substitute(value = "*", ownerBefore = true, usesParenthesis = false)
 	public Quaternion mul(Vector3 r)
 	{
-		double w_ = -x * r.getX() - y * r.getY() - z * r.getZ();
-		double x_ = w * r.getX() + y * r.getZ() - z * r.getY();
-		double y_ = w * r.getY() + z * r.getX() - x * r.getZ();
-		double z_ = w * r.getZ() + x * r.getY() - y * r.getX();
+		float w_ = -x * r.getX() - y * r.getY() - z * r.getZ();
+		float x_ = w * r.getX() + y * r.getZ() - z * r.getY();
+		float y_ = w * r.getY() + z * r.getX() - x * r.getZ();
+		float z_ = w * r.getZ() + x * r.getY() - y * r.getX();
 		return new Quaternion(x_, y_, z_, w_);
 	}
 
 	@Substitute(value = "x", actsAsField = true)
-	public double getX()
+	public float getX()
 	{
 		return x;
 	}
 
 	@Substitute(value = "x", actsAsField = true)
-	public void setX(double x)
+	public void setX(float x)
 	{
 		this.x = x;
 	}
 
 	@Substitute(value = "y", actsAsField = true)
-	public double getY()
+	public float getY()
 	{
 		return y;
 	}
 
 	@Substitute(value = "y", actsAsField = true)
-	public void setY(double y)
+	public void setY(float y)
 	{
 		this.y = y;
 	}
 
 	@Substitute(value = "z", actsAsField = true)
-	public double getZ()
+	public float getZ()
 	{
 		return z;
 	}
 
 	@Substitute(value = "z", actsAsField = true)
-	public void setZ(double z)
+	public void setZ(float z)
 	{
 		this.z = z;
 	}
 
 	@Substitute(value = "w", actsAsField = true)
-	public double getW()
+	public float getW()
 	{
 		return w;
 	}
 
 	@Substitute(value = "w", actsAsField = true)
-	public void setW(double w)
+	public void setW(float w)
 	{
 		this.w = w;
 	}
@@ -308,7 +309,7 @@ public class Quaternion implements BufferWritable
 		return 4;
 	}
 
-	public void set(double x, double y, double z, double w)
+	public void set(float x, float y, float z, float w)
 	{
 		this.x = x;
 		this.y = y;
@@ -319,7 +320,7 @@ public class Quaternion implements BufferWritable
 	@Substitute(value = "xyz", ownerPosition = -1, usesParenthesis = false, actsAsField = true)
 	public Vector3 xyz()
 	{
-		return new Vector3(x, y, z);
+		return Vector3.get(x, y, z);
 	}
 
 	@Substitute(value = "/", ownerBefore = true, usesParenthesis = false)
@@ -329,7 +330,7 @@ public class Quaternion implements BufferWritable
 	}
 
 	@Substitute(value = "/", ownerBefore = true, usesParenthesis = false)
-	public Quaternion div(double factor)
+	public Quaternion div(float factor)
 	{
 		return new Quaternion(x / factor, y / factor, z / factor, w / factor);
 	}

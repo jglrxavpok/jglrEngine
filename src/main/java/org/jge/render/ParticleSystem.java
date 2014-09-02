@@ -13,7 +13,6 @@ import org.jge.components.SceneComponent;
 import org.jge.components.SceneObject;
 import org.jge.maths.Matrix4;
 import org.jge.maths.Vector3;
-import org.jge.render.mesh.Mesh;
 import org.jge.render.shaders.Shader;
 
 public class ParticleSystem extends SceneObject
@@ -35,9 +34,6 @@ public class ParticleSystem extends SceneObject
 	private int				  max;
 	private ArrayList<Particle>  particles;
 	private ArrayList<Particle>  toRemove;
-	private Mesh				 mesh;
-	private ArrayList<Vertex>	vertices		 = new ArrayList<Vertex>();
-	private ArrayList<Integer>   indices		  = new ArrayList<Integer>();
 	private BillboardSprite	  billboardRenderer;
 
 	public ParticleSystem()
@@ -50,8 +46,6 @@ public class ParticleSystem extends SceneObject
 		this.max = max;
 		this.particles = new ArrayList<Particle>();
 		this.toRemove = new ArrayList<Particle>();
-
-		mesh = new Mesh();
 	}
 
 	public void onAddToScene(SceneObject object)
@@ -107,41 +101,19 @@ public class ParticleSystem extends SceneObject
 		engine.setParallaxDispMapping(false);
 		engine.setBoolean("normalMapping", false);
 		engine.setAmbientColor(1, 1, 1);
-		// shader.bind();
-		// shader.updateUniforms(getTransform(), cam, particleMaterial, engine);
 
-		int currentIndex = 0;
 		sortParticles(cam);
 		for(Particle particle : particles)
 		{
 			Sprite s = particle.getSprite();
-			s.setX(-0.5);
-			s.setY(-0.5);
+			s.setX(-0.5f);
+			s.setY(-0.5f);
 			s.setWidth(1);
 			s.setHeight(1);
 			billboardRenderer.setSprite(s);
-			billboardRenderer.getTransform().setPosition(new Vector3(particle.getPos().x, particle.getPos().y, particle.getPos().z));
-			// Transform trans = particle.getTransform();
-			// double yAngle =
-			// Maths.acos(cam.getPos().copy().setY(0).normalize().dot(particle.getPos().copy().setY(0).normalize()));
-			// trans.setRotation(new Quaternion(new Vector3(0, 1, 0), yAngle));
-			// currentIndex += s.prepareGroupedRendering(vertices, indices,
-			// currentIndex, particle.getPos().x, particle.getPos().y,
-			// particle.getPos().z, trans);
+			billboardRenderer.getTransform().setPosition(Vector3.get(particle.getPos().x, particle.getPos().y, particle.getPos().z));
 			billboardRenderer.render(shader, cam, delta, engine);
 		}
-
-		// Integer[] indicesArray = indices.toArray(new Integer[0]);
-		// Vertex[] verticesArray = vertices.toArray(new Vertex[0]);
-		// int[] indicesArrayInt = new int[indicesArray.length];
-		// for(int i = 0; i < indicesArray.length; i++ )
-		// indicesArrayInt[i] = indicesArray[i];
-		// mesh.setVertices(verticesArray, indicesArrayInt, false);
-		// mesh.sendDataToOGL();
-		// mesh.draw();
-
-		vertices.clear();
-		indices.clear();
 
 		engine.popState();
 	}

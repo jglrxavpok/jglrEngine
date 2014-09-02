@@ -24,12 +24,12 @@ public class Vertex implements BufferWritable
 
 	public Vertex(Vector3 pos, Vector2 texCoords)
 	{
-		this(pos, texCoords, new Vector3(0, 0, 0));
+		this(pos, texCoords, new Vector3());
 	}
 
 	public Vertex(Vector3 pos, Vector2 texCoords, Vector3 normal)
 	{
-		this(pos, texCoords, normal, new Vector3(0, 0, 0));
+		this(pos, texCoords, normal, new Vector3());
 	}
 
 	public Vertex(Vector3 pos, Vector2 texCoords, Vector3 normal, Vector3 vector3)

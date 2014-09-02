@@ -9,11 +9,11 @@ import org.jge.render.shaders.Shader;
 public class DirectionalLight extends BaseLight
 {
 
-	private double halfArea;
+	private float halfArea;
 
 	public DirectionalLight()
 	{
-		this(new Vector3(1, 1, 1), 1f, 200);
+		this(Vector3.get(1, 1, 1), 1f, 200);
 	}
 
 	public DirectionalLight(Vector3 color, float intensity)
@@ -21,13 +21,13 @@ public class DirectionalLight extends BaseLight
 		this(color, intensity, 200);
 	}
 
-	public DirectionalLight(Vector3 color, float intensity, double shadowArea)
+	public DirectionalLight(Vector3 color, float intensity, float shadowArea)
 	{
 		super(color, intensity);
 
 		setShader(new Shader(new ResourceLocation("shaders", "forward-directional")));
 
-		halfArea = shadowArea / 2.0;
+		halfArea = shadowArea / 2.0f;
 		setShadowingInfo(new ShadowingInfo(new Matrix4().initOrthographic(-halfArea, halfArea, -halfArea, halfArea, -halfArea, halfArea)).flipFaces(true));
 	}
 
@@ -39,10 +39,10 @@ public class DirectionalLight extends BaseLight
 
 		double worldTexelSize = halfArea * 2.0 / (double)getShadowingInfo().getShadowMapSize().getSize();
 
-		Vector3 lightCamPos = result.pos.rotate(result.rot.conjugate());
+		Vector3 lightCamPos = result.pos.rotate(result.rot.conjugate()).copy();
 
-		lightCamPos.setX(Maths.floor(lightCamPos.getX() / worldTexelSize) * worldTexelSize);
-		lightCamPos.setY(Maths.floor(lightCamPos.getY() / worldTexelSize) * worldTexelSize);
+		lightCamPos.setX((float)(Maths.floor(lightCamPos.getX() / worldTexelSize) * worldTexelSize));
+		lightCamPos.setY((float)(Maths.floor(lightCamPos.getY() / worldTexelSize) * worldTexelSize));
 
 		result.pos = lightCamPos.rotate(result.rot);
 		return result;

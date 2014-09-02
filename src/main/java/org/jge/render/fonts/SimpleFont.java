@@ -35,13 +35,13 @@ public class SimpleFont extends Font
 	}
 
 	@Override
-	public double getCharWidth(char c)
+	public float getCharWidth(char c)
 	{
 		return 16;
 	}
 
 	@Override
-	public double getCharHeight(char c)
+	public float getCharHeight(char c)
 	{
 		return 16;
 	}

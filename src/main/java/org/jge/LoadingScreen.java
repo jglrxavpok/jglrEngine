@@ -19,6 +19,7 @@ public abstract class LoadingScreen
 	private Camera			camera;
 	private LoadingScreenType type;
 
+	@SuppressWarnings("unused")
 	public LoadingScreen(Game game, LoadingScreenType type)
 	{
 		this.type = type;
@@ -31,7 +32,7 @@ public abstract class LoadingScreen
 		{
 			e.printStackTrace();
 		}
-		camera = new Camera(new Matrix4().initOrthographic(0, Window.getCurrent().getPhysicalWidth(), 0, Window.getCurrent().getPhysicalHeight(), -1.0, 100));
+		camera = new Camera(new Matrix4().initOrthographic(0, Window.getCurrent().getPhysicalWidth(), 0, Window.getCurrent().getPhysicalHeight(), -1.0f, 100));
 		new DummySceneObject(camera);
 	}
 

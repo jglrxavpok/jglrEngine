@@ -85,7 +85,7 @@ public class OBJLoader extends IndexedModelLoader
 					}
 					else if(parts[0].equals(POSITION))
 					{
-						positions.add(new Vector3(Double.parseDouble(parts[1]), Double.parseDouble(parts[2]), Double.parseDouble(parts[3])));
+						positions.add(Vector3.get(Float.parseFloat(parts[1]), Float.parseFloat(parts[2]), Float.parseFloat(parts[3])));
 					}
 					else if(parts[0].equals(FACE))
 					{
@@ -98,11 +98,11 @@ public class OBJLoader extends IndexedModelLoader
 					}
 					else if(parts[0].equals(NORMAL))
 					{
-						normals.add(new Vector3(Double.parseDouble(parts[1]), Double.parseDouble(parts[2]), Double.parseDouble(parts[3])));
+						normals.add(Vector3.get(Float.parseFloat(parts[1]), Float.parseFloat(parts[2]), Float.parseFloat(parts[3])));
 					}
 					else if(parts[0].equals(TEX_COORDS))
 					{
-						texCoords.add(new Vector2(Double.parseDouble(parts[1]), Double.parseDouble(parts[2])));
+						texCoords.add(new Vector2(Float.parseFloat(parts[1]), Float.parseFloat(parts[2])));
 					}
 				}
 			}
@@ -127,7 +127,7 @@ public class OBJLoader extends IndexedModelLoader
 				}
 				else
 				{
-					normal = new Vector3(0, 0, 0);
+					normal = Vector3.get(0, 0, 0).copy();
 				}
 
 				int modelVertexIndex = resultIndexMap.get(current);
@@ -139,7 +139,7 @@ public class OBJLoader extends IndexedModelLoader
 					result.getPositions().add(pos);
 					result.getTexCoords().add(texCoord);
 					if(hasNormals) result.getNormals().add(normal);
-					result.getTangents().add(new Vector3(0, 0, 0));
+					result.getTangents().add(new Vector3());
 				}
 
 				int normalModelIndex = normalIndexMap.get(current.positionIndex);
@@ -152,7 +152,7 @@ public class OBJLoader extends IndexedModelLoader
 					normalModel.getPositions().add(pos);
 					normalModel.getTexCoords().add(texCoord);
 					normalModel.getNormals().add(normal);
-					normalModel.getTangents().add(new Vector3(0, 0, 0));
+					normalModel.getTangents().add(new Vector3());
 				}
 
 				result.getIndices().add(modelVertexIndex);

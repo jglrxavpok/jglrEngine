@@ -52,7 +52,7 @@ public class HUDObject extends SceneObject
 		if(CoreEngine.getCurrent().getGame().getCursor() != null && !Input.isMouseCursorLocked())
 		{
 			Transform transform = new Transform();
-			transform.setPosition(new Vector3(Input.getMouseX(), Input.getMouseY() - CoreEngine.getCurrent().getGame().getCursor().getTexture().getHeight(), 0));
+			transform.setPosition(Vector3.get(Input.getMouseX(), Input.getMouseY() - CoreEngine.getCurrent().getGame().getCursor().getTexture().getHeight(), 0));
 			if(cursorSprite == null)
 			{
 				cursorSprite = new Sprite(CoreEngine.getCurrent().getGame().getCursor().getTexture());

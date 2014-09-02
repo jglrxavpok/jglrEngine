@@ -1,10 +1,10 @@
 package org.jge.crash;
 
-public class OSInfos extends CrashInfos
+public class OSInfos implements CrashInfos
 {
 
 	@Override
-	public String toString()
+	public String getInfos()
 	{
 		String osName = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");

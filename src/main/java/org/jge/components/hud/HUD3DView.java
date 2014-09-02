@@ -23,7 +23,7 @@ public class HUD3DView extends HUDWidget
 	private Sprite	  sprite;
 	private SceneObject viewRoot;
 
-	public HUD3DView(double w, double h)
+	public HUD3DView(float w, float h)
 	{
 		super(w, h);
 	}
@@ -57,7 +57,7 @@ public class HUD3DView extends HUDWidget
 	{
 		TextureResource oldid = engine.getRenderTarget();
 		renderTexture.bindAsRenderTarget();
-		glClearColor(1, 1, 1, 1);
+		glClearColor(0, 0, 0, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
 		if(this.viewCamera != null && viewRoot != null)
 		{

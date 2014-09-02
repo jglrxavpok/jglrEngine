@@ -78,20 +78,20 @@ public class IndexedModel
 			Vector3 l1 = vertices.get(i2).sub(vertices.get(i0));
 			Vector3 normal = l0.cross(l1);
 
-			normals.get(i0).set(normals.get(i0).add(normal));
-			normals.get(i1).set(normals.get(i1).add(normal));
-			normals.get(i2).set(normals.get(i2).add(normal));
+			normals.set(i0, normals.get(i0).add(normal));
+			normals.set(i1, normals.get(i1).add(normal));
+			normals.set(i2, normals.get(i2).add(normal));
 		}
 
 		for(int i = 0; i < normals.size(); i++ )
-			normals.get(i).set(normals.get(i).normalize());
+			normals.set(i, normals.get(i).normalize());
 	}
 
 	public void computeTangents()
 	{
 		tangents.clear();
 		for(int i = 0; i < vertices.size(); i++ )
-			tangents.add(new Vector3(0, 0, 0));
+			tangents.add(Vector3.NULL);
 
 		for(int i = 0; i < indices.size(); i += 3)
 		{
@@ -110,25 +110,20 @@ public class IndexedModel
 			double dividend = (deltaU1 * deltaV2 - deltaU2 * deltaV1);
 			double f = dividend == 0.0f ? 0.0f : 1.0f / dividend;
 
-			Vector3 tangent = new Vector3(0, 0, 0);
-
-			tangent.setX(f * (deltaV2 * edge1.getX() - deltaV1 * edge2.getX()));
-			tangent.setY(f * (deltaV2 * edge1.getY() - deltaV1 * edge2.getY()));
-			tangent.setZ(f * (deltaV2 * edge1.getZ() - deltaV1 * edge2.getZ()));
+			Vector3 tangent = Vector3.get((float)(f * (deltaV2 * edge1.getX() - deltaV1 * edge2.getX())), (float)(f * (deltaV2 * edge1.getY() - deltaV1 * edge2.getY())), (float)(f * (deltaV2 * edge1.getZ() - deltaV1 * edge2.getZ())));
 
 			// Bitangent example, in Java
-			Vector3 bitangent = new Vector3(0, 0, 0);
+			// Vector3 bitangent = Vector3.get((float)(f * (-deltaU2 *
+			// edge1.getX() - deltaU1 * edge2.getX())), (float)(f * (-deltaU2 *
+			// edge1.getY() - deltaU1 * edge2.getY())), (float)(f * (-deltaU2 *
+			// edge1.getZ() - deltaU1 * edge2.getZ())));
 
-			bitangent.setX(f * (-deltaU2 * edge1.getX() - deltaU1 * edge2.getX()));
-			bitangent.setX(f * (-deltaU2 * edge1.getY() - deltaU1 * edge2.getY()));
-			bitangent.setX(f * (-deltaU2 * edge1.getZ() - deltaU1 * edge2.getZ()));
-
-			tangents.get(i0).set(tangents.get(i0).add(tangent));
-			tangents.get(i1).set(tangents.get(i1).add(tangent));
-			tangents.get(i2).set(tangents.get(i2).add(tangent));
+			tangents.set(i0, tangents.get(i0).add(tangent));
+			tangents.set(i1, tangents.get(i1).add(tangent));
+			tangents.set(i2, tangents.get(i2).add(tangent));
 		}
 
 		for(int i = 0; i < tangents.size(); i++ )
-			tangents.get(i).set(tangents.get(i).normalize());
+			tangents.set(i, tangents.get(i).normalize());
 	}
 }

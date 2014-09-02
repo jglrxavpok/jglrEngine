@@ -20,12 +20,12 @@ public class Transform
 	public Transform()
 	{
 		rotation = new Quaternion(0, 0, 0, 1);
-		scale = new Vector3(1, 1, 1);
-		position = new Vector3(0, 0, 0);
+		scale = Vector3.get(1, 1, 1);
+		position = Vector3.NULL;
 		parentMatrix = new Matrix4().initIdentity();
 	}
 
-	public Transform rotate(Vector3 axis, double angle)
+	public Transform rotate(Vector3 axis, float angle)
 	{
 		rotation = new Quaternion(axis, angle).mul(rotation).normalize();
 		return this;
@@ -65,15 +65,15 @@ public class Transform
 	{
 		if(oldPosition != null)
 		{
-			oldPosition.set(position);
-			oldScale.set(scale);
-			oldRotation.set(rotation);
+			oldPosition = position.copy();
+			oldScale = scale;
+			oldRotation = rotation.copy();
 		}
 		else
 		{
-			oldPosition = new Vector3(0, 0, 0).set(position).add(1.0);
-			oldRotation = new Quaternion(0, 0, 0, 0).set(rotation).mul(0.5);
-			oldScale = new Vector3(0, 0, 0).set(scale).add(0.5);
+			oldPosition = position.add(1.0f);
+			oldRotation = rotation.mul(0.5f);
+			oldScale = scale.add(0.5f);
 		}
 	}
 

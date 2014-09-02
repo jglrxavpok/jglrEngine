@@ -36,7 +36,7 @@ public class ParticleGenerator extends ParticleSystem
 			for(int i = 0; i < spawnNumber; i++ )
 			{
 				Vector3 pos = getTransform().getTransformedPos();
-				addParticle(new SmokeParticle(pos, new Vector3(Maths.rand() * 3.0 - 1.5, Maths.rand() * 2.0 - 1.0, Maths.rand() * 3.0 - 1.5), 120, new Vector3(0, 2.5, 0), false));
+				addParticle(new SmokeParticle(pos, Vector3.get(Maths.randf() * 3.0f - 1.5f, Maths.randf() * 2.0f - 1.0f, Maths.randf() * 3.0f - 1.5f), 120, Vector3.get(0, 2.5f, 0), false));
 			}
 		}
 		super.update(delta);

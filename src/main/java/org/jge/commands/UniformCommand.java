@@ -67,7 +67,7 @@ public class UniformCommand extends AbstractCommand
 							}
 							else if(uniformType.equals("vec3"))
 							{
-								s.setUniform(uniformName, new Vector3(Double.parseDouble(values[0]), Double.parseDouble(values[1]), Double.parseDouble(values[2])));
+								s.setUniform(uniformName, Vector3.get(Float.parseFloat(values[0]), Float.parseFloat(values[1]), Float.parseFloat(values[2])));
 								Log.message("Successfully updated " + uniformType + " " + uniformName + " in shader " + args[0].getContentAsString());
 							}
 							else

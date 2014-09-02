@@ -14,7 +14,6 @@ import org.jge.maths.Vector3;
 
 import org.jglrxavpok.jlsl.BytecodeDecoder;
 import org.jglrxavpok.jlsl.JLSLContext;
-import org.jglrxavpok.jlsl.ObfuscationFilter;
 import org.jglrxavpok.jlsl.glsl.FragmentShader;
 import org.jglrxavpok.jlsl.glsl.GLSLEncoder;
 import org.jglrxavpok.jlsl.glsl.ShaderBase;
@@ -36,7 +35,7 @@ public class JavaShader extends Shader
 		encoder.setGLSLTranslation(Quaternion.class.getCanonicalName(), "vec4");
 
 		JLSLContext context = new JLSLContext(new BytecodeDecoder(), encoder);
-		context.addFilters(new ObfuscationFilter());
+		// context.addFilters(new ObfuscationFilter());
 		String name = null;
 		for(Class<? extends ShaderBase> shaderClass : shaderClasses)
 		{

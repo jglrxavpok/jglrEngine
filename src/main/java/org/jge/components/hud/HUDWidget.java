@@ -31,8 +31,8 @@ public class HUDWidget extends SceneObject
 
 	public static final ResourceLocation widgetLocation = new ResourceLocation("textures", "widgets.png");
 	public static Texture				widgetTexture;
-	private double					   w;
-	private double					   h;
+	private float						w;
+	private float						h;
 	protected Mesh					   renderMesh;
 	protected Material				   renderMaterial;
 	protected boolean					isMouseOn;
@@ -50,7 +50,7 @@ public class HUDWidget extends SceneObject
 	private static Sprite				right;
 	private static Sprite				in;
 
-	public HUDWidget(double w, double h)
+	public HUDWidget(float w, float h)
 	{
 		this.eventBus = new EventBus();
 		this.w = w;
@@ -110,17 +110,17 @@ public class HUDWidget extends SceneObject
 		}
 	}
 
-	public void drawBox(Shader shader, Camera camera, RenderEngine engine, double startX, double startY)
+	public void drawBox(Shader shader, Camera camera, RenderEngine engine, float startX, float startY)
 	{
 		drawBox(shader, camera, getTransform(), renderMaterial, renderMesh, engine, startX, startY, getWidth(), getHeight());
 	}
 
-	public void drawBox(Shader shader, Camera camera, RenderEngine engine, double startX, double startY, double width, double height)
+	public void drawBox(Shader shader, Camera camera, RenderEngine engine, float startX, float startY, float width, float height)
 	{
 		drawBox(shader, camera, getTransform(), renderMaterial, renderMesh, engine, startX, startY, width, height);
 	}
 
-	public static void drawBox(Shader shader, Camera camera, Transform transform, Material renderMaterial, Mesh renderMesh, RenderEngine engine, double startX, double startY, double width, double height)
+	public static void drawBox(Shader shader, Camera camera, Transform transform, Material renderMaterial, Mesh renderMesh, RenderEngine engine, float startX, float startY, float width, float height)
 	{
 		if(topLeft == null)
 		{
@@ -305,23 +305,23 @@ public class HUDWidget extends SceneObject
 		}
 	}
 
-	public double getWidth()
+	public float getWidth()
 	{
 		return w;
 	}
 
-	public HUDWidget setWidth(double newW)
+	public HUDWidget setWidth(float newW)
 	{
 		w = newW;
 		return this;
 	}
 
-	public double getHeight()
+	public float getHeight()
 	{
 		return h;
 	}
 
-	public HUDWidget setHeight(double newH)
+	public HUDWidget setHeight(float newH)
 	{
 		h = newH;
 		return this;

@@ -16,8 +16,8 @@ public class SoundSource extends SceneComponent
 	{
 		this.sound = sound;
 		this.delayBetweenPlays = delayBetweenPlays;
-		pos = new Vector3(0, 0, 0);
-		vel = new Vector3(0, 0, 0);
+		pos = Vector3.NULL;
+		vel = Vector3.NULL;
 	}
 
 	public void onAddToScene()

@@ -13,13 +13,22 @@ import org.jge.render.shaders.Shader;
 public class Sprite extends TextureRegion
 {
 
-	private double   x;
-	private double   y;
-	private double   w;
-	private double   h;
+	private float	x;
+	private float	y;
+	private float	w;
+	private float	h;
 	private Mesh	 mesh;
 	private Material material;
-	private boolean  stateChanged = true;
+	private boolean  stateChanged   = true;
+	private Vector2  topRightUV	 = new Vector2(getMaxU(), getMaxV());
+	private Vector2  bottomRightUV  = new Vector2(getMaxU(), getMinV());
+	private Vector2  topLeftUV	  = new Vector2(getMinU(), getMaxV());
+	private Vector2  bottomLeftUV   = new Vector2(getMinU(), getMinV());
+
+	private Vector3  topRightPos	= Vector3.NULL.copy();
+	private Vector3  bottomRightPos = Vector3.NULL.copy();
+	private Vector3  topLeftPos	 = Vector3.NULL.copy();
+	private Vector3  bottomLeftPos  = Vector3.NULL.copy();
 
 	public Sprite(TextureRegion region)
 	{
@@ -39,8 +48,8 @@ public class Sprite extends TextureRegion
 	public Sprite(Texture texture, double minU, double minV, double maxU, double maxV, double pixelW, double pixelH)
 	{
 		super(texture, minU, minV, maxU, maxV);
-		this.w = pixelW;
-		this.h = pixelH;
+		this.w = (float)pixelW;
+		this.h = (float)pixelH;
 		this.mesh = new Mesh();
 		this.material = new Material();
 		material.setTexture("diffuse", texture);
@@ -95,26 +104,26 @@ public class Sprite extends TextureRegion
 		this(texture, 0, 0, 1, 1, texture.getWidth(), texture.getHeight());
 	}
 
-	public int prepareGroupedRendering(ArrayList<Vertex> vertices, ArrayList<Integer> indices, int currentIndex, double x, double y)
+	public int prepareGroupedRendering(ArrayList<Vertex> vertices, ArrayList<Integer> indices, int currentIndex, float x, float y)
 	{
 		return prepareGroupedRendering(vertices, indices, currentIndex, x, y, 0);
 	}
 
-	public int prepareGroupedRendering(ArrayList<Vertex> vertices, ArrayList<Integer> indices, int currentIndex, double x, double y, double z)
+	public int prepareGroupedRendering(ArrayList<Vertex> vertices, ArrayList<Integer> indices, int currentIndex, float x, float y, float z)
 	{
 		return prepareGroupedRendering(vertices, indices, currentIndex, x, y, z, Transform.NULL);
 	}
 
-	public int prepareGroupedRendering(ArrayList<Vertex> vertices, ArrayList<Integer> indices, int currentIndex, double x, double y, double z, Transform trans)
+	public int prepareGroupedRendering(ArrayList<Vertex> vertices, ArrayList<Integer> indices, int currentIndex, float x, float y, float z, Transform trans)
 	{
-		Vector3 a = trans.transform(new Vector3(x, y, z));
-		Vector3 b = trans.transform(new Vector3(x + w, y, z));
-		Vector3 c = trans.transform(new Vector3(x + w, y + h, z));
-		Vector3 d = trans.transform(new Vector3(x, y + h, z));
-		vertices.add(new Vertex(a, new Vector2(getMinU(), getMaxV())));
-		vertices.add(new Vertex(b, new Vector2(getMaxU(), getMaxV())));
-		vertices.add(new Vertex(c, new Vector2(getMaxU(), getMinV())));
-		vertices.add(new Vertex(d, new Vector2(getMinU(), getMinV())));
+		Vector3 a = trans.transform(topLeftPos.set(x, y, z));
+		Vector3 b = trans.transform(topRightPos.set(x + w, y, z));
+		Vector3 c = trans.transform(bottomRightPos.set(x + w, y + h, z));
+		Vector3 d = trans.transform(bottomLeftPos.set(x, y + h, z));
+		vertices.add(new Vertex(a, topLeftUV.set(getMinU(), getMaxV())));
+		vertices.add(new Vertex(b, topRightUV.set(getMaxU(), getMaxV())));
+		vertices.add(new Vertex(c, bottomRightUV.set(getMaxU(), getMinV())));
+		vertices.add(new Vertex(d, bottomLeftUV.set(getMinU(), getMinV())));
 		indices.add(currentIndex + 0);
 		indices.add(currentIndex + 2);
 		indices.add(currentIndex + 3);
@@ -125,11 +134,11 @@ public class Sprite extends TextureRegion
 		return 4;
 	}
 
-	public Sprite prepareRendering(double x, double y)
+	public Sprite prepareRendering(float x, float y)
 	{
 		Vertex[] vertices = new Vertex[]
 		{
-				new Vertex(new Vector3(x, y, 0), new Vector2(getMinU(), getMaxV())), new Vertex(new Vector3(x + w, y, 0), new Vector2(getMaxU(), getMaxV())), new Vertex(new Vector3(x + w, y + h, 0), new Vector2(getMaxU(), getMinV())), new Vertex(new Vector3(x, y + h, 0), new Vector2(getMinU(), getMinV()))
+				new Vertex(topLeftPos.set(x, y, 0), topLeftUV.set(getMinU(), getMaxV())), new Vertex(topRightPos.set(x + w, y, 0), topRightUV.set(getMaxU(), getMaxV())), new Vertex(bottomRightPos.set(x + w, y + h, 0), bottomRightUV.set(getMaxU(), getMinV())), new Vertex(bottomLeftPos.set(x, y + h, 0), bottomLeftUV.set(getMinU(), getMinV()))
 		};
 		int[] indices = new int[]
 		{
@@ -153,48 +162,48 @@ public class Sprite extends TextureRegion
 		return this;
 	}
 
-	public double getY()
+	public float getY()
 	{
 		return y;
 	}
 
-	public double getX()
+	public float getX()
 	{
 		return x;
 	}
 
-	public Sprite setY(double y)
+	public Sprite setY(float y)
 	{
 		this.y = y;
 		this.stateChanged = true;
 		return this;
 	}
 
-	public Sprite setX(double x)
+	public Sprite setX(float x)
 	{
 		this.x = x;
 		this.stateChanged = true;
 		return this;
 	}
 
-	public double getHeight()
+	public float getHeight()
 	{
 		return h;
 	}
 
-	public double getWidth()
+	public float getWidth()
 	{
 		return w;
 	}
 
-	public Sprite setHeight(double h)
+	public Sprite setHeight(float h)
 	{
 		this.h = h;
 		this.stateChanged = true;
 		return this;
 	}
 
-	public Sprite setWidth(double w)
+	public Sprite setWidth(float w)
 	{
 		this.w = w;
 		this.stateChanged = true;

@@ -4,13 +4,6 @@ import javax.vecmath.Matrix4f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
-import com.bulletphysics.collision.broadphase.AxisSweep3;
-import com.bulletphysics.collision.dispatch.CollisionDispatcher;
-import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
-import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
-import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
-import com.bulletphysics.util.ObjectArrayList;
-
 import org.jge.Profiler.ProfileTimer;
 import org.jge.maths.Matrix4;
 import org.jge.maths.Quaternion;
@@ -18,6 +11,13 @@ import org.jge.maths.Transform;
 import org.jge.maths.Vector3;
 import org.jge.render.Vertex;
 import org.jge.render.mesh.Mesh;
+
+import com.bulletphysics.collision.broadphase.AxisSweep3;
+import com.bulletphysics.collision.dispatch.CollisionDispatcher;
+import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
+import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
+import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
+import com.bulletphysics.util.ObjectArrayList;
 
 public class PhysicsEngine
 {
@@ -42,7 +42,7 @@ public class PhysicsEngine
 		SequentialImpulseConstraintSolver solver = new SequentialImpulseConstraintSolver();
 
 		world = new DiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
-		world.setGravity(toBullet(new Vector3(0, -9.81, 0)));
+		world.setGravity(toBullet(Vector3.get(0, -9.81f, 0)));
 	}
 
 	public void addPhysObject(PhysicsComponent object)
@@ -83,7 +83,7 @@ public class PhysicsEngine
 
 	public static Vector3 toJGE(Vector3f v)
 	{
-		return new Vector3(v.x, v.y, v.z);
+		return Vector3.get(v.x, v.y, v.z);
 	}
 
 	public void update(double delta)

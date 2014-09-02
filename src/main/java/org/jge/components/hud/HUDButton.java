@@ -11,7 +11,7 @@ public class HUDButton extends HUDWidget
 	private String text;
 	private Font   font;
 
-	public HUDButton(double w, double h, String text, Font font)
+	public HUDButton(float w, float h, String text, Font font)
 	{
 		super(w, h);
 		this.text = text;
@@ -20,8 +20,8 @@ public class HUDButton extends HUDWidget
 
 	public void render(Shader shader, Camera camera, double delta, RenderEngine engine)
 	{
-		double startX = isFocused ? 0 : isMouseOn ? 64 : 0;
-		double startY = isFocused ? 48 : 0;
+		float startX = isFocused ? 0 : isMouseOn ? 64 : 0;
+		float startY = isFocused ? 48 : 0;
 		drawBox(shader, camera, engine, startX, startY);
 
 		font.drawString(shader, text, getTransform(), 0xFF000000, getWidth() / 2 - font.getTextLength(text) / 2 + 1, getHeight() / 2 - font.getCharHeight('H') / 2 - 1, camera, engine);

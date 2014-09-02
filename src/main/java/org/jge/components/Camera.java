@@ -15,7 +15,7 @@ public class Camera extends SceneComponent
 		this.projection = projection;
 	}
 
-	public Camera(double fov, double aspect, double zNear, double zFar)
+	public Camera(float fov, float aspect, float zNear, float zFar)
 	{
 		super();
 		this.projection = new Matrix4().initPerspective(fov, aspect, zNear, zFar);
@@ -65,19 +65,9 @@ public class Camera extends SceneComponent
 		return getParent().getTransform().getTransformedRotation().getForward();
 	}
 
-	public void setForward(Vector3 forward)
-	{
-		getParent().getTransform().getTransformedRotation().getForward().set(forward.getX(), forward.getY(), forward.getZ());
-	}
-
 	public Vector3 getUp()
 	{
 		return getParent().getTransform().getTransformedRotation().getUp();
-	}
-
-	public void setUp(Vector3 up)
-	{
-		getParent().getTransform().getRotation().getUp().set(up.getX(), up.getY(), up.getZ());
 	}
 
 	public String getName()

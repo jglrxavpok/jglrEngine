@@ -13,12 +13,12 @@ public class SpotLight extends PointLight
 
 	public SpotLight(float cutoff)
 	{
-		this(new Vector3(1, 1, 1), 1f, new Vector3(0, 0, 1), cutoff);
+		this(Vector3.get(1, 1, 1), 1f, Vector3.get(0, 0, 1), cutoff);
 	}
 
 	public SpotLight(Vector3 atten, float cutoff)
 	{
-		this(new Vector3(1, 1, 1), 1f, atten, cutoff);
+		this(Vector3.get(1, 1, 1), 1f, atten, cutoff);
 	}
 
 	public SpotLight(Vector3 color, float intensity, Vector3 atten, float fov)
@@ -27,7 +27,7 @@ public class SpotLight extends PointLight
 		this.cutoff = (float)Maths.acos(fov / 2.0);
 
 		setShader(new Shader(new ResourceLocation("shaders", "forward-spot")));
-		setShadowingInfo(new ShadowingInfo(new Matrix4().initPerspective(fov, 1.0, 0.1, this.getRange())).flipFaces(true));
+		setShadowingInfo(new ShadowingInfo(new Matrix4().initPerspective(fov, 1.0f, 0.1f, this.getRange())).flipFaces(true));
 	}
 
 	public float getCutoff()

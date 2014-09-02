@@ -25,6 +25,11 @@ public class Maths
 		return localRandom.nextDouble();
 	}
 
+	public static float randf()
+	{
+		return localRandom.nextFloat();
+	}
+
 	public static double toRadians(double adegrees)
 	{
 		return (adegrees % 360 / 360.0D * TAU);

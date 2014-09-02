@@ -1,10 +1,11 @@
 package org.jge.crash;
 
-public abstract class CrashInfos
+@FunctionalInterface
+public interface CrashInfos
 {
 
 	public static final String SECTION_START = "[=====";
 	public static final String SECTION_END   = "=====]";
 
-	public abstract String toString();
+	public String getInfos();
 }

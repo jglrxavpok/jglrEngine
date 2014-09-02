@@ -7,7 +7,7 @@ import org.jge.maths.Vector3;
 public class FreeLook extends SceneComponent
 {
 
-	private static final Vector3 yAxis = new Vector3(0, 1, 0);
+	private static final Vector3 yAxis = Vector3.get(0, 1, 0);
 	private double			   sensitivity;
 	private boolean			  onlyOnMousePressed;
 
@@ -28,8 +28,8 @@ public class FreeLook extends SceneComponent
 		if(Input.isButtonPressed(0))
 		{
 			Input.lockCursor(true);
-			getParent().getTransform().rotate(yAxis, Maths.toRadians(Input.getMouseDX() * sensitivity));
-			getParent().getTransform().rotate(getParent().getTransform().getRotation().getRight(), Maths.toRadians(-Input.getMouseDY() * sensitivity));
+			getParent().getTransform().rotate(yAxis, (float)Maths.toRadians(Input.getMouseDX() * sensitivity));
+			getParent().getTransform().rotate(getParent().getTransform().getRotation().getRight(), (float)Maths.toRadians(-Input.getMouseDY() * sensitivity));
 		}
 		else
 			Input.lockCursor(false);

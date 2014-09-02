@@ -13,12 +13,12 @@ public class PointLight extends BaseLight
 
 	public PointLight()
 	{
-		this(new Vector3(0, 0, 0));
+		this(Vector3.NULL);
 	}
 
 	public PointLight(Vector3 attenuation)
 	{
-		this(new Vector3(1, 1, 1), 1f, attenuation);
+		this(Vector3.get(1, 1, 1), 1f, attenuation);
 	}
 
 	public PointLight(Vector3 color, float intensity, Vector3 attenuation)

@@ -22,7 +22,7 @@ public class BaseLight extends SceneComponent
 
 	public BaseLight()
 	{
-		this(new Vector3(1, 1, 1), 0.8f);
+		this(Vector3.get(1, 1, 1), 0.8f);
 	}
 
 	public BaseLight(Vector3 color, float intensity)

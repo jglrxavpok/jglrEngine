@@ -84,13 +84,7 @@ public class OpenGLUtils
 		BufferedImage img = ImageUtils.loadImage(res);
 		if(img == null) throw new EngineException("Couldn't load texture " + res.getResourceLocation().getFullPath() + " : couldn't read");
 
-		ByteBuffer oglPixelBuf = imageToByteBuffer(img);
-		TextureResource resource = new TextureResource(GL_TEXTURE_2D, 1, img.getWidth(), img.getHeight(), oglPixelBuf, filter, GL30.GL_RGBA32F, GL_RGBA, false);
-
-		GL11.glBindTexture(resource.getTarget(), 0);
-
-		texturesIds.put(res, resource);
-		return resource;
+		return loadTexture(img, filter);
 	}
 
 	public static ByteBuffer imageToByteBuffer(BufferedImage img)
@@ -124,5 +118,15 @@ public class OpenGLUtils
 	{
 		if(!capNamesMap.containsKey(cap)) return "" + cap;
 		return capNamesMap.get(cap);
+	}
+
+	public static TextureResource loadTexture(BufferedImage img, float filter)
+	{
+		ByteBuffer oglPixelBuf = imageToByteBuffer(img);
+		TextureResource resource = new TextureResource(GL_TEXTURE_2D, 1, img.getWidth(), img.getHeight(), oglPixelBuf, filter, GL30.GL_RGBA32F, GL_RGBA, false);
+
+		GL11.glBindTexture(resource.getTarget(), 0);
+
+		return resource;
 	}
 }

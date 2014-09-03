@@ -186,12 +186,12 @@ public class Sprite extends TextureRegion
 		return this;
 	}
 
-	public float getHeight()
+	public double getHeight()
 	{
 		return h;
 	}
 
-	public float getWidth()
+	public double getWidth()
 	{
 		return w;
 	}

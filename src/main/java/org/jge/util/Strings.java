@@ -16,11 +16,10 @@ public class Strings
 		for(int i = 0; i < name.length(); i++ )
 		{
 			char c = name.charAt(i);
-			if(c == ':' || c == '?' || c == '/') c = '_';
+			if(c == ':' || c == '?' || c == '/' || c == '\\') c = '_';
 			buffer.append(c);
 		}
 
 		return buffer.toString();
 	}
-
 }

@@ -90,6 +90,7 @@ public final class CoreEngine
 	private DiskSimpleResourceLoader	  diskResLoader;
 	private static CoreEngine			 current;
 	private ArrayList<ITickable>		  tickables				   = new ArrayList<ITickable>();
+	private boolean					   debug;
 
 	public CoreEngine(Game game)
 	{
@@ -150,6 +151,7 @@ public final class CoreEngine
 						GLSLEncoder.DEBUG = true;
 						BytecodeDecoder.DEBUG = true;
 						JavaShader.DEBUG_PRINT_GLSL_TRANSLATION = true;
+						debug = true;
 					}
 					if(!GLContext.getCapabilities().OpenGL33)
 					{
@@ -437,6 +439,11 @@ public final class CoreEngine
 	public void addTickableObject(ITickable tickable)
 	{
 		tickables.add(tickable);
+	}
+
+	public boolean isDebug()
+	{
+		return debug;
 	}
 
 }

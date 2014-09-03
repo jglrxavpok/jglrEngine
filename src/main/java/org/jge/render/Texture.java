@@ -60,6 +60,13 @@ public class Texture implements Disposable
 		this.data = new TextureResource(target, 1, width, height, data, filter, attachment, internalFormat, format, clamp);
 	}
 
+	public Texture(TextureResource res) throws EngineException
+	{
+		JGEngine.getDisposer().add(this);
+		data = res;
+		data.increaseCounter();
+	}
+
 	public Texture(AbstractResource res) throws EngineException
 	{
 		this(res, GL_LINEAR);

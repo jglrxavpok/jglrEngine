@@ -93,12 +93,12 @@ public class Animation implements ITickable
 		return this;
 	}
 
-	public float getSpriteWidth()
+	public double getSpriteWidth()
 	{
 		return getSprite().getWidth();
 	}
 
-	public float getSpriteHeight()
+	public double getSpriteHeight()
 	{
 		return getSprite().getHeight();
 	}

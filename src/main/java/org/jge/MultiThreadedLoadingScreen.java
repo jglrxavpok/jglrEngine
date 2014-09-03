@@ -131,7 +131,7 @@ public class MultiThreadedLoadingScreen extends LoadingScreen
 		if(animation != null)
 		{
 			int tick = CoreEngine.getCurrent().getTick();
-			float x = backgroundImage.getWidth() - animation.getSpriteWidth();
+			float x = (float)(backgroundImage.getWidth() - animation.getSpriteWidth());
 			float y = 0;
 			Transform.GLOBAL.setPosition(Vector3.get(x, y, 0));
 			animation.render(engine.defaultShader, Transform.GLOBAL, camera, 1, engine, tick);

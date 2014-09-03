@@ -1,6 +1,6 @@
 package org.jge.render;
 
-public class TextureRegion
+public class TextureRegion implements TextureIcon
 {
 
 	private Texture texture;
@@ -12,6 +12,11 @@ public class TextureRegion
 	public TextureRegion(Texture texture)
 	{
 		this(texture, 0, 0, 1, 1);
+	}
+
+	public TextureRegion(Texture texture, TextureIcon icon)
+	{
+		this(texture, icon.getMinU(), icon.getMinV(), icon.getMaxU(), icon.getMaxV());
 	}
 
 	public TextureRegion(Texture texture, double minU, double minV, double maxU, double maxV)
@@ -94,5 +99,17 @@ public class TextureRegion
 			minV = oldMaxV;
 		}
 		return this;
+	}
+
+	@Override
+	public double getWidth()
+	{
+		return (double)((getMaxU() - getMinU()) * texture.getWidth());
+	}
+
+	@Override
+	public double getHeight()
+	{
+		return (double)((getMaxV() - getMinV()) * texture.getHeight());
 	}
 }

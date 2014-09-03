@@ -85,7 +85,6 @@ public class Maths
 	 * @param precision
 	 * @param start
 	 *            : 2 is for cosinus and 3 for sine
-	 * @return
 	 */
 	public static double trig(double arad, int precision, int start, double firstValue)
 	{
@@ -113,7 +112,6 @@ public class Maths
 	 * Not yet optimized, please do NOT use values > 69 or < 0
 	 * 
 	 * @param value
-	 * @return
 	 */
 	public static double factorial(int value)
 	{
@@ -139,7 +137,6 @@ public class Maths
 	 * Rely on Java
 	 * 
 	 * @param num
-	 * @return
 	 */
 	public static double sqrt(double num)
 	{
@@ -218,5 +215,28 @@ public class Maths
 	{
 		if((int)(number + .5) >= (int)(number)) return (int)number + 1;
 		return (int)number;
+	}
+
+	public static boolean isPowerOf2(int v)
+	{
+		return (v & (v - 1)) == 1;
+	}
+
+	/**
+	 * From http://graphics.stanford.edu/~seander/bithacks.html
+	 * 
+	 * @param v
+	 */
+	public static int upperPowerOf2(int v)
+	{
+		v-- ;
+		v |= v >> 1;
+		v |= v >> 2;
+		v |= v >> 4;
+		v |= v >> 8;
+		v |= v >> 16;
+		v |= v >> 32;
+		v++ ;
+		return v;
 	}
 }

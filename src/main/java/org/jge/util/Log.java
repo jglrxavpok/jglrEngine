@@ -12,6 +12,7 @@ import java.lang.reflect.Method;
 import org.jge.JGEngine;
 import org.jge.ResourceLocation;
 import org.jge.Time;
+import org.jge.crash.CrashReport;
 
 public class Log
 {
@@ -123,5 +124,11 @@ public class Log
 			savingOutput.flush();
 			savingOutput.close();
 		}
+	}
+
+	@NonLoggable
+	public static void fatal(String string)
+	{
+		JGEngine.crash(new CrashReport(string));
 	}
 }

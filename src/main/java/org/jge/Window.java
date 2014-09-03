@@ -113,6 +113,7 @@ public class Window
 			else
 				parentFrame.setLocation(0, 0);
 			parentFrame.setAlwaysOnTop(false);
+			parentFrame.setResizable(false);
 			setDisplayMode(w, h, shouldGoFullscreen);
 			Display.setParent(parentCanvas);
 			ContextAttribs context = new ContextAttribs(3, 3);
@@ -296,14 +297,12 @@ public class Window
 			{
 				targetDisplayMode = new DisplayMode(width, height);
 				// parentFrame.dispose();
-				System.out.println("test_setting1");
 				parentCanvas.setPreferredSize(new Dimension(width, height));
 				// parentFrame.setUndecorated(false);
 				parentFrame.pack();
 				parentFrame.setLocationRelativeTo(null);
 				parentFrame.setVisible(true);
 				parentFrame.setAlwaysOnTop(false);
-				System.out.println("test_setting2");
 			}
 
 			if(targetDisplayMode == null)
@@ -324,9 +323,7 @@ public class Window
 				return;
 			}
 
-			System.out.println("test_setting4");
 			Display.setFullscreen(fullscreen);
-			System.out.println("test_setting3");
 			Display.setDisplayMode(targetDisplayMode);
 
 		}

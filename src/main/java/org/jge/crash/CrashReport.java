@@ -13,7 +13,7 @@ public class CrashReport
 
 	private static String[] comments = new String[]
 									 {
-			null, null, "Well, this was a disappointment."
+			null, null, "Well, this was a disappointment.", "I'm sorry Dave. I think I can't let you do that", "Here, have a gift http://xkcd.com/953/ "
 									 };
 
 	static
@@ -59,7 +59,7 @@ public class CrashReport
 		buffer.append(CrashInfos.SECTION_START + " Crash " + CrashInfos.SECTION_END + "\n");
 		String comment = generateRandomComment();
 		buffer.append(comment + "\n");
-		buffer.append("\n\t" + exception.getClass().getCanonicalName());
+		buffer.append("\n" + exception.getClass().getCanonicalName());
 		StackTraceElement[] stackTrace = exception.getStackTrace();
 		if(exception.getLocalizedMessage() != null)
 		{
@@ -71,7 +71,7 @@ public class CrashReport
 		{
 			for(StackTraceElement elem : stackTrace)
 			{
-				buffer.append("\t\t" + elem.toString() + "\n");
+				buffer.append("\tat " + elem.toString() + "\n");
 			}
 		}
 		else
@@ -84,7 +84,7 @@ public class CrashReport
 		add(buffer, new OpenALInfos());
 		add(buffer, new OpenGLInfos());
 		add(buffer, new RenderStateInfos());
-		Log.error(buffer.toString(), false);
+		System.err.println(buffer.toString());
 	}
 
 	private void add(StringBuffer buffer, CrashInfos infos)

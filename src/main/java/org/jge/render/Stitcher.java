@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import org.jge.maths.Maths;
+import org.jge.util.ImageUtils;
 import org.jge.util.Log;
 
 /**
@@ -36,9 +37,11 @@ public class Stitcher
 	private ArrayList<Slot>		  slots;
 	private int					  tileWidth;
 	private int					  tileHeight;
+	private BufferedImage			emptySlotImage;
 
-	public Stitcher()
+	public Stitcher(BufferedImage emptyImage)
 	{
+		this.emptySlotImage = emptyImage;
 		slots = new ArrayList<>();
 		imgs = new ArrayList<>();
 		tileWidth = -1;
@@ -47,16 +50,21 @@ public class Stitcher
 
 	public int addImage(BufferedImage img)
 	{
+		return addImage(img, false);
+	}
+
+	public int addImage(BufferedImage img, boolean forceResize)
+	{
 		if(tileWidth == -1 || tileHeight == -1)
 		{
 			tileWidth = img.getWidth();
 			tileHeight = img.getHeight();
 		}
-		else if(img.getWidth() != tileWidth || img.getHeight() != tileHeight)
+		else if(!forceResize && (img.getWidth() != tileWidth || img.getHeight() != tileHeight))
 		{
 			Log.fatal("Unexpected size: " + img.getWidth() + "x" + img.getHeight() + "px, expected " + tileWidth + "x" + tileHeight + "px. Image index: " + imgs.size());
 		}
-		imgs.add(img);
+		imgs.add(ImageUtils.resize(img, tileWidth, tileHeight));
 		return imgs.size() - 1;
 	}
 
@@ -75,8 +83,15 @@ public class Stitcher
 			int x = column * tileWidth;
 			int y = row * tileHeight;
 			g.drawImage(imgs.get(i), column * tileWidth, row * tileHeight, null);
-
 			slots.add(new Slot((float)x / (float)width, (float)y / (float)height, (float)(x + tileWidth) / (float)width, (float)(y + tileHeight) / (float)height, width, height));
+		}
+
+		emptySlotImage = ImageUtils.resize(emptySlotImage, tileWidth, tileHeight);
+		for(int n = imgs.size(); n < nbrX * nbrY; n++ )
+		{
+			int column = n % nbrX;
+			int row = n / nbrX;
+			g.drawImage(emptySlotImage, column * tileWidth, row * tileHeight, null);
 		}
 		g.dispose();
 		return result;

@@ -129,6 +129,7 @@ public final class CoreEngine
 				timeBetweenUpdates = 1000000000 / expectedFrameRate;
 				try
 				{
+
 					LWJGLHandler.load(new File(JGEngine.getEngineFolder(), "natives"));
 					window.setTitle(game.getGameName());
 					window.init();
@@ -169,59 +170,58 @@ public final class CoreEngine
 					Log.message("[------OpenAL infos------]");
 					Log.message("  Version: " + AL10.alGetString(AL10.AL_VERSION));
 					Log.message("  Vendor: " + AL10.alGetString(AL10.AL_VENDOR));
-					// TODO OpenCL infos
-				Log.message("[------Engine infos------]");
-				Log.message("  Version: " + JGEngine.getEngineVersion());
-				Log.message("------------------------");
-			}
-			catch(Exception e)
-			{
-				e.printStackTrace();
-			}
-			renderEngine = new RenderEngine();
-			renderEngine.getEventBus().registerListener(game);
-			physEngine = new PhysicsEngine();
-			RenderEngine.printIfGLError();
-			Texture loadingScreenText = null;
-			try
-			{
-				loadingScreenText = renderEngine.loadTexture(classResLoader.getResource(new ResourceLocation("textures", "loadingScreen.png")));
-			}
-			catch(Exception e)
-			{
-				e.printStackTrace();
-				System.exit(-1);
-			}
-			LoadingScreen loadingScreen = new MonoThreadedLoadingScreen(game);
-			loadingScreen.setBackgroundImage(loadingScreenText);
-			game.setLoadingScreen(loadingScreen);
-			game.drawLoadingScreen("Loading...");
+					Log.message("[------Engine infos------]");
+					Log.message("  Version: " + JGEngine.getEngineVersion());
+					Log.message("------------------------");
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+				renderEngine = new RenderEngine();
+				renderEngine.getEventBus().registerListener(game);
+				physEngine = new PhysicsEngine();
+				RenderEngine.printIfGLError();
+				Texture loadingScreenText = null;
+				try
+				{
+					loadingScreenText = renderEngine.loadTexture(classResLoader.getResource(new ResourceLocation("textures", "loadingScreen.png")));
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+					System.exit(-1);
+				}
+				LoadingScreen loadingScreen = new MonoThreadedLoadingScreen(game);
+				loadingScreen.setBackgroundImage(loadingScreenText);
+				game.setLoadingScreen(loadingScreen);
+				game.drawLoadingScreen("Loading...");
 
-			Properties properties = new Properties();
-			File propsFile = new File(game.getGameFolder(), "properties.txt");
-			if(!propsFile.exists())
-			{
-				propsFile.createNewFile();
+				Properties properties = new Properties();
+				File propsFile = new File(game.getGameFolder(), "properties.txt");
+				if(!propsFile.exists())
+				{
+					propsFile.createNewFile();
+				}
+				properties.load(new FileInputStream(propsFile));
+				game.setProperties(properties);
+				game.onPropertiesLoad(properties);
+				renderEngine.init();
+				soundEngine.init();
+				physEngine.init();
+				game.init();
+				while(running && !window.shouldBeClosed() && game.isRunning())
+				{
+					tick();
+				}
 			}
-			properties.load(new FileInputStream(propsFile));
-			game.setProperties(properties);
-			game.onPropertiesLoad(properties);
-			renderEngine.init();
-			soundEngine.init();
-			physEngine.init();
-			game.init();
-			while(running && !window.shouldBeClosed() && game.isRunning())
+			catch(Exception e)
 			{
-				tick();
+				e.printStackTrace();
 			}
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		cleanup();
-		System.exit(0);
-	}   ).start();
+			cleanup();
+			System.exit(0);
+		}).start();
 	}
 
 	private void cleanup()

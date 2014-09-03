@@ -1,5 +1,6 @@
 package org.jge.render;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -51,6 +52,8 @@ public class TextureMap implements IconGenerator
 	private ArrayList<TextureIcon>				 registredIcons;
 	private HashMap<ResourceLocation, TextureIcon> registredMap;
 	private Texture								texture;
+	private BufferedImage						  nullImage;
+	private BufferedImage						  emptyImage;
 
 	public TextureMap(ResourceLoader loader, ResourceLocation base)
 	{
@@ -66,6 +69,73 @@ public class TextureMap implements IconGenerator
 		return newLoc;
 	}
 
+	private void initNullAndEmptyImages()
+	{
+		if(loader.doesResourceExists(completeLocation(new ResourceLocation("missigno.png"))))
+		{
+			try
+			{
+				nullImage = ImageUtils.loadImage(loader.getResource(completeLocation(new ResourceLocation("missigno.png"))));
+			}
+			catch(EngineException e)
+			{
+				e.printStackTrace();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else
+		{
+			nullImage = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+			Graphics g = nullImage.createGraphics();
+			for(int x = 0; x < 16; x++ )
+			{
+				for(int y = 0; y < 16; y++ )
+				{
+					int color = 0x000000;
+					if((x >= 8 && y >= 8) || (x < 8 && y < 8)) color = 0xFF00DC;
+					nullImage.setRGB(x, y, color);
+				}
+			}
+			g.dispose();
+
+		}
+
+		if(loader.doesResourceExists(completeLocation(new ResourceLocation(".png"))))
+		{
+			try
+			{
+				emptyImage = ImageUtils.loadImage(loader.getResource(completeLocation(new ResourceLocation(".png"))));
+			}
+			catch(EngineException e)
+			{
+				e.printStackTrace();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else
+		{
+			emptyImage = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+			Graphics g = emptyImage.createGraphics();
+			for(int x = 0; x < 16; x++ )
+			{
+				for(int y = 0; y < 16; y++ )
+				{
+					if(x == 0 || y == 0)
+						emptyImage.setRGB(x, y, 0x4800FF);
+					else
+						emptyImage.setRGB(x, y, 0xFF00DC);
+				}
+			}
+			g.dispose();
+		}
+	}
+
 	@Override
 	public TextureIcon generateIcon(ResourceLocation loc)
 	{
@@ -78,8 +148,9 @@ public class TextureMap implements IconGenerator
 
 	public void compile() throws EngineException
 	{
+		initNullAndEmptyImages();
 		Iterator<Entry<ResourceLocation, TextureIcon>> it = registredMap.entrySet().iterator();
-		Stitcher stitcher = new Stitcher();
+		Stitcher stitcher = new Stitcher(emptyImage);
 		HashMap<Integer, TextureIcon> indexes = new HashMap<>();
 		while(it.hasNext())
 		{
@@ -95,6 +166,7 @@ public class TextureMap implements IconGenerator
 			catch(Exception e)
 			{
 				Log.error("Unable to find icon: " + loc.getFullPath());
+				indexes.put(stitcher.addImage(nullImage, true), icon);
 			}
 
 		}
@@ -129,6 +201,11 @@ public class TextureMap implements IconGenerator
 		}
 
 		texture = new Texture(OpenGLUtils.loadTexture(stitchedImage, Texture.FILTER_NEAREST));
+	}
+
+	public Texture getTexture()
+	{
+		return texture;
 	}
 
 	private class TextureMapIcon implements TextureIcon
@@ -217,8 +294,4 @@ public class TextureMap implements IconGenerator
 		}
 	}
 
-	public Texture getTexture()
-	{
-		return texture;
-	}
 }

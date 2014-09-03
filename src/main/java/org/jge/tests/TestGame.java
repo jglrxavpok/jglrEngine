@@ -38,6 +38,9 @@ import org.jge.render.ParticleGenerator;
 import org.jge.render.Sprite;
 import org.jge.render.Texture;
 import org.jge.render.TextureAtlas;
+import org.jge.render.TextureIcon;
+import org.jge.render.TextureMap;
+import org.jge.render.TextureRegion;
 import org.jge.render.fonts.Font;
 import org.jge.render.fonts.SimpleFont;
 import org.jge.render.mesh.Mesh;
@@ -104,6 +107,22 @@ public class TestGame extends Game
 	{
 		try
 		{
+			TextureMap map = new TextureMap(getClasspathResourceLoader(), new ResourceLocation("test/textures", "icons"));
+
+			map.generateIcon("alchemist.png");
+			map.generateIcon("archer.png");
+			map.generateIcon("barbarian.png");
+			map.generateIcon("block.png");
+			map.generateIcon("enchanter.png");
+			map.generateIcon("enchanter2.png");
+			map.generateIcon("bomber.png");
+			map.generateIcon("farmer.png");
+			map.generateIcon("locked.png");
+			map.generateIcon("enderman.png");
+			map.generateIcon("sheep.png");
+			TextureIcon icon = map.generateIcon("spy.png");
+
+			map.compile();
 			Script script = new LuaScript(getClasspathResourceLoader().getResource(new ResourceLocation("text", "test.lua")));
 			Log.message(script.run().toString());
 			ZipSimpleResourceLoader loader = new ZipSimpleResourceLoader(getDiskResourceLoader().getResource(new ResourceLocation("./test.zip")));
@@ -120,6 +139,7 @@ public class TestGame extends Game
 			spriteObject.getTransform().setPosition(Vector3.get(50, 50, 0));
 			addToHUD(new TextLabelObject(font, "Hello t§uhere! How are you doing §cFFFF0000today, §r§bhm?", 0xFFFFFFFF));
 			addToHUD(menu);
+			addToHUD(new HUDSpriteObject(new Sprite(new TextureRegion(map.getTexture(), icon))));
 			addToHUD(spriteObject);
 			getRenderEngine().setAmbientColor(0.15f, 0.15f, 0.15f);
 			material = new Material();
@@ -396,7 +416,6 @@ public class TestGame extends Game
 	{
 		SceneObject monkey = new SceneObject();
 		Mesh monkeyMesh = new Mesh((getClasspathResourceLoader().getResource(new ResourceLocation("test/models/monkey.obj"))));
-		Log.message("Monkey: After material");
 		Material material2 = new Material();
 		material2.setTexture("diffuse", new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "bricks.png"))));
 		material2.setTexture("normalMap", new Texture(getClasspathResourceLoader().getResource(new ResourceLocation("test/textures", "bricks_normal.png"))));

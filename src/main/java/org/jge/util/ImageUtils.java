@@ -1,6 +1,7 @@
 package org.jge.util;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BandCombineOp;
 import java.awt.image.BufferedImage;
@@ -210,5 +211,14 @@ public class ImageUtils
 		{
 			throw new EngineException("Error while loading image: " + res.getResourceLocation().getFullPath(), e);
 		}
+	}
+
+	public static BufferedImage resize(BufferedImage img, int w, int h)
+	{
+		BufferedImage resized = new BufferedImage(w, h, img.getType());
+		Graphics g = resized.createGraphics();
+		g.drawImage(img, 0, 0, w, h, null);
+		g.dispose();
+		return resized;
 	}
 }

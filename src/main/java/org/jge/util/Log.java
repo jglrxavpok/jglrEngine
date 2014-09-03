@@ -73,7 +73,7 @@ public class Log
 	@NonLoggable
 	public static void message(String msg, boolean format)
 	{
-		log(msg, System.out, format);
+		log("[INFO] " + msg, System.out, format);
 	}
 
 	@NonLoggable
@@ -85,7 +85,7 @@ public class Log
 	@NonLoggable
 	public static void error(String msg, boolean format)
 	{
-		log(msg, System.err, format);
+		log("[ERROR] " + msg, System.err, format);
 	}
 
 	@NonLoggable

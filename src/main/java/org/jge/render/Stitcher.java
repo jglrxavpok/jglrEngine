@@ -72,6 +72,9 @@ public class Stitcher
 	{
 		int nbrY = Maths.upperPowerOf2((int)Maths.floor(Maths.sqrt(imgs.size())));
 		int nbrX = (int)Maths.roundToNearest((double)imgs.size() / (double)nbrY);
+
+		while((nbrX * nbrY - imgs.size()) >= nbrY)
+			nbrY-- ;
 		int width = nbrX * tileWidth;
 		int height = nbrY * tileHeight;
 		BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);

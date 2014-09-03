@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 
@@ -47,20 +46,20 @@ import org.jge.util.Strings;
 public class TextureMap implements IconGenerator
 {
 
-	private ResourceLoader						 loader;
-	private ResourceLocation					   base;
-	private ArrayList<TextureIcon>				 registredIcons;
-	private HashMap<ResourceLocation, TextureIcon> registredMap;
-	private Texture								texture;
-	private BufferedImage						  nullImage;
-	private BufferedImage						  emptyImage;
+	private ResourceLoader			  loader;
+	private ResourceLocation			base;
+	private ArrayList<TextureIcon>	  registredIcons;
+	private ArrayList<ResourceLocation> registredLocations;
+	private Texture					 texture;
+	private BufferedImage			   nullImage;
+	private BufferedImage			   emptyImage;
 
 	public TextureMap(ResourceLoader loader, ResourceLocation base)
 	{
 		this.loader = loader;
 		this.base = base;
 		registredIcons = new ArrayList<>();
-		registredMap = new HashMap<>();
+		registredLocations = new ArrayList<>();
 	}
 
 	public ResourceLocation completeLocation(ResourceLocation loc)
@@ -139,24 +138,22 @@ public class TextureMap implements IconGenerator
 	@Override
 	public TextureIcon generateIcon(ResourceLocation loc)
 	{
-		if(registredMap.containsKey(loc)) return registredMap.get(loc);
+		if(registredLocations.contains(loc)) return registredIcons.get(registredLocations.indexOf(loc));
 		TextureMapIcon icon = new TextureMapIcon(0, 0, 0, 0, 0, 0);
 		registredIcons.add(icon);
-		registredMap.put(loc, icon);
+		registredLocations.add(loc);
 		return icon;
 	}
 
 	public void compile() throws EngineException
 	{
 		initNullAndEmptyImages();
-		Iterator<Entry<ResourceLocation, TextureIcon>> it = registredMap.entrySet().iterator();
 		Stitcher stitcher = new Stitcher(emptyImage);
 		HashMap<Integer, TextureIcon> indexes = new HashMap<>();
-		while(it.hasNext())
+		for(int i = 0; i < registredIcons.size(); i++ )
 		{
-			Entry<ResourceLocation, TextureIcon> entry = it.next();
-			ResourceLocation loc = completeLocation(entry.getKey());
-			TextureIcon icon = entry.getValue();
+			ResourceLocation loc = completeLocation(registredLocations.get(i));
+			TextureIcon icon = registredIcons.get(i);
 			try
 			{
 				AbstractResource res = loader.getResource(loc);

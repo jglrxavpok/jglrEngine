@@ -53,13 +53,24 @@ public class TextureMap implements IconGenerator
 	private Texture					 texture;
 	private BufferedImage			   nullImage;
 	private BufferedImage			   emptyImage;
+	private boolean					 lenient;
+	private Stitcher					stitcher;
 
 	public TextureMap(ResourceLoader loader, ResourceLocation base)
 	{
+		this(loader, base, false);
+	}
+
+	public TextureMap(ResourceLoader loader, ResourceLocation base, boolean lenientOnSizes)
+	{
+		this.lenient = lenientOnSizes;
 		this.loader = loader;
 		this.base = base;
 		registredIcons = new ArrayList<>();
 		registredLocations = new ArrayList<>();
+
+		initNullAndEmptyImages();
+		stitcher = new Stitcher(emptyImage);
 	}
 
 	public ResourceLocation completeLocation(ResourceLocation loc)
@@ -147,8 +158,6 @@ public class TextureMap implements IconGenerator
 
 	public void compile() throws EngineException
 	{
-		initNullAndEmptyImages();
-		Stitcher stitcher = new Stitcher(emptyImage);
 		HashMap<Integer, TextureIcon> indexes = new HashMap<>();
 		for(int i = 0; i < registredIcons.size(); i++ )
 		{
@@ -158,7 +167,7 @@ public class TextureMap implements IconGenerator
 			{
 				AbstractResource res = loader.getResource(loc);
 				BufferedImage img = ImageUtils.loadImage(res);
-				indexes.put(stitcher.addImage(img), icon);
+				indexes.put(stitcher.addImage(img, lenient), icon);
 			}
 			catch(Exception e)
 			{
@@ -203,6 +212,12 @@ public class TextureMap implements IconGenerator
 	public Texture getTexture()
 	{
 		return texture;
+	}
+
+	public void fixSize(int w, int h)
+	{
+		stitcher.setTileWidth(w);
+		stitcher.setTileHeight(h);
 	}
 
 	private class TextureMapIcon implements TextureIcon

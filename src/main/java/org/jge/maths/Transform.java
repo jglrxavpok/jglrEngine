@@ -19,7 +19,7 @@ public class Transform
 
 	public Transform()
 	{
-		rotation = new Quaternion(0, 0, 0, 1);
+		rotation = Quaternion.NULL;
 		scale = Vector3.get(1, 1, 1);
 		position = Vector3.NULL;
 		parentMatrix = new Matrix4().initIdentity();
@@ -65,9 +65,9 @@ public class Transform
 	{
 		if(oldPosition != null)
 		{
-			oldPosition = position.copy();
+			oldPosition = position;
 			oldScale = scale;
-			oldRotation = rotation.copy();
+			oldRotation = rotation;
 		}
 		else
 		{
@@ -97,7 +97,7 @@ public class Transform
 
 	public Quaternion getTransformedRotation()
 	{
-		Quaternion parentRotation = new Quaternion();
+		Quaternion parentRotation = Quaternion.NULL;
 		if(parent != null)
 		{
 			parentRotation = getParent().getRotation();

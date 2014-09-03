@@ -19,17 +19,17 @@ public class Vertex implements BufferWritable
 
 	public Vertex(Vector3 pos)
 	{
-		this(pos, new Vector2(0, 0));
+		this(pos, Vector2.NULL);
 	}
 
 	public Vertex(Vector3 pos, Vector2 texCoords)
 	{
-		this(pos, texCoords, new Vector3());
+		this(pos, texCoords, Vector3.NULL);
 	}
 
 	public Vertex(Vector3 pos, Vector2 texCoords, Vector3 normal)
 	{
-		this(pos, texCoords, normal, new Vector3());
+		this(pos, texCoords, normal, Vector3.NULL);
 	}
 
 	public Vertex(Vector3 pos, Vector2 texCoords, Vector3 normal, Vector3 vector3)

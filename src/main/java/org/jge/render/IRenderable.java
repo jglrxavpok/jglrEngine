@@ -1,6 +1,7 @@
 package org.jge.render;
 
 import org.jge.components.Camera;
+import org.jge.maths.Transform;
 import org.jge.render.shaders.Shader;
 
 /**
@@ -29,5 +30,5 @@ import org.jge.render.shaders.Shader;
 @FunctionalInterface
 public interface IRenderable
 {
-	public void render(Shader shader, Camera cam, double delta, RenderEngine engine);
+	public Sprite render(Shader shader, Transform transform, Camera cam, double delta, RenderEngine engine);
 }

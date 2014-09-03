@@ -46,8 +46,8 @@ public class Particle
 	{
 		life-- ;
 		ticksExisted++ ;
-		velocity = velocity.add(gravityForce.mul((float)delta));
-		pos = pos.add(velocity.mul((float)delta));
+		// velocity = velocity.add(gravityForce.mul((float)delta));
+		// pos = pos.add(velocity.mul((float)delta));
 		if(life <= 0) dead = true;
 	}
 

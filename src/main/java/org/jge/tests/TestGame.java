@@ -107,8 +107,10 @@ public class TestGame extends Game
 	{
 		try
 		{
-			TextureMap map = new TextureMap(getClasspathResourceLoader(), new ResourceLocation("test/textures", "icons"));
+			TextureMap map = new TextureMap(getClasspathResourceLoader(), new ResourceLocation("test/textures", "icons"), true);
 
+			map.fixSize(16, 16);
+			map.generateIcon("../bricks.png");
 			map.generateIcon("alchemist.png");
 			map.generateIcon("archer.png");
 			map.generateIcon("barbarian.png");
@@ -120,6 +122,7 @@ public class TestGame extends Game
 			map.generateIcon("locked.png");
 			map.generateIcon("enderman.png");
 			map.generateIcon("sheep.png");
+			map.generateIcon("../icon32.png");
 			TextureIcon icon = map.generateIcon("spy.png");
 
 			map.compile();

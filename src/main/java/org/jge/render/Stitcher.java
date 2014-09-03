@@ -60,11 +60,18 @@ public class Stitcher
 			tileWidth = img.getWidth();
 			tileHeight = img.getHeight();
 		}
-		else if(!forceResize && (img.getWidth() != tileWidth || img.getHeight() != tileHeight))
+		else if((img.getWidth() != tileWidth || img.getHeight() != tileHeight))
 		{
-			Log.fatal("Unexpected size: " + img.getWidth() + "x" + img.getHeight() + "px, expected " + tileWidth + "x" + tileHeight + "px. Image index: " + imgs.size());
+			if(!forceResize)
+			{
+				Log.fatal("Unexpected size: " + img.getWidth() + "x" + img.getHeight() + "px, expected " + tileWidth + "x" + tileHeight + "px. Image index: " + imgs.size());
+			}
+			else
+			{
+				img = ImageUtils.resize(img, tileWidth, tileHeight);
+			}
 		}
-		imgs.add(ImageUtils.resize(img, tileWidth, tileHeight));
+		imgs.add(img);
 		return imgs.size() - 1;
 	}
 
@@ -148,5 +155,15 @@ public class Stitcher
 			this.width = width;
 			this.height = height;
 		}
+	}
+
+	public void setTileWidth(int w)
+	{
+		tileWidth = w;
+	}
+
+	public void setTileHeight(int h)
+	{
+		tileHeight = h;
 	}
 }

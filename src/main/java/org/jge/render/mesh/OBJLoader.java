@@ -118,7 +118,7 @@ public class OBJLoader extends IndexedModelLoader
 				}
 				else
 				{
-					texCoord = new Vector2(0, 0);
+					texCoord = Vector2.NULL;
 				}
 				Vector3 normal;
 				if(hasNormals)
@@ -127,7 +127,7 @@ public class OBJLoader extends IndexedModelLoader
 				}
 				else
 				{
-					normal = Vector3.get(0, 0, 0).copy();
+					normal = Vector3.NULL.copy();
 				}
 
 				int modelVertexIndex = resultIndexMap.get(current);
@@ -139,7 +139,7 @@ public class OBJLoader extends IndexedModelLoader
 					result.getPositions().add(pos);
 					result.getTexCoords().add(texCoord);
 					if(hasNormals) result.getNormals().add(normal);
-					result.getTangents().add(new Vector3());
+					result.getTangents().add(Vector3.NULL);
 				}
 
 				int normalModelIndex = normalIndexMap.get(current.positionIndex);
@@ -152,7 +152,7 @@ public class OBJLoader extends IndexedModelLoader
 					normalModel.getPositions().add(pos);
 					normalModel.getTexCoords().add(texCoord);
 					normalModel.getNormals().add(normal);
-					normalModel.getTangents().add(new Vector3());
+					normalModel.getTangents().add(Vector3.NULL);
 				}
 
 				result.getIndices().add(modelVertexIndex);

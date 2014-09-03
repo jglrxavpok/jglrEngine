@@ -315,7 +315,7 @@ public class RenderEngine extends MappedValues
 
 		setTexture("filterTexture", source);
 		altCamera.getParent().getTransform().setPosition(Vector3.NULL);
-		altCamera.getParent().getTransform().setRotation(new Quaternion());
+		altCamera.getParent().getTransform().setRotation(Quaternion.NULL);
 		altCamera.setProjection(initMatrix);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
@@ -431,7 +431,7 @@ public class RenderEngine extends MappedValues
 		Window.getCurrent().bindAsRenderTarget();
 
 		altCamera.getParent().getTransform().setPosition(Vector3.NULL);
-		altCamera.getParent().getTransform().setRotation(new Quaternion());
+		altCamera.getParent().getTransform().setRotation(Quaternion.NULL);
 		altCamera.setProjection(initMatrix);
 		glClearColor(0.0f, 0.0f, 1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

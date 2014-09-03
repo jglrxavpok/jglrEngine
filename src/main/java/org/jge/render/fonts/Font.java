@@ -23,10 +23,6 @@ public abstract class Font
 	private String	   supportedChars;
 	private Mesh		 mesh;
 	private Material	 material;
-	private Vector2	  topRightUV	= new Vector2(1, 1);
-	private Vector2	  bottomRightUV = new Vector2(1, 0);
-	private Vector2	  topLeftUV	 = new Vector2(0, 1);
-	private Vector2	  bottomLeftUV  = new Vector2(0, 0);
 
 	public Font(TextureAtlas atlas, String supportedChars)
 	{

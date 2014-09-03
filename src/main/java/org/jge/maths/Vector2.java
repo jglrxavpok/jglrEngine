@@ -3,13 +3,15 @@ package org.jge.maths;
 import java.nio.FloatBuffer;
 
 import org.jge.util.BufferWritable;
+
 import org.jglrxavpok.jlsl.glsl.GLSL.Substitute;
 
 public class Vector2 implements BufferWritable
 {
 
-	public double x;
-	public double y;
+	public static final Vector2 NULL = new Vector2(0, 0);
+	public double			   x;
+	public double			   y;
 
 	public Vector2(double x, double y)
 	{

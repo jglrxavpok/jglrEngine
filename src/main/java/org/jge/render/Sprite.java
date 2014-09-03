@@ -10,7 +10,7 @@ import org.jge.maths.Vector3;
 import org.jge.render.mesh.Mesh;
 import org.jge.render.shaders.Shader;
 
-public class Sprite extends TextureRegion
+public class Sprite extends TextureRegion implements IRenderable
 {
 
 	private float	x;

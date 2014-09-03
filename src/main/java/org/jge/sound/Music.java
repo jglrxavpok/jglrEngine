@@ -6,8 +6,13 @@ import java.util.Iterator;
 
 import org.jge.AbstractResource;
 import org.jge.Time;
+
 import org.lwjgl.openal.AL10;
 
+/**
+ * Needs to use streaming!!!!
+ * 
+ */
 public class Music
 {
 
@@ -16,6 +21,10 @@ public class Music
 	private int										   sourceId;
 	private long										  startedTime;
 
+	/**
+	 * Needs to use streaming!!!!
+	 * 
+	 */
 	private Music(AbstractResource res)
 	{
 		musics.put(res, this);

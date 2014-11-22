@@ -21,7 +21,7 @@ public class ThreadReadConsoleInput extends Thread
 			try
 			{
 				String line = sc.nextLine();
-				Console.executeStringCommand(line);
+				CommandHelper.executeStringCommand(line);
 			}
 			catch(Exception e)
 			{

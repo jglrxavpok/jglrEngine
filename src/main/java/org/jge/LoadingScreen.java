@@ -63,9 +63,9 @@ public abstract class LoadingScreen
 	public void refreshScreen()
 	{
 		game.getWindow().bindAsRenderTarget();
-		glClearColor(0, 0, 0, 0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		RenderEngine engine = CoreEngine.getCurrent().getRenderEngine();
+		engine.setClearColor(0, 0, 0, 0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		engine.pushState();
 		engine.disableGLCap(GL_CULL_FACE);
 		engine.disableGLCap(GL_DEPTH_TEST);

@@ -15,10 +15,10 @@ public class Material extends MappedValues
 		super();
 		try
 		{
-			getTextures().setDefault(new Texture(JGEngine.getResourceLoader().getResource(new ResourceLocation("textures", "damier.png"))));
-			setTexture("normalMap", new Texture(JGEngine.getResourceLoader().getResource(new ResourceLocation("textures", "default_normal.png"))));
-			setTexture("dispMap", new Texture(JGEngine.getResourceLoader().getResource(new ResourceLocation("textures", "default_disp.png"))));
-			setTexture("lightMap", new Texture(JGEngine.getResourceLoader().getResource(new ResourceLocation("textures", "default_light.png"))));
+			getTextures().setDefault(new Texture(JGEngine.getClasspathResourceLoader().getResource(new ResourceLocation("textures", "damier.png"))));
+			setTexture("normalMap", new Texture(JGEngine.getClasspathResourceLoader().getResource(new ResourceLocation("textures", "default_normal.png"))));
+			setTexture("dispMap", new Texture(JGEngine.getClasspathResourceLoader().getResource(new ResourceLocation("textures", "default_disp.png"))));
+			setTexture("lightMap", new Texture(JGEngine.getClasspathResourceLoader().getResource(new ResourceLocation("textures", "default_light.png"))));
 			setFloat("dispMapScale", 0.04f);
 
 			float baseBias = getFloat("dispMapScale") / 2.0f;

@@ -10,7 +10,7 @@ import org.jge.commands.ShadowColorCommand;
 import org.jge.commands.UniformCommand;
 import org.jge.util.Log;
 
-public class Console
+public class CommandHelper
 {
 
 	public static HashMap<String, AbstractCommand> commands = new HashMap<String, AbstractCommand>();

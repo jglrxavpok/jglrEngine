@@ -20,8 +20,8 @@ public class CrashReport
 	{
 		try
 		{
-			comments[0] = new String(JGEngine.getResourceLoader().getResource(new ResourceLocation("text:crackedFloppy.ascii")).getData(), Charset.forName("utf-8")).replace("\n       -jglrxavpok", "");
-			comments[1] = new String(JGEngine.getResourceLoader().getResource(new ResourceLocation("text:deadFace.ascii")).getData(), Charset.forName("utf-8")).replace("\n       -jglrxavpok", "");
+			comments[0] = new String(JGEngine.getClasspathResourceLoader().getResource(new ResourceLocation("text:crackedFloppy.ascii")).getData(), Charset.forName("utf-8")).replace("\n       -jglrxavpok", "");
+			comments[1] = new String(JGEngine.getClasspathResourceLoader().getResource(new ResourceLocation("text:deadFace.ascii")).getData(), Charset.forName("utf-8")).replace("\n       -jglrxavpok", "");
 		}
 		catch(Exception e)
 		{

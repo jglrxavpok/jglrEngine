@@ -171,4 +171,29 @@ public class Transform
 		return getTransformationMatrix().transform(v);
 	}
 
+	public void setRotation(Matrix4 rotMatrix)
+	{
+		this.rotation = new Quaternion(rotMatrix);
+	}
+
+	public void forward(float f)
+	{
+		this.position = position.add(getRotation().getForward().copy().setY(0).normalize().mul(f));
+	}
+
+	public void backwards(float f)
+	{
+		forward(-1f * f);
+	}
+
+	public void strafeRight(float f)
+	{
+		this.position = position.add(getRotation().getRight().mul(f));
+	}
+
+	public void strafeLeft(float f)
+	{
+		strafeRight(f * -1f);
+	}
+
 }

@@ -46,8 +46,8 @@ public class Particle
 	{
 		life-- ;
 		ticksExisted++ ;
-		// velocity = velocity.add(gravityForce.mul((float)delta));
-		// pos = pos.add(velocity.mul((float)delta));
+		velocity = velocity.add(gravityForce.mul((float)delta));
+		pos = pos.add(velocity.mul((float)delta));
 		if(life <= 0) dead = true;
 	}
 
@@ -98,7 +98,7 @@ public class Particle
 
 	public float getSize()
 	{
-		return 4f;
+		return 2f;
 	}
 
 	public Sprite getSprite()

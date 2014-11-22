@@ -57,7 +57,7 @@ public class HUD3DView extends HUDWidget
 	{
 		TextureResource oldid = engine.getRenderTarget();
 		renderTexture.bindAsRenderTarget();
-		glClearColor(0, 0, 0, 1);
+		engine.setClearColor(0, 0, 0, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
 		if(this.viewCamera != null && viewRoot != null)
 		{

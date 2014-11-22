@@ -33,4 +33,9 @@ public class AABB
 	{
 		return maxExtents;
 	}
+
+	public AABB translate(Vector3 position)
+	{
+		return new AABB(minExtents.add(position), maxExtents.add(position));
+	}
 }

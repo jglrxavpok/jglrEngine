@@ -4,7 +4,6 @@ import org.jge.CoreEngine;
 import org.jge.components.Camera;
 import org.jge.components.SceneObject;
 import org.jge.maths.Matrix4;
-import org.jge.maths.Quaternion;
 import org.jge.maths.Transform;
 import org.jge.maths.Vector3;
 import org.jge.render.shaders.Shader;
@@ -71,7 +70,7 @@ public class BillboardSprite extends SceneObject
 		Matrix4 rotMatrix = new Matrix4().initRotation(look, up, right);
 		transform.setScale(getTransform().getTransformedScale());
 		transform.setPosition(getTransform().getTransformedPos());
-		transform.setRotation(new Quaternion(rotMatrix));
+		transform.setRotation(rotMatrix);
 		if(animation != null) animation.render(shader, transform, camera, delta, engine, CoreEngine.getCurrent().getTick());
 		if(sprite != null) sprite.render(shader, transform, camera, delta, engine);
 	}

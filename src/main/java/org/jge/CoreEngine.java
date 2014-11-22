@@ -91,6 +91,7 @@ public final class CoreEngine
 	private static CoreEngine			 current;
 	private ArrayList<ITickable>		  tickables				   = new ArrayList<ITickable>();
 	private boolean					   debug;
+	public boolean						updateOnly;
 
 	public CoreEngine(Game game)
 	{
@@ -124,17 +125,27 @@ public final class CoreEngine
 				classResLoader = new ClasspathSimpleResourceLoader();
 				diskResLoader = new DiskSimpleResourceLoader();
 				running = true;
-				this.window = window;
-				expectedFrameRate = window.getFPSCap();
+				if(window != null)
+				{
+					this.window = window;
+					expectedFrameRate = window.getFPSCap();
+				}
+				else
+				{
+					expectedFrameRate = 60;
+				}
 				timeBetweenUpdates = 1000000000 / expectedFrameRate;
 				try
 				{
-
-					LWJGLHandler.load(new File(JGEngine.getEngineFolder(), "natives"));
-					window.setTitle(game.getGameName());
-					window.init();
+					if(!updateOnly)
+					{
+						LWJGLHandler.load(new File(JGEngine.getEngineFolder(), "natives"));
+						window.setTitle(game.getGameName());
+						window.init();
+					}
 					String currentParameter = null;
 					HashMap<String, String> props = new HashMap<String, String>();
+					props.put("debugAll", "false");
 					for(int i = 0; i < args.length; i++ )
 					{
 						if(args[i].startsWith("-"))
@@ -154,48 +165,53 @@ public final class CoreEngine
 						JavaShader.DEBUG_PRINT_GLSL_TRANSLATION = true;
 						debug = true;
 					}
-					if(!GLContext.getCapabilities().OpenGL33)
+					if(!updateOnly)
 					{
-						Log.message("Incompatible OpenGL version: " + OpenGLUtils.getOpenGLVersion());
-						Log.message("Must be at least: 3.3.0");
-						cleanup();
+						if(!GLContext.getCapabilities().OpenGL33)
+						{
+							Log.message("Incompatible OpenGL version: " + OpenGLUtils.getOpenGLVersion());
+							Log.message("Must be at least: 3.3.0");
+							cleanup();
+						}
+						soundEngine = new SoundEngine();
+						OpenGLUtils.loadCapNames();
+						CL.create();
+						Log.message("[------OpenGL infos------]");
+						Log.message("  Version: " + OpenGLUtils.getOpenGLVersion());
+						Log.message("  Vendor: " + OpenGLUtils.getOpenGLVendor());
+						Log.message("[------OpenAL infos------]");
+						Log.message("  Version: " + AL10.alGetString(AL10.AL_VERSION));
+						Log.message("  Vendor: " + AL10.alGetString(AL10.AL_VENDOR));
+						Log.message("[------Engine infos------]");
+						Log.message("  Version: " + JGEngine.getEngineVersion());
+						Log.message("------------------------");
 					}
-					soundEngine = new SoundEngine();
-
-					OpenGLUtils.loadCapNames();
-					CL.create();
-					Log.message("[------OpenGL infos------]");
-					Log.message("  Version: " + OpenGLUtils.getOpenGLVersion());
-					Log.message("  Vendor: " + OpenGLUtils.getOpenGLVendor());
-					Log.message("[------OpenAL infos------]");
-					Log.message("  Version: " + AL10.alGetString(AL10.AL_VERSION));
-					Log.message("  Vendor: " + AL10.alGetString(AL10.AL_VENDOR));
-					Log.message("[------Engine infos------]");
-					Log.message("  Version: " + JGEngine.getEngineVersion());
-					Log.message("------------------------");
 				}
 				catch(Exception e)
 				{
 					e.printStackTrace();
 				}
-				renderEngine = new RenderEngine();
-				renderEngine.getEventBus().registerListener(game);
 				physEngine = new PhysicsEngine();
-				RenderEngine.printIfGLError();
-				Texture loadingScreenText = null;
-				try
+				if(!updateOnly)
 				{
-					loadingScreenText = renderEngine.loadTexture(classResLoader.getResource(new ResourceLocation("textures", "loadingScreen.png")));
+					renderEngine = new RenderEngine();
+					renderEngine.getEventBus().registerListener(game);
+					RenderEngine.printIfGLError();
+					Texture loadingScreenText = null;
+					try
+					{
+						loadingScreenText = renderEngine.loadTexture(classResLoader.getResource(new ResourceLocation("textures", "loadingScreen.png")));
+					}
+					catch(Exception e)
+					{
+						e.printStackTrace();
+						System.exit(-1);
+					}
+					LoadingScreen loadingScreen = new MonoThreadedLoadingScreen(game);
+					loadingScreen.setBackgroundImage(loadingScreenText);
+					game.setLoadingScreen(loadingScreen);
+					game.drawLoadingScreen("Loading...");
 				}
-				catch(Exception e)
-				{
-					e.printStackTrace();
-					System.exit(-1);
-				}
-				LoadingScreen loadingScreen = new MonoThreadedLoadingScreen(game);
-				loadingScreen.setBackgroundImage(loadingScreenText);
-				game.setLoadingScreen(loadingScreen);
-				game.drawLoadingScreen("Loading...");
 
 				Properties properties = new Properties();
 				File propsFile = new File(game.getGameFolder(), "properties.txt");
@@ -206,13 +222,18 @@ public final class CoreEngine
 				properties.load(new FileInputStream(propsFile));
 				game.setProperties(properties);
 				game.onPropertiesLoad(properties);
-				renderEngine.init();
-				soundEngine.init();
+				if(!updateOnly)
+				{
+					renderEngine.init();
+					soundEngine.init();
+				}
 				physEngine.init();
 				game.init();
-				while(running && !window.shouldBeClosed() && game.isRunning())
+				boolean b = true;
+				while(running && b && game.isRunning())
 				{
 					tick();
+					if(window != null && !updateOnly) b = !window.shouldBeClosed();
 				}
 			}
 			catch(Exception e)
@@ -227,11 +248,17 @@ public final class CoreEngine
 	private void cleanup()
 	{
 		running = false;
-		AL.destroy();
-		GPUProgramResource.destroyAll();
-		CL.destroy();
+		if(!updateOnly)
+		{
+			AL.destroy();
+			GPUProgramResource.destroyAll();
+			CL.destroy();
+		}
 		JGEngine.disposeAll();
-		window.disposeWindow();
+		if(!updateOnly)
+		{
+			window.disposeWindow();
+		}
 		try
 		{
 			game.saveProperties();
@@ -245,13 +272,19 @@ public final class CoreEngine
 
 	private final void tick()
 	{
-		if(game.getCursor() != null) window.hideCursor();
+		if(!updateOnly)
+		{
+			if(game.getCursor() != null) window.hideCursor();
+		}
 		double now = System.nanoTime();
 		int updateCount = 0;
 
 		if(!paused)
 		{
-			Input.pollEvents();
+			if(!updateOnly)
+			{
+				Input.pollEvents();
+			}
 			double delta = timeBetweenUpdates / 1000000000;
 			while(now - lastUpdateTime > timeBetweenUpdates && updateCount < maxUpdatesBeforeRender)
 			{
@@ -267,9 +300,12 @@ public final class CoreEngine
 			}
 
 			render(delta);
-			windowUpdateTimer.startInvocation();
-			window.refresh();
-			windowUpdateTimer.endInvocation();
+			if(!updateOnly)
+			{
+				windowUpdateTimer.startInvocation();
+				window.refresh();
+				windowUpdateTimer.endInvocation();
+			}
 			lastRenderTime = now;
 			// Update the frames we got.
 			int thisSecond = (int)(lastUpdateTime / 1000000000);
@@ -313,7 +349,7 @@ public final class CoreEngine
 			}
 		}
 
-		if(!window.isActive()) try
+		if(!updateOnly) if(!window.isActive()) try
 		{
 			window.setFullscreen(false);
 		}
@@ -328,31 +364,34 @@ public final class CoreEngine
 
 	private void update(double delta)
 	{
-		if(Input.isKeyDown(Input.KEY_F2) && !screenshotKey)
+		if(!updateOnly)
 		{
-			screenshotKey = true;
-			try
+			if(Input.isKeyDown(Input.KEY_F2) && !screenshotKey)
 			{
-				File screenshotsFolder = new File(game.getGameFolder(), "screenshots");
-				if(!screenshotsFolder.exists())
+				screenshotKey = true;
+				try
 				{
-					screenshotsFolder.mkdirs();
+					File screenshotsFolder = new File(game.getGameFolder(), "screenshots");
+					if(!screenshotsFolder.exists())
+					{
+						screenshotsFolder.mkdirs();
+					}
+					ImageIO.write(LWJGLHandler.takeScreenshot(), "png", new File(screenshotsFolder, Strings.createCorrectedFileName(Time.getTimeAsString()) + ".png"));
 				}
-				ImageIO.write(LWJGLHandler.takeScreenshot(), "png", new File(screenshotsFolder, Strings.createCorrectedFileName(Time.getTimeAsString()) + ".png"));
+				catch(IOException e)
+				{
+					e.printStackTrace();
+				}
 			}
-			catch(IOException e)
+			else if(!Input.isKeyDown(Input.KEY_F2) && screenshotKey)
 			{
-				e.printStackTrace();
+				screenshotKey = false;
 			}
-		}
-		else if(!Input.isKeyDown(Input.KEY_F2) && screenshotKey)
-		{
-			screenshotKey = false;
 		}
 
 		Time.setDelta(delta);
 		int lastRecordedTick = tick;
-		while(game.getLoadingScreen() != null && !game.getLoadingScreen().isFinished())
+		while(game.getLoadingScreen() != null && !game.getLoadingScreen().isFinished() && !updateOnly)
 		{
 			for(Music m : Music.musicsPlaying())
 			{
@@ -370,7 +409,10 @@ public final class CoreEngine
 		}
 		tick = lastRecordedTick;
 		physEngine.update(delta);
-		soundEngine.update(delta);
+		if(!updateOnly)
+		{
+			soundEngine.update(delta);
+		}
 		game.update(delta);
 		tickTickables(false);
 		tick++ ;
@@ -389,6 +431,10 @@ public final class CoreEngine
 
 	private void render(double delta)
 	{
+		if(updateOnly)
+		{
+			return;
+		}
 		window.updateSizeIfNeeded();
 		renderEngine.clearBuffers();
 		glColor4f(1, 1, 1, 1);

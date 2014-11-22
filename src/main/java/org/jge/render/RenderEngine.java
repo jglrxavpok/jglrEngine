@@ -34,6 +34,7 @@ import org.jge.render.shaders.Shader;
 import org.jge.util.HashMapWithDefault;
 import org.jge.util.Log;
 
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32;
 import org.lwjgl.util.glu.GLU;
@@ -118,6 +119,8 @@ public class RenderEngine extends MappedValues
 	private Stack<Runnable>					 beforeRenders;
 
 	private EventBus							eventBus;
+
+	private Texture							 boundTexture;
 
 	public RenderEngine()
 	{
@@ -218,7 +221,7 @@ public class RenderEngine extends MappedValues
 			nullFilterShader = new Shader(new ResourceLocation("shaders", "filter-null"));
 			gausBlurFilterShader = new Shader(new ResourceLocation("shaders", "filter-gausBlur7x1"));
 
-			glClearColor(0, 0, 0, 0);
+			setClearColor(0, 0, 0, 0);
 			glFrontFace(GL_CW);
 			glCullFace(GL_BACK);
 			enableGLCap(GL_CULL_FACE);
@@ -258,7 +261,7 @@ public class RenderEngine extends MappedValues
 
 			altTransform.rotate(Vector3.get(1, 0, 0), (float)Maths.toRadians(90));
 			altTransform.rotate(Vector3.get(0, 1, 0), (float)Maths.toRadians(180));
-			planeMesh = new Mesh(JGEngine.getResourceLoader().getResource(new ResourceLocation("models", "planePrimitive.obj")));
+			planeMesh = new Mesh(JGEngine.getClasspathResourceLoader().getResource(new ResourceLocation("models", "planePrimitive.obj")));
 
 			setVector3("shadowColor", Vector3.get(0, 0, 0));
 		}
@@ -347,7 +350,7 @@ public class RenderEngine extends MappedValues
 			shadowMaps[shadowMapIndex].bindAsRenderTarget();
 			setTexture("shadowMap", shadowMaps[shadowMapIndex]);
 			setTexture("shadowMapTempTarget", shadowMapTempTargets[shadowMapIndex]);
-			glClearColor(0, 0, 0, 0);
+			setClearColor(0, 0, 0, 0);
 			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 			renderingShadowMap = true;
 			if(shadowingInfo != null && isShadowingOn())
@@ -425,7 +428,7 @@ public class RenderEngine extends MappedValues
 
 		renderProfileTimer.startInvocation();
 		renderToTextTarget.bindAsRenderTarget();
-		glClearColor(0, 0, 0, 0f);
+		setClearColor(0, 0, 0, 0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		renderScene(object, this.renderCamera, renderToTextTarget, renderToTextTargetTemp, delta);
 		Window.getCurrent().bindAsRenderTarget();
@@ -433,7 +436,7 @@ public class RenderEngine extends MappedValues
 		altCamera.getParent().getTransform().setPosition(Vector3.NULL);
 		altCamera.getParent().getTransform().setRotation(Quaternion.NULL);
 		altCamera.setProjection(initMatrix);
-		glClearColor(0.0f, 0.0f, 1f, 1.0f);
+		setClearColor(0.0f, 0.0f, 1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		defaultShader.bind();
 		defaultShader.updateUniforms(altTransform, altCamera, planeMaterial, this);
@@ -597,6 +600,13 @@ public class RenderEngine extends MappedValues
 		return this;
 	}
 
+	public RenderEngine setClearColor(float r, float g, float b, float a)
+	{
+		glClearColor(r, g, b, a);
+		renderState.setClearColor(r, g, b, a);
+		return this;
+	}
+
 	public void setBoolean(String name, boolean value)
 	{
 		super.setBoolean(name, value);
@@ -665,5 +675,25 @@ public class RenderEngine extends MappedValues
 	public EventBus getEventBus()
 	{
 		return eventBus;
+	}
+
+	public RenderEngine bindTexture(Texture texture)
+	{
+		bindTexture(texture, 0);
+		return this;
+	}
+
+	public RenderEngine bindTexture(Texture texture, int samplerSlot)
+	{
+		assert (samplerSlot >= 0 && samplerSlot <= 31) : "Sampler slot must be >= 0 and <= 31";
+		GL13.glActiveTexture(GL13.GL_TEXTURE0 + samplerSlot);
+		glBindTexture(texture.getResource().getTarget(), texture.getResource().getID());
+		this.boundTexture = texture;
+		return this;
+	}
+
+	public Texture getBoundTexture()
+	{
+		return boundTexture;
 	}
 }

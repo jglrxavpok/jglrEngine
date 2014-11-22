@@ -36,7 +36,9 @@ public class SmokeParticle extends Particle
 	public Sprite getSprite()
 	{
 		double time = (double)getTicksExisted() / (double)getMaxLife();
-		return spritesArray[(int)(Maths.floor(time * spritesArray.length - 1))];
+		int index = (int)(Maths.floor(time * spritesArray.length - 1));
+		if(index < 0) index = 0;
+		return spritesArray[index];
 	}
 
 }

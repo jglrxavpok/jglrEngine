@@ -2,14 +2,17 @@ package org.jge.components;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.jge.Disposable;
 import org.jge.JGEngine;
 import org.jge.maths.Transform;
+import org.jge.render.IRenderable;
 import org.jge.render.RenderEngine;
 import org.jge.render.shaders.Shader;
 
-public class SceneObject implements Disposable
+public class SceneObject implements Disposable, IRenderable
 {
 
 	private HashMap<String, SceneObject>	children;
@@ -76,6 +79,28 @@ public class SceneObject implements Disposable
 		return this;
 	}
 
+	public void removeChild(SceneObject child)
+	{
+		if(children.containsValue(child))
+		{
+			Iterator<Entry<String, SceneObject>> it = children.entrySet().iterator();
+			String key = null;
+			while(it.hasNext())
+			{
+				Entry<String, SceneObject> entry = it.next();
+				if(entry.getValue().equals(child))
+				{
+					key = entry.getKey();
+					break;
+				}
+			}
+			if(key != null)
+			{
+				children.remove(key);
+			}
+		}
+	}
+
 	public Collection<SceneObject> getChildren()
 	{
 		return children.values();
@@ -133,6 +158,11 @@ public class SceneObject implements Disposable
 		{
 			child.updateAll(delta);
 		}
+	}
+
+	public void render(Shader shader, Transform trans, Camera cam, double delta, RenderEngine renderEngine)
+	{
+		this.render(shader, cam, delta, renderEngine);
 	}
 
 	public void render(Shader shader, Camera cam, double delta, RenderEngine renderEngine)

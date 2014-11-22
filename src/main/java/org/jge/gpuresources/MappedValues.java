@@ -27,7 +27,7 @@ public abstract class MappedValues
 
 		try
 		{
-			textures.setDefault(new Texture(JGEngine.getResourceLoader().getResource(new ResourceLocation("textures", "damier.png"))));
+			textures.setDefault(new Texture(JGEngine.getClasspathResourceLoader().getResource(new ResourceLocation("textures", "damier.png"))));
 			booleans.setDefault(false);
 			integers.setDefault(0);
 			floats.setDefault(0f);

@@ -25,13 +25,12 @@ public class FreeLook extends SceneComponent
 	public void update(double delta)
 	{
 		if(!onlyOnMousePressed) Input.lockCursor(true);
-		if(Input.isButtonPressed(0))
+		if(Input.isButtonPressed(0) || !onlyOnMousePressed)
 		{
 			Input.lockCursor(true);
 			getParent().getTransform().rotate(yAxis, (float)Maths.toRadians(Input.getMouseDX() * sensitivity));
 			getParent().getTransform().rotate(getParent().getTransform().getRotation().getRight(), (float)Maths.toRadians(-Input.getMouseDY() * sensitivity));
 		}
-		else
-			Input.lockCursor(false);
+		else if(onlyOnMousePressed) Input.lockCursor(false);
 	}
 }

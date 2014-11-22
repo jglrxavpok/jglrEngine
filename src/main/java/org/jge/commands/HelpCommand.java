@@ -2,7 +2,7 @@ package org.jge.commands;
 
 import java.util.Iterator;
 
-import org.jge.Console;
+import org.jge.CommandHelper;
 import org.jge.util.Log;
 
 public class HelpCommand extends AbstractCommand
@@ -20,11 +20,11 @@ public class HelpCommand extends AbstractCommand
 		Log.message("*** Help ***");
 		if(args.length == 0)
 		{
-			Iterator<String> it = Console.commands.keySet().iterator();
+			Iterator<String> it = CommandHelper.commands.keySet().iterator();
 			while(it.hasNext())
 			{
 				String commandName = it.next();
-				AbstractCommand command = Console.commands.get(commandName);
+				AbstractCommand command = CommandHelper.commands.get(commandName);
 				String usagesList = "";
 				String[] usages = command.getCorrectUsages();
 				if(usages != null)
@@ -46,7 +46,7 @@ public class HelpCommand extends AbstractCommand
 		else if(args.length == 1)
 		{
 			String commandName = args[0].getContentAsString();
-			AbstractCommand command = Console.commands.get(commandName);
+			AbstractCommand command = CommandHelper.commands.get(commandName);
 			if(command == null)
 			{
 				return "Unknown command " + commandName;

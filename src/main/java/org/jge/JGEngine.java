@@ -48,7 +48,7 @@ public class JGEngine
 		return disposer;
 	}
 
-	public static ResourceLoader getResourceLoader()
+	public static ResourceLoader getClasspathResourceLoader()
 	{
 		return game.getClasspathResourceLoader();
 	}

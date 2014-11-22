@@ -217,11 +217,6 @@ public class Maths
 		return (int)number;
 	}
 
-	public static boolean isPowerOf2(int v)
-	{
-		return (v & (v - 1)) == 1;
-	}
-
 	/**
 	 * From http://graphics.stanford.edu/~seander/bithacks.html
 	 * 

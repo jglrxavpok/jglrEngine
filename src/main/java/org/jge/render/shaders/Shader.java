@@ -56,7 +56,7 @@ public class Shader implements Disposable
 
 	public Shader(ResourceLocation partialPath)
 	{
-		this(partialPath, JGEngine.getResourceLoader());
+		this(partialPath, JGEngine.getClasspathResourceLoader());
 	}
 
 	public Shader(ResourceLocation partialPath, ResourceLoader resLoader)

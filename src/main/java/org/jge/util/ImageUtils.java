@@ -2,6 +2,7 @@ package org.jge.util;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BandCombineOp;
 import java.awt.image.BufferedImage;
@@ -25,7 +26,9 @@ public class ImageUtils
 	public static BufferedImage toBufferedImage(Image i)
 	{
 		BufferedImage result = new BufferedImage(i.getWidth(null), i.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-		result.createGraphics().drawImage(i, 0, 0, null);
+		Graphics2D g = result.createGraphics();
+		g.drawImage(i, 0, 0, null);
+		g.dispose();
 		return result;
 	}
 

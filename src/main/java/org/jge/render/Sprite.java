@@ -149,7 +149,7 @@ public class Sprite extends TextureRegion implements IRenderable
 		return this;
 	}
 
-	public Sprite render(Shader shader, Transform transform, Camera cam, double delta, RenderEngine engine)
+	public void render(Shader shader, Transform transform, Camera cam, double delta, RenderEngine engine)
 	{
 		if(stateChanged)
 		{
@@ -159,7 +159,6 @@ public class Sprite extends TextureRegion implements IRenderable
 		shader.bind();
 		shader.updateUniforms(transform, cam, material, engine);
 		mesh.draw();
-		return this;
 	}
 
 	public float getY()

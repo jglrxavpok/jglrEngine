@@ -9,7 +9,7 @@ public class PlaneMesh extends Mesh
 
 	public PlaneMesh() throws Exception
 	{
-		super(JGEngine.getResourceLoader().getResource(new ResourceLocation("models", "plane.obj")));
+		super(JGEngine.getClasspathResourceLoader().getResource(new ResourceLocation("test/models/plane.obj")));
 	}
 
 }

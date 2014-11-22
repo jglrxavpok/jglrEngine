@@ -6,13 +6,12 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 
 import org.jge.AbstractResource;
+import org.jge.CoreEngine;
 import org.jge.Disposable;
 import org.jge.EngineException;
 import org.jge.JGEngine;
 import org.jge.gpuresources.TextureResource;
 import org.jge.util.OpenGLUtils;
-
-import org.lwjgl.opengl.GL13;
 
 /**
  * The MIT License (MIT)
@@ -102,9 +101,7 @@ public class Texture implements Disposable
 
 	public void bind(int samplerSlot)
 	{
-		assert (samplerSlot >= 0 && samplerSlot <= 31) : "Sampler slot must be >= 0 and <= 31";
-		GL13.glActiveTexture(GL13.GL_TEXTURE0 + samplerSlot);
-		glBindTexture(data.getTarget(), data.getID());
+		CoreEngine.getCurrent().getRenderEngine().bindTexture(this, samplerSlot);
 	}
 
 	public void dispose()

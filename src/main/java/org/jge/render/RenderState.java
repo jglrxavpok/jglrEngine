@@ -17,6 +17,10 @@ public class RenderState extends MappedValues implements Cloneable
 	private int					   blendFuncDst;
 	private int					   alphaFunc;
 	private float					 alphaRef;
+	private float					 clearColorR;
+	private float					 clearColorG;
+	private float					 clearColorB;
+	private float					 clearColorA;
 
 	public RenderState clone()
 	{
@@ -27,6 +31,10 @@ public class RenderState extends MappedValues implements Cloneable
 		copy.alphaRef = alphaRef;
 		copy.glCaps.putAll(glCaps);
 		copy.lightMatrix = lightMatrix;
+		copy.clearColorA = clearColorA;
+		copy.clearColorR = clearColorR;
+		copy.clearColorG = clearColorG;
+		copy.clearColorB = clearColorB;
 		copyInto(copy);
 		return copy;
 	}
@@ -125,6 +133,8 @@ public class RenderState extends MappedValues implements Cloneable
 			glBlendFunc(blendFuncSrc, blendFuncDst);
 			glAlphaFunc(alphaFunc, alphaRef);
 			if(lightMatrix != null) renderEngine.getLightMatrix().set(lightMatrix);
+
+			glClearColor(clearColorR, clearColorG, clearColorG, clearColorA);
 		}
 	}
 
@@ -143,5 +153,13 @@ public class RenderState extends MappedValues implements Cloneable
 	{
 		this.alphaFunc = func;
 		this.alphaRef = ref;
+	}
+
+	public void setClearColor(float r, float g, float b, float a)
+	{
+		this.clearColorR = r;
+		this.clearColorG = g;
+		this.clearColorB = b;
+		this.clearColorA = a;
 	}
 }

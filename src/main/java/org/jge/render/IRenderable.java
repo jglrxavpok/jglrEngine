@@ -30,5 +30,5 @@ import org.jge.render.shaders.Shader;
 @FunctionalInterface
 public interface IRenderable
 {
-	public Sprite render(Shader shader, Transform transform, Camera cam, double delta, RenderEngine engine);
+	public void render(Shader shader, Transform transform, Camera cam, double delta, RenderEngine engine);
 }

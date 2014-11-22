@@ -29,10 +29,15 @@ public class Camera extends SceneComponent
 
 	public Matrix4 getViewProjection()
 	{
-		Matrix4 cameraRotation = getParent().getTransform().getTransformedRotation().conjugate().toRotationMatrix();
+		Matrix4 cameraRotation = getRotationMatrix();
 		Vector3 cameraPos = getParent().getTransform().getTransformedPos().mul(-1);
 		Matrix4 cameraTranslation = new Matrix4().initTranslation(cameraPos.getX(), cameraPos.getY(), cameraPos.getZ());
 		return projection.mul(cameraRotation.mul(cameraTranslation));
+	}
+
+	public Matrix4 getRotationMatrix()
+	{
+		return getParent().getTransform().getTransformedRotation().conjugate().toRotationMatrix();
 	}
 
 	public void init(SceneObject object)
